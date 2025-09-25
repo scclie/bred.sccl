@@ -6,7 +6,7 @@ tags:
   - "#aim"
 date: 2025-09-22
 ---
-> [!info] Page on Russian: [[RU Casualization of aim]]
+> [!info] This page on Russian: [[RU Casualization of aim]]
 
 ![[ground_tracking.png]]
 
@@ -35,10 +35,10 @@ The core idea is to **lower the skill ceiling for aim** (to neutralize the aim a
 Here lies the main paradox that many fail to grasp.
 
 *   **Low TTK (Time To Kill):** Characteristic of tactical shooters (CS2, Valorant, R6 Siege). A kill happens in 1-2 hits. It would seem that jewel-like aim is needed here to land headshots consistently. But in reality, **aim is less important** than it seems. The decisive factor is often not the pure shot, but: **Positioning** (you can catch an enemy by surprise, get an easy kill without even starting a duel), **Angle knowledge** (pre-fires, off-angles, etc.), **Luck** (a random bullet flew into the face. A noob just jerked their hand, fired while running/jumping and one-tapped a much stronger player).
-![[{83D66784-A207-4A4D-B4A1-568418ECC41B}.png]]
+![[valorant_headshot.png]]
 
 *   **High TTK:** A classic for arena shooters (*Quake*, *Apex Legends*, *Overwatch 2*, *The Finals*). Here, to kill an enemy, you need to continuously track them and hit them **many times in a row**. It's simply impossible to track by accident for dozens of seconds.
-![[{2EF663E8-A9E8-4018-90A7-B0FA36E67EBF}.png]]
+![[quake_lg.png]]
 
 And this is where **raw aim takes the front seat**. A lucky shot won't decide anything here. You need to **track the target long and accurately**. In high-TTK games, the gap in aiming skill between players is much more visible. A strong player will consistently track and kill a novice, who simply won't have the precision and mouse control to deal enough damage. Tactics and positioning alone won't solve the problem here – you absolutely need to hit your shots (though you can try to compensate with movement, which again expands the aim-advantage spread based on the points above).
 
@@ -47,11 +47,11 @@ And this is where **raw aim takes the front seat**. A lucky shot won't decide an
 Since pure aim is a difficult skill, requiring thousands of hours to hone, developers shift the focus to other, more "democratic" mechanics:
 
 1.  **Tactics and Communication.** You can be terrible with a mouse but still outsmart your opponent by taking unexpected positions, making calls for team play, and using utility.
-![[{E4894617-C3C1-4BA1-8171-9528F9C62BB4}.png]]
+![[dust_tactics.png]]
 2.  **Movement.** In tactical shooters, it works as a **limiter** (slow and predictable). In arena shooters, it works as a **divider** (fast and complex), allowing a skilled player to dodge and demonstrate superior tracking.
 ![[Thumbnail_Best_Movement_Guide.png]]
 3.  **Abilities.** The most powerful tool for de-leveling aim. Why aim perfectly when you can spam your opponent with grenades, turrets, smokes, slow-fields, and flashbangs? These mechanics require not precision, but good decision-making and timing.
-![[{23814916-77E9-4891-8ECD-21CBA4A12AAF}.png]]
+![[overwatch_zarub.png]]
 
 ---
 
