@@ -41,6 +41,6 @@ And then a new level of explanation emerges, an even higher-level abstraction, s
 
 In the end, the circle closes. All the complex explanations and multi-layered abstractions lead to the only working solution that has always existed: **"Watch how others do it and try to replicate it until you succeed."**
 
-![[Pasted image 20251001164016.png]]
+![[Pasted image 20251001170718.png]]
 
 This is not merely an evasion. It is an acknowledgment that some skills cannot be conveyed through words and diagrams. They can only be **absorbed through observation and built up through thousands of repetitions**. Practice, in the end, dissolves all abstractions, returning the player to the very starting point of the question—to that intuitive "track the target smoothly with your crosshair and strive to hit more." But now, this "just" is backed by real, rather than theoretical, experience.
