@@ -7,11 +7,11 @@ tags:
 date: 2025-11-04
 ---
 > [!info] This page on Russian: [[RU Shaking]]
-## **The Micro-Flick-Flick-Flick Problem**
+## The Micro-Flick-Flick-Flick Problem
 
 The majority of tracking novices experience shakiness. During aiming, they perform movements in **jerks**. Each mouse flick is a separate action, followed by result analysis and another flick. The crosshair moves crookedly - overreaction occurs, along with multiple unnecessary movements, which further complicates subsequent analysis.
 
-## **Visuomotor Feedback Loop**
+## Visuomotor Feedback Loop
 
 This entire phenomenon can be described by a single term - **Visuomotor Feedback Loop**. Essentially, this is an information processing cycle that the nervous system runs at **maximum possible speed**:
 
@@ -28,7 +28,7 @@ This entire phenomenon can be described by a single term - **Visuomotor Feedback
 
 **Reactive tracking works precisely on the basis of this loop.** This is a **sequence of micro-corrections** that occur at such speed that they appear as a single smooth action. Even pro players perform the same micro-corrections, but their **interpolation** (smoothing between cycles) reaches a level where the movement looks absolutely smooth - each micro-correction adds to the initial vector rather than being a new movement vector. Plus, an experienced system incorporates **slight trajectory prediction**, pre-calculating the target's next position.
 
-## **Novice vs Professional**
+## Novice vs Professional
 
 **Novice:**
 
@@ -44,7 +44,7 @@ This entire phenomenon can be described by a single term - **Visuomotor Feedback
 
 The professional's loop spins _faster_. Unlike the novice, an experienced player is capable of qualitatively correcting their previous movements - for example, while previously moving in a straight line, they can add precise correction within the same movement vector such that it won't look like a flick or shake. These micro-adjustments layer upon each other, creating the appearance of smooth, continuous tracking.
 
-## **Skill Development Mechanism**
+## Skill Development Mechanism
 
 Many hours of training in aim trainers allow for **optimization of the speed and effectiveness of the visuomotor feedback loop.** The system learns to:
 
@@ -55,7 +55,7 @@ Many hours of training in aim trainers allow for **optimization of the speed and
 
 Result: micro-corrections that previously were **visible as distinct jerks** begin to **merge** into a single smooth movement.
 
-## **Conclusion**
+## Conclusion
 
 **Shakiness and jerks** (flickshots with noticeable intervals) are signs of **insufficient speed and accuracy of information processing.** The system simply doesn't manage to perform the necessary number of micro-corrections and has to make **macro-movements**.
 
