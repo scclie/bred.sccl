@@ -6,7 +6,7 @@ tags:
   - "#aim"
 date: 2025-11-04
 ---
-
+> [!info] This page on Russian: [[RU Shaking]]
 ## **The Micro-Flick-Flick-Flick Problem**
 
 The majority of tracking novices experience shakiness. During aiming, they perform movements in **jerks**. Each mouse flick is a separate action, followed by result analysis and another flick. The crosshair moves crookedly - overreaction occurs, along with multiple unnecessary movements, which further complicates subsequent analysis.
