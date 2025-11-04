@@ -29,19 +29,19 @@ export const defaultContentPageLayout: PageLayout = {
   ],
   left: [
     Component.PageTitle(),
-    Component.Darkmode(),
+    // Component.Darkmode(),
     Component.MobileOnly(Component.Spacer()),
-    // Component.Flex({
-    //    components: [
-    //     { Component: Component.Darkmode() },
-    //     // {
-    //     //   Component: Component.Search(),
-    //     //   grow: true,
-    //     // },
-    //     // { Component: Component.ReaderMode() },
-    //   ],
-    // }),
-    // Component.Explorer(),
+    Component.Flex({
+       components: [
+        { Component: Component.Darkmode() },
+        {
+          Component: Component.Search(),
+          grow: true,
+        },
+        { Component: Component.ReaderMode() },
+      ],
+    }),
+    Component.Explorer(),
   ],
   right: [
     // Component.Graph(),

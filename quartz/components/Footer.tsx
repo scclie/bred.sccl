@@ -14,7 +14,7 @@ export default ((opts?: Options) => {
     return (
       <footer class={`${displayClass ?? ""}`}>
         <p>
-          {`${year} © Daniel K. paper_sacculos`}
+          {`${year} © paper_sacculos`}
           {/* <a>Daniel K. - paper_sacculos</a> */}
           {/* <a href="https://quartz.jzhao.xyz/">Quartz v{version}</a> © {year} */}
         </p>
