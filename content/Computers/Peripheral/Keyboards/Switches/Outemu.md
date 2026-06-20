@@ -10,7 +10,16 @@ date: 2026-16-06
 Мне довелось потестить 38 свитчей отуему, пройдёмся по каждому:
 
 Звуковое сравнение можно посмотреть в видосике
-[![[outemu_thumb.png|outemu|100]]](https://www.youtube.com/watch?v=roa0XXvA1UU)
+<iframe 
+  width="100%" 
+  height="400" 
+  src="https://www.youtube.com/watch?v=roa0XXvA1UU" 
+  title="38 Outemu Keyboard Switches Sound Test Comparison" 
+  frameborder="0" 
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+  allowfullscreen>
+</iframe>
+
 
 # Тирлист
 🟢 - Linear

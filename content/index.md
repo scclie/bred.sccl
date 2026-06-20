@@ -1,6 +1,6 @@
 ---
-title: Test
+title: Main
 ---
-test wiki page
+Me writing my absolute brainrot here!!!!
 
 ![[blobby-blobby-dancer.gif]]
