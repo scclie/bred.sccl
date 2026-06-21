@@ -1,93 +1,103 @@
 /*! MIT License
  * Copyright (c) 2018 GitHub Inc.
  * https://github.com/primer/primitives/blob/main/LICENSE
+ * Nord Variant adapted for Quartz
  */
 
 main {
-  --color-prettylights-syntax-comment: #8b949e;
-  --color-prettylights-syntax-constant: #79c0ff;
-  --color-prettylights-syntax-entity: #d2a8ff;
-  --color-prettylights-syntax-storage-modifier-import: #c9d1d9;
-  --color-prettylights-syntax-entity-tag: #7ee787;
-  --color-prettylights-syntax-keyword: #ff7b72;
-  --color-prettylights-syntax-string: #a5d6ff;
-  --color-prettylights-syntax-variable: #ffa657;
-  --color-prettylights-syntax-brackethighlighter-unmatched: #f85149;
-  --color-prettylights-syntax-invalid-illegal-text: #f0f6fc;
-  --color-prettylights-syntax-invalid-illegal-bg: #8e1519;
-  --color-prettylights-syntax-carriage-return-text: #f0f6fc;
-  --color-prettylights-syntax-carriage-return-bg: #b62324;
-  --color-prettylights-syntax-string-regexp: #7ee787;
-  --color-prettylights-syntax-markup-list: #f2cc60;
-  --color-prettylights-syntax-markup-heading: #1f6feb;
-  --color-prettylights-syntax-markup-italic: #c9d1d9;
-  --color-prettylights-syntax-markup-bold: #c9d1d9;
-  --color-prettylights-syntax-markup-deleted-text: #ffdcd7;
-  --color-prettylights-syntax-markup-deleted-bg: #67060c;
-  --color-prettylights-syntax-markup-inserted-text: #aff5b4;
-  --color-prettylights-syntax-markup-inserted-bg: #033a16;
-  --color-prettylights-syntax-markup-changed-text: #ffdfb6;
-  --color-prettylights-syntax-markup-changed-bg: #5a1e02;
-  --color-prettylights-syntax-markup-ignored-text: #c9d1d9;
-  --color-prettylights-syntax-markup-ignored-bg: #1158c7;
-  --color-prettylights-syntax-meta-diff-range: #d2a8ff;
-  --color-prettylights-syntax-brackethighlighter-angle: #8b949e;
-  --color-prettylights-syntax-sublimelinter-gutter-mark: #484f58;
-  --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
-  --color-btn-text: #d4d4d4; /* --darkgray */
-  --color-btn-bg: #161618; /* --light */
-  --color-btn-border: rgb(240, 246, 252 / 10%); /* --dark */
-  --color-btn-shadow: 0 0 transparent;
-  --color-btn-inset-shadow: 0 0 transparent;
-  --color-btn-hover-bg: #30363d;
-  --color-btn-hover-border: #8b949e;
-  --color-btn-active-bg: hsl(212deg 12% 18% / 100%);
-  --color-btn-active-border: #6e7681;
-  --color-btn-selected-bg: #161b22;
-  --color-btn-primary-text: #fff;
-  --color-btn-primary-bg: #84a59d; /* --tertiary */
-  --color-btn-primary-border: rgb(240, 246, 252 / 10%); /* --dark */
-  --color-btn-primary-shadow: 0 0 transparent;
-  --color-btn-primary-inset-shadow: 0 0 transparent;
-  --color-btn-primary-hover-bg: #7b97aa; /* --secondary */
-  --color-btn-primary-hover-border: rgb(240, 246, 252 / 10%); /* --dark */
-  --color-btn-primary-selected-bg: #7b97aa; /* --secondary */
-  --color-btn-primary-selected-shadow: 0 0 transparent;
-  --color-btn-primary-disabled-text: rgba(33, 32, 32, 0.5);
-  --color-btn-primary-disabled-bg: rgb(35 134 54 / 60%);
-  --color-btn-primary-disabled-border: rgb(240 246 252 / 10%);
-  --color-action-list-item-default-hover-bg: rgb(177 186 196 / 12%);
-  --color-segmented-control-bg: rgb(110 118 129 / 10%);
-  --color-segmented-control-button-bg: #0d1117;
-  --color-segmented-control-button-selected-border: #6e7681;
-  --color-fg-default: #ebebec; /* --dark */
-  --color-fg-muted: #d4d4d4; /* --darkgray */
-  --color-fg-subtle: #d4d4d4; /* --darkgray */
-  --color-canvas-default: #0d1117;
-  --color-canvas-overlay: #161b22;
-  --color-canvas-inset: #010409;
-  --color-canvas-subtle: #161b22;
-  --color-border-default: #30363d;
-  --color-border-muted: #21262d;
-  --color-neutral-muted: rgb(110 118 129 / 40%);
-  --color-accent-fg: #2f81f7;
-  --color-accent-emphasis: #1f6feb;
-  --color-accent-muted: rgb(56 139 253 / 40%);
-  --color-accent-subtle: rgb(56 139 253 / 10%);
-  --color-success-fg: #3fb950;
-  --color-attention-fg: #d29922;
-  --color-attention-muted: rgb(187 128 9 / 40%);
-  --color-attention-subtle: rgb(187 128 9 / 15%);
-  --color-danger-fg: #f85149;
-  --color-danger-muted: rgb(248 81 73 / 40%);
-  --color-danger-subtle: rgb(248 81 73 / 10%);
-  --color-primer-shadow-inset: 0 0 transparent;
-  --color-scale-gray-7: #21262d;
-  --color-scale-blue-8: #0c2d6b;
+  --color-prettylights-syntax-comment: #4c566a; /* Nord 3 */
+  --color-prettylights-syntax-constant: #81a1c1; /* Nord 9 */
+  --color-prettylights-syntax-entity: #8fbcbb; /* Nord 7 */
+  --color-prettylights-syntax-storage-modifier-import: #d8dee9; /* Nord 4 */
+  --color-prettylights-syntax-entity-tag: #81a1c1; /* Nord 9 */
+  --color-prettylights-syntax-keyword: #81a1c1; /* Nord 9 */
+  --color-prettylights-syntax-string: #a3be8c; /* Nord 14 (Green) */
+  --color-prettylights-syntax-variable: #d8dee9; /* Nord 4 */
+  --color-prettylights-syntax-brackethighlighter-unmatched: #bf616a; /* Nord 11 (Red) */
+  --color-prettylights-syntax-invalid-illegal-text: #eceff4; /* Nord 6 */
+  --color-prettylights-syntax-invalid-illegal-bg: #bf616a; /* Nord 11 */
+  --color-prettylights-syntax-carriage-return-text: #eceff4; /* Nord 6 */
+  --color-prettylights-syntax-carriage-return-bg: #bf616a; /* Nord 11 */
+  --color-prettylights-syntax-string-regexp: #b48ead; /* Nord 15 (Purple) */
+  --color-prettylights-syntax-markup-list: #d08770; /* Nord 12 (Orange) */
+  --color-prettylights-syntax-markup-heading: #88c0d0; /* Nord 8 */
+  --color-prettylights-syntax-markup-italic: #d8dee9;
+  --color-prettylights-syntax-markup-bold: #d8dee9;
+  --color-prettylights-syntax-markup-deleted-text: #bf616a; /* Nord 11 */
+  --color-prettylights-syntax-markup-deleted-bg: rgb(191 97 106 / 15%);
+  --color-prettylights-syntax-markup-inserted-text: #a3be8c; /* Nord 14 */
+  --color-prettylights-syntax-markup-inserted-bg: rgb(163 190 140 / 15%);
+  --color-prettylights-syntax-markup-changed-text: #d08770; /* Nord 12 */
+  --color-prettylights-syntax-markup-changed-bg: rgb(208 135 112 / 15%);
+  --color-prettylights-syntax-markup-ignored-text: #4c566a; /* Nord 3 */
+  --color-prettylights-syntax-markup-ignored-bg: #81a1c1; /* Nord 9 */
+  --color-prettylights-syntax-meta-diff-range: #b48ead; /* Nord 15 */
+  --color-prettylights-syntax-brackethighlighter-angle: #4c566a; /* Nord 3 */
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #434c5e; /* Nord 2 */
+  --color-prettylights-syntax-constant-other-reference-link: #81a1c1; /* Nord 9 */
+
+  --color-btn-text: #d8dee9; /* Nord 4 */
+  --color-btn-bg: #3b4252; /* Nord 1 */
+  --color-btn-border: #4c566a; /* Nord 3 */
+  --color-btn-shadow: 0 1px 0 rgb(46 52 64 / 50%);
+  --color-btn-inset-shadow: inset 0 1px 0 rgb(255 255 255 / 5%);
+  --color-btn-hover-bg: #434c5e; /* Nord 2 */
+  --color-btn-hover-border: #4c566a; /* Nord 3 */
+  --color-btn-active-bg: #4c566a; /* Nord 3 */
+  --color-btn-active-border: #4c566a;
+  --color-btn-selected-bg: #434c5e; /* Nord 2 */
+
+  --color-btn-primary-text: #2e3440; /* Nord 0 */
+  --color-btn-primary-bg: #88c0d0; /* Nord 8 */
+  --color-btn-primary-border: #88c0d0;
+  --color-btn-primary-shadow: 0 1px 0 rgb(0 0 0 / 20%);
+  --color-btn-primary-inset-shadow: inset 0 1px 0 rgb(255 255 255 / 20%);
+  --color-btn-primary-hover-bg: #81a1c1; /* Nord 9 */
+  --color-btn-primary-hover-border: #81a1c1;
+  --color-btn-primary-selected-bg: #5e81ac; /* Nord 10 */
+  --color-btn-primary-selected-shadow: inset 0 1px 0 rgb(0 0 0 / 20%);
+  --color-btn-primary-disabled-text: rgb(216 222 233 / 50%);
+  --color-btn-primary-disabled-bg: #4c566a; /* Nord 3 */
+  --color-btn-primary-disabled-border: #4c566a;
+
+  --color-action-list-item-default-hover-bg: #3b4252; /* Nord 1 */
+  --color-segmented-control-bg: #2e3440; /* Nord 0 */
+  --color-segmented-control-button-bg: #3b4252; /* Nord 1 */
+  --color-segmented-control-button-selected-border: #4c566a; /* Nord 3 */
+
+  --color-fg-default: #d8dee9; /* Nord 4 */
+  --color-fg-muted: #e5e9f0; /* Nord 5 */
+  --color-fg-subtle: #4c566a; /* Nord 3 */
+  --color-canvas-default: #2e3440; /* Nord 0 */
+  --color-canvas-overlay: #3b4252; /* Nord 1 */
+  --color-canvas-inset: #2e3440; /* Nord 0 */
+  --color-canvas-subtle: #3b4252; /* Nord 1 */
+  --color-border-default: #3b4252; /* Nord 1 */
+  --color-border-muted: #434c5e; /* Nord 2 */
+  --color-neutral-muted: rgb(67 76 94 / 40%); /* Nord 2 */
+
+  --color-accent-fg: #88c0d0; /* Nord 8 */
+  --color-accent-emphasis: #81a1c1; /* Nord 9 */
+  --color-accent-muted: rgb(136 192 208 / 40%);
+  --color-accent-subtle: rgb(136 192 208 / 10%);
+
+  --color-success-fg: #a3be8c; /* Nord 14 */
+
+  --color-attention-fg: #d08770; /* Nord 12 */
+  --color-attention-muted: rgb(208 135 112 / 40%);
+  --color-attention-subtle: rgb(208 135 112 / 10%);
+
+  --color-danger-fg: #bf616a; /* Nord 11 */
+  --color-danger-muted: rgb(191 97 106 / 40%);
+  --color-danger-subtle: rgb(191 97 106 / 10%);
+
+  --color-primer-shadow-inset: inset 0 1px 0 rgb(0 0 0 / 20%);
+  --color-scale-gray-1: #3b4252; /* Nord 1 */
+  --color-scale-blue-1: #434c5e; /* Nord 2 */
 
   /*! Extensions from @primer/css/alerts/flash.scss */
-  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
-  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+  --color-social-reaction-bg-hover: var(--color-scale-gray-1);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-1);
 }
 
 main .pagination-loader-container {

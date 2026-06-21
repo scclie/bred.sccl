@@ -21,7 +21,7 @@ Sound comparison can be seen in the video
 </iframe>
 
 
-# Thirlist
+# Tierlist
 🔴 - Linear
 
 🟡 - Tactile
