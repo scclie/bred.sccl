@@ -5,7 +5,7 @@ tags:
   - "#shitpost"
   - "#project"
   - "#peripheral"
-date: 2026-21-06
+date: 2026-06-21
 ---
 
 > [!info] В процессе разработки...
