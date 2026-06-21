@@ -1,18 +1,17 @@
 @use "./base.scss";
 
 // ==========================================
-// 1. КАСТОМНОЕ ЦВЕТОВОЕ КОДИРОВАНИЕ СТАТЕЙ (ARTICLE)
+// ARTICLE
 // ==========================================
 article {
-  // --- НАСТРОЙКИ ДЛЯ ТЕМНОЙ ТЕМЫ ---
   :root[saved-theme="dark"] & {
-    h1 { color: #88C0D0; } // Nord8 (Голубой)
-    h2 { color: #81A1C1; } // Nord9 (Светло-синий)
-    h3 { color: #5E81AC; } // Nord10 (Темно-синий)
-    h4, h5, h6 { color: #8FBCBB; } // Nord7 (Морская волна)
+    h1 { color: #88C0D0; } // Nord8
+    h2 { color: #81A1C1; } // Nord9
+    h3 { color: #5E81AC; } // Nord10
+    h4, h5, h6 { color: #8FBCBB; } // Nord7
 
-    strong, b { color: #A3BE8C; } // Nord14 (Приятный зеленый)
-    em, i { color: #EBCB8B; }     // Nord13 (Теплый желтый)
+    strong, b { color: #A3BE8C; } // Nord14
+    em, i { color: #EBCB8B; }     // Nord13
 
     a {
       color: #81A1C1; // Nord9
@@ -21,40 +20,38 @@ article {
     }
 
     mark {
-      background-color: rgba(163, 190, 140, 0.3); // Зеленый Nord14 с прозрачностью
-      color: #E5E9F0; // Nord5 (Яркий текст)
+      background-color: rgba(163, 190, 140, 0.3);
+      color: #E5E9F0; // Nord5
     }
   }
 
-  // --- НАСТРОЙКИ ДЛЯ СВЕТЛОЙ ТЕМЫ (Более контрастные цвета) ---
   :root[saved-theme="light"] & {
-    h1 { color: #5E81AC; } // Более глубокий синий (Nord10)
-    h2 { color: #4C566A; } // Темно-серый сланец (Nord3)
+    h1 { color: #5E81AC; } // Nord10
+    h2 { color: #4C566A; } // Nord3
     h3 { color: #434C5E; } // Nord2
-    h4, h5, h6 { color: #2E3440; } // Самый темный (Nord0)
+    h4, h5, h6 { color: #2E3440; } // Nord0
 
     strong, b {
-      color: #5E8343; // Затемненный зеленый для идеальной читаемости на белом
+      color: #5E8343;
       font-weight: 700;
     }
     em, i {
-      color: #9A7426; // Приглушенный охрово-желтый
+      color: #9A7426;
       font-style: italic;
     }
 
     a {
-      color: #3B4252; // Контрастный Nord1 для ссылок
+      color: #3B4252; // Nord1
       border-bottom-color: rgba(59, 66, 82, 0.4);
       &:hover { color: #5E81AC; }
     }
 
     mark {
-      background-color: #EBCB8B; // Плотный маркерный желтый подложки (Nord13)
-      color: #2E3440; // Черный текст внутри маркера
+      background-color: #EBCB8B; // Nord13
+      color: #2E3440;
     }
   }
 
-  // --- ОБЩИЕ БАЗОВЫЕ СТИЛИ (Применяются везде) ---
   strong, b {
     font-weight: 600;
   }
@@ -75,7 +72,7 @@ article {
 }
 
 // ==========================================
-// 2. СТИЛИЗАЦИЯ И АДАПТАЦИЯ КНОПКИ ГРАФА (.GRAPH)
+// 2. .GRAPH
 // ==========================================
 .graph {
   position: relative !important;
@@ -132,7 +129,7 @@ article {
 }
 
 // ==========================================
-// 3. СТИЛИЗАЦИЯ СЛИВАЮЩЕГОСЯ EXPLORER
+// 3. EXPLORER
 // ==========================================
 .explorer {
   button.folder-button {

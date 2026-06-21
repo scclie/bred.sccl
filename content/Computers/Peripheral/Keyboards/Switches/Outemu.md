@@ -28,11 +28,11 @@ date: 2026-06-16
 
 | Ранг | Свитчи |
 | :--- | :--- |
-| **S** | 🟡  Silent Yellow Jade • 🟢  Cold Plum • 🟢  Pink Jade |
+| **S** | 🟡  Silent Jade Yellow • 🟢  Cold Plum • 🟢  Jade Pink |
 | **A** | 🟡  Cream Yellow • 🟢  Cream Pink • 🟢  Silent Peach V2 • 🟢  Pink Lotus • 🟢  Hanny • 🟢  Lanny |
-| **B** | 🟡  Silent Lemon V2 • 🟡  Maple Leaf • 🟢  Milk Peach • 🟢  Bai Lan • 🟢  Silent Ocean|
-| **C** | 🟡  Red Panda • 🟡  Milk Tea • 🟢  Silent Peach V1 • 🟢  Silent White |
-| **D** | 🟡  Silent Lemon V1 • 🟢  Dustproof Silver • 🟢  Crystal Linear |
+| **B** | 🟡  Silent Lemon V2 • 🟡  Maple Leaf • 🟢  Milk Peach • 🟢  Bai Lan |
+| **C** | 🟡  Red Panda • 🟡  Milk Tea • 🟢  Silent Peach V1 • 🟢  Silent White • 🟢  Silent Ocean |
+| **D** | 🟡  Silent Lemon V1 • 🟢  Dustproof Silver • 🟢  Crystal Linear • 🟡 Outemu Silent Tom |
 | **F** | 🟢  Silver • 🟢  Black • 🟢  Red • 🟡  Brown • 🟡  Orange • 🟡  Purple |
 | **F-** | 🔴 Blue, Green, Gold, Ocean Clicky, Spring Breeze, Milk Blue, Jerry Clicky, Cream Blue, Jade Blue |
 
@@ -54,7 +54,7 @@ date: 2026-06-16
 * **Outemu Crystal Linear** - Полностью из поликарбоната. Сухой и дребезжит.
 * **Outemu Dustproof Silver** - Чуть лучше обычного сильвера, но все равно так себе.
 * **Outemu Cream Pink** - Хорошо смазан, маслянистый ход, глубокий звук (но Jade лучше).
-* **Outemu Pink Jade** - Более крутая версия Cream Pink, с быстрой пружиной.
+* **Outemu Jade Pink** - Более крутая версия Cream Pink, с быстрой пружиной.
 
 ------------------------------
 ## [TACTILES]
@@ -64,8 +64,9 @@ date: 2026-06-16
 * **Outemu Red Panda** - Проходной клон Holy Panda. Округлый бугор на старте, но без ручной смазки так себе затея.
 * **Outemu Maple Leaf** - Неплохой звонкий тактильник. Бугор четкий, ощущается быстрым, clacky звучание.
 * **Outemu Milk Tea** - Бюджетный средняк. Из-за молочного корпуса звук чуть мягче, но тактильность слабая.
-* **Outemu Silent Yellow Jade** - Топовый тихий тактильник. Четкий бугор на старте, вообще не ватный, смазан нормально. Близок к Gazzew Boba u4, но мягче.
+* **Outemu Silent Jade Yellow** - Топовый тихий тактильник. Четкий бугор на старте, вообще не ватный, смазан нормально. Близок к Gazzew Boba u4, но мягче.
 * **Outemu Cream Yellow** - Тактильный аналог Cream Pink. Хорошая смазка, мягкий глухой звук, приятный ход. Тоже близок к u4.
+* **Outemu Silent Tom** - Старый тихий тактильник. Бугор невнятный и размытый, уже не актуален.
 * **Outemu Silent Grey** - Древнее ватное говно. Бугра почти нет, при нажатии полное ощущение резины.
 * **Outemu Silent Lemon V1** - Был популярным тихим свитчем, но сильно песочит.
 * **Outemu Silent Lemon V2** - Работа над ошибками V1. Стал гораздо плавнее, нормальный тихий аналог коричневых свитчей.
