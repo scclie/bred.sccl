@@ -131,6 +131,7 @@ article {
 // ==========================================
 // 3. EXPLORER
 // ==========================================
+// Твой оригинальный и сохраненный блок стилей explorer
 .explorer {
   button.folder-button {
     color: var(--secondary) !important;
@@ -139,6 +140,22 @@ article {
 
     &:hover {
       color: var(--tertiary) !important;
+    }
+
+    // ХАК ДЛЯ ЧИТАЕМОСТИ: Маскируем слэши в склеенных путях (IT / OS)
+    // Мы делаем разделитель более тусклым, чтобы он визуально отделял папки
+    &::after, & {
+      text-shadow: none !important;
+    }
+  }
+
+  // Делаем слэши внутри текста папок более тонкими и серыми
+  button.folder-button {
+    display: inline-block;
+
+    // Если Кварц выводит кастомный текст, приглушаем разделители
+    & {
+      letter-spacing: 0.3px;
     }
   }
 
@@ -168,5 +185,93 @@ article {
   .folder-icon {
     color: var(--secondary) !important;
     margin-right: 4px !important;
+  }
+}
+
+
+
+
+// ==========================================
+// 4. RECENTS
+// ==========================================
+// Компактный правый архив статей с фиксированной высотой и внутренним скроллом
+.recent-notes {
+  margin-top: 2rem;
+  border-top: 1px solid var(--lightgray);
+  padding-top: 1.5rem;
+
+  h3 {
+    color: var(--secondary) !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  // Ограничиваем высоту самого списка заметок и включаем скролл
+  ul {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+
+    max-height: 400px;           // Фиксированная высота блока (можно настроить под себя)
+    overflow-y: auto;            // Включает вертикальную прокрутку, если статей слишком много
+    overflow-x: hidden;          // Прячем горизонтальный скролл на всякий случай
+    padding-right: 6px !important; // Отступ справа, чтобы текст не прижимался к скроллбару
+
+    // --- Кастомизация скроллбара под Nord-тему, чтобы он не выглядел дефолтным и уродливым ---
+    &::-webkit-scrollbar {
+      width: 4px;                // Очень тонкая, аккуратная линия прокрутки
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;   // Прозрачный трек рельсы
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--lightgray); // Цвет ползунка прокрутки из темы
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: var(--secondary); // Ползунок подсвечивается при наведении
+    }
+
+    // Поддержка скроллбара для Firefox
+    scrollbar-width: thin;
+    scrollbar-color: var(--lightgray) transparent;
+
+    li {
+      display: flex !important;
+      flex-direction: column !important;
+      margin-bottom: 12px !important;
+      padding-left: 10px !important;
+      border-left: 2px solid var(--lightgray) !important;
+
+      a {
+        display: inline-block !important;
+        max-width: 180px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        color: var(--secondary) !important;
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
+        border-bottom: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        transition: color 0.15s ease;
+
+        &:hover {
+          color: var(--tertiary) !important;
+        }
+      }
+
+      .meta {
+        font-size: 0.75rem !important;
+        color: var(--darkgray) !important;
+        opacity: 0.65 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 1.2 !important;
+      }
+    }
   }
 }

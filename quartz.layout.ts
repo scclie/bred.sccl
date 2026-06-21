@@ -8,9 +8,8 @@ export const sharedPageComponents: SharedLayout = {
   afterBody: [],
   footer: Component.Footer({
     links: {
-      GitHub: "https://github.com/papersaccul",
-      "Discord Community": "https://discord.gg/CTQN7X4a3A",
-      "Steam Profile": "https://steamcommunity.com/profiles/76561199186274147",
+      Contacts: "https://sccl.cc/contacts/",
+      GitHub: "https://github.com/scclie",
     },
   }),
 }
@@ -42,9 +41,10 @@ export const defaultContentPageLayout: PageLayout = {
     }),
     Component.Explorer({
       title: "Explorer",
-      folderClickBehavior: "collapse",
-      folderDefaultState: "collapsed",
+      folderClickBehavior: "toggle",
+      folderDefaultState: "open",
       useSavedState: true,
+      useCompactFolders: true,
       filterFn: (node) => node.name !== "templates" && node.name !== "private",
     }),
   ],
@@ -52,6 +52,12 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Graph(),
     Component.DesktopOnly(Component.TableOfContents()),
     Component.Backlinks(),
+    Component.RecentNotes({
+      title: "Recents",
+      limit: 50,
+      showTags: false,
+      linkToMore: "tags/",
+    }),
   ],
 }
 
