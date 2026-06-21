@@ -1,0 +1,87 @@
+---
+title: SSK-58tmr
+description: Split Scclie Wireless Keyboard 60. Craft OpenSource keyboard
+lang: en
+tags: 
+date: 2026-05-14
+autoTranslated: true
+---
+
+> [!info] In the process of thinking (development has not started)
+> Currently working on another keyboard: [[Sakuli60lp]]
+
+*A.K.A.*
+# Long way to dream
+
+## In short...
+I have long had a desire to build a custom keyboard from scratch...
+This writing is essentially my shitpost *(Idk what the fuck:: I love writing letters)*
+I’ll dump my thoughts on this project here, if you can call it that. (sort of like an overkill job, maybe it’s possible)
+
+## Whatamhow
+It is known that the topic of analog keyboards, mainly based on Hall-Effect sensors, has been popular in the keyboard market for the last few years.
+I don’t see any point in listing the goodies, they are obvious.
+And one of the minuses is the fucking energy consumption of HE keyboards compared to mechanical ones.
+Which greatly complicates the assembly of a wireless keyboard...
+
+For many, it may seem that wireless is useless shit, useless to anyone.
+Until some time I thought so myself, sitting on a staggered 2 kg piece of aluminum with buttons.
+But then I found myself in the hands of a split keyboard without a single wire.
+: turned on 2 halves, shoved the USB dongle into the computer and you work
+holds a charge for 3 months with 15 hours of daily use with 1500mAh batteries in each half (hule mechanics)
+And it turned out to be so convenient that I can no longer imagine a keyboard with wires.
+
+That's why I look towards tmr, because he eats 8 times less than he
+Although there must be pitfalls with it in the form of an unstable Vcc, which can spoil their accuracy, which is crap in comparison with he (well, in fact, in fact, they are stupidly less noisy, they don’t really suck in terms of accuracy)
+
+## Sobsna what do I need, where the fuck does it all begin.
+Right now it’s a stage of thinking, which will later flow into tests.
+According to budgets, I hope not to cost more than 25k rubles.
+-# the price for delivering sensors to Russia is just fucking fucked up (60++ euros per bag, fucking trade unions and sanctions)
+
+In terms of software, at first I thought this was the top: [peppapighs/libhmk](https://github.com/peppapighs/libhmk), because this is the best open source software for analog keyboards that can be found so far. It’s a pity that no one has messed with the TMR section yet, but overall I don’t think there’s a big difference. (more on the difference later)
+
+But unfortunately [author stated](https://github.com/peppapighs/libhmk/issues/2) - there will be no support for split
+And implementing such a theme on your own is fucking hell, which will probably require re-wiring all the software. Because there is no implementation of communication and synchronization of two controllers (such as uart/i2c/spi) Well, at least you can put some kind of wireless on top of tinyusb if you break your ass a little.
+
+But in order not to tear my ass, I’ll rather look towards [zmk](https://github.com/zmkfirmware/zmk) because This is one of the best solutions for keyboard firewood.
+And some idiot is already making a [module](https://github.com/cr3eperall/zmk-feature-hall-effect) for it to support HE boards, with a rapid trigger, socd and other cool features.
+
+## So we raised the topic of software...
+But there is no mention of TRM anywhere.
+But no one has ever made keyboards on TMR in the open source.
+Moreover, no one has made Split Wireless TMR keyboards.
+
+Everywhere current HE-HE-HE
+
+This is one of the key problems of this project - there are no examples.
+But fortunately there is already some progress in the HE field.
+And there is hope that there will be no special problems with TMR.
+
+## Let's move on to the difference between TMR and HE.
+Pachama, I have hope that I can push TMR sensors under HE firewood without tearing my ass?
+
+- TMR and HE have the same pinout (if we consider keyboard-friendly options in the SOT23-3 case)
+> GND, Vcc, Out
+
+- Can operate in the same voltage range
+> Keyboards usually dance at 3.3v - both technologies can work in this field
+
+- Similar transfer function 
+> HE: VOUT = VQ + S*B
+> TMR: VOUT = VCC\*(VOFFSET + S\*B)
+> 
+> , where 
+> VOUT - output voltage
+> VCC - supply voltage
+> VOFFSET - offset
+> VQ - Voltage at B = 0 
+> S - sensitivity
+> B - induction (don’t give a fuck, the position of the magnet, the switch is tightly clamped)
+> 
+> In short, it's just bullshit, we just need to take Vcc into account, which may become a problem in the future.
+
+The theme itself will be a columar format, like on a keyboard (it has a little more - 64 buttons, I think this keyboard will still have 58-60 buttons), which few people will be interested in.
+But questions about HE/TMR are common, regardless of the layout, I hope at least someone will be interested in reading some of my belongings and research on this topic...
+
+![[sccl_colemak.webp]]

@@ -1,0 +1,45 @@
+/* quartz/static/giscus.css */
+
+main {
+  --color-preload-color-scheme: light;
+  --color-canvas-default: var(--light);
+  --color-canvas-next: var(--lightgray);
+  --color-border-default: var(--lightgray);
+  --color-border-muted: var(--lightgray);
+  --color-text-default: var(--dark);
+  --color-text-muted: var(--gray);
+  --color-text-accent: var(--secondary);
+  --color-btn-text: var(--dark);
+  --color-btn-bg: var(--light);
+  --color-btn-border: var(--lightgray);
+  --color-btn-hover-bg: var(--lightgray);
+  --color-btn-hover-border: var(--gray);
+  --color-btn-primary-text: var(--light);
+  --color-btn-primary-bg: var(--secondary);
+  --color-btn-primary-border: var(--secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+  main {
+    --color-preload-color-scheme: dark;
+    --color-canvas-default: var(--dark);
+    --color-canvas-next: var(--darkgray);
+    --color-border-default: var(--darkgray);
+    --color-border-muted: var(--darkgray);
+    --color-text-default: var(--light);
+    --color-text-muted: var(--gray);
+    --color-text-accent: var(--secondary);
+    --color-btn-text: var(--light);
+    --color-btn-bg: var(--dark);
+    --color-btn-border: var(--darkgray);
+    --color-btn-hover-bg: var(--darkgray);
+    --color-btn-hover-border: var(--gray);
+  }
+}
+
+.giscus-frame {
+  font-family: var(--bodyFont), sans-serif;
+}
+.giscus .btn {
+  border-radius: 4px !important;
+}

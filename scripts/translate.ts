@@ -2,27 +2,22 @@
 /**
  * translate.ts — пре-билд автоперевод статей
  *
- * Логика:
- *  1. Обходит content/ru/** и для каждого .md проверяет наличие пары в content/en/
- *  2. Если пары нет — переводит через Google Translate (unofficial, без ключа)
- *  3. Кэширует по SHA-256 от исходного контента в .translation-cache.json
- *  4. Если файл не изменился — повторно не переводит
- *
  * Запуск:
  *   npx ts-node scripts/translate.ts
- *   npx ts-node scripts/translate.ts --dry-run   (показать что будет переведено)
- *   npx ts-node scripts/translate.ts --force      (игнорировать кэш)
- *
- * Добавьте в package.json:
- *   "prebuild": "npx ts-node scripts/translate.ts"
+ *   npx ts-node scripts/translate.ts --dry-run
+ *   npx ts-node scripts/translate.ts --force
  */
 
 import * as fs from "fs"
 import * as path from "path"
 import * as crypto from "crypto"
 import * as https from "https"
+import { fileURLToPath } from "url"
 
 // ─── Конфиг ───────────────────────────────────────────────────────────────────
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const CONTENT_ROOT = path.resolve(__dirname, "../content")
 const RU_DIR = path.join(CONTENT_ROOT, "ru")
@@ -32,7 +27,7 @@ const CACHE_FILE = path.resolve(__dirname, "../.translation-cache.json")
 const DRY_RUN = process.argv.includes("--dry-run")
 const FORCE = process.argv.includes("--force")
 
-// Задержка между запросами, чтобы не получить бан (мс)
+// Задержка между запросами (мс)
 const DELAY_MS = 1200
 
 // ─── Типы ─────────────────────────────────────────────────────────────────────
@@ -42,7 +37,7 @@ interface CacheEntry {
   translatedAt: string
 }
 
-type Cache = Record<string, CacheEntry> // ключ = относительный путь от content/ru/
+type Cache = Record<string, CacheEntry>
 
 // ─── Утилиты ──────────────────────────────────────────────────────────────────
 
@@ -103,52 +98,89 @@ function parseFrontmatter(content: string): ParsedFile {
 
 function buildFrontmatter(fm: Record<string, string>): string {
   const lines = Object.entries(fm).map(([k, v]) => {
-    // Если значение содержит спецсимволы — оборачиваем в кавычки
     const needsQuotes = /[:#\[\]{},|>&*!]/.test(v) || v.includes("\n")
     return `${k}: ${needsQuotes ? `'${v.replace(/'/g, "''")}'` : v}`
   })
   return `---\n${lines.join("\n")}\n---\n\n`
 }
 
-// ─── Google Translate (unofficial) ────────────────────────────────────────────
-// Использует публичный endpoint translate.googleapis.com
-// Нестабилен, может требовать повтора при 429
+// ─── Google Translate (unofficial, POST) ──────────────────────────────────────
+// POST вместо GET — кириллица в encodeURIComponent раздувает GET-URL втрое → 400.
 
 function gtranslateSingle(text: string, from: string, to: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    const encoded = encodeURIComponent(text)
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encoded}`
+    const body = new URLSearchParams({ q: text }).toString()
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t`
 
-    https
-      .get(url, (res) => {
-        let data = ""
-        res.on("data", (chunk) => (data += chunk))
-        res.on("end", () => {
-          try {
-            const json = JSON.parse(data)
-            // Структура ответа: [[["translated", "original", ...], ...], ...]
-            const translated = json[0]
-              .map((part: [string]) => part[0])
-              .filter(Boolean)
-              .join("")
-            resolve(translated)
-          } catch {
-            reject(new Error(`Ошибка парсинга ответа GT: ${data.slice(0, 200)}`))
-          }
-        })
+    const options: https.RequestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": Buffer.byteLength(body),
+        "User-Agent": "Mozilla/5.0",
+      },
+    }
+
+    const req = https.request(url, options, (res) => {
+      let data = ""
+      res.on("data", (chunk) => (data += chunk))
+      res.on("end", () => {
+        if (res.statusCode === 429) {
+          reject(new Error("GT rate limit (429)"))
+          return
+        }
+        if (res.statusCode !== 200) {
+          reject(new Error(`GT HTTP ${res.statusCode}: ${data.slice(0, 150)}`))
+          return
+        }
+        try {
+          const json = JSON.parse(data)
+          const translated = (json[0] as [string][])
+            .map((part) => part[0])
+            .filter(Boolean)
+            .join("")
+          resolve(translated)
+        } catch {
+          reject(new Error(`GT parse error: ${data.slice(0, 200)}`))
+        }
       })
-      .on("error", reject)
+    })
+
+    req.on("error", reject)
+    req.write(body)
+    req.end()
   })
 }
 
-// Разбиваем на чанки по ~4500 символов (лимит GT)
+// Retry с экспоненциальной задержкой
+async function gtranslateWithRetry(
+  text: string,
+  from: string,
+  to: string,
+  retries = 3,
+): Promise<string> {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      return await gtranslateSingle(text, from, to)
+    } catch (err: any) {
+      if (attempt === retries) throw err
+      const wait = DELAY_MS * attempt * 2
+      console.warn(`  ⚠️  Попытка ${attempt} (${err.message}), повтор через ${wait}мс...`)
+      await sleep(wait)
+    }
+  }
+  throw new Error("unreachable")
+}
+
+// Разбиваем на чанки по ~1500 символов
+// (кириллица = ~3 байта/символ, безопасный размер POST-тела ~5KB)
 async function translateText(text: string, from: string, to: string): Promise<string> {
-  const CHUNK_SIZE = 4500
+  const CHUNK_SIZE = 1500
+
   if (text.length <= CHUNK_SIZE) {
-    return gtranslateSingle(text, from, to)
+    return gtranslateWithRetry(text, from, to)
   }
 
-  // Разбиваем по абзацам, чтобы не резать слова
   const paragraphs = text.split(/\n\n+/)
   const chunks: string[] = []
   let current = ""
@@ -165,7 +197,7 @@ async function translateText(text: string, from: string, to: string): Promise<st
 
   const results: string[] = []
   for (const chunk of chunks) {
-    const translated = await gtranslateSingle(chunk, from, to)
+    const translated = await gtranslateWithRetry(chunk, from, to)
     results.push(translated)
     if (chunks.length > 1) await sleep(DELAY_MS)
   }
@@ -184,16 +216,13 @@ async function translateFile(
   const content = fs.readFileSync(ruPath, "utf-8")
   const hash = sha256(content)
 
-  // Проверяем кэш
   if (!FORCE && cache[relPath]?.sourceHash === hash && fs.existsSync(enPath)) {
-    return false // не изменился
+    return false
   }
 
   const { frontmatter, body } = parseFrontmatter(content)
 
-  // Проверяем, есть ли явная ссылка на ручной перевод
   if (frontmatter.translation) {
-    // Ручной перевод существует — автоперевод не нужен
     return false
   }
 
@@ -202,23 +231,21 @@ async function translateFile(
   if (DRY_RUN) return true
 
   try {
-    // Переводим title и description из frontmatter
     const enFm = { ...frontmatter }
     enFm.lang = "en"
     enFm.autoTranslated = "true"
     delete enFm.translation
 
     if (frontmatter.title) {
-      enFm.title = await translateText(frontmatter.title, "ru", "en")
+      enFm.title = await gtranslateWithRetry(frontmatter.title, "ru", "en")
       await sleep(DELAY_MS)
     }
     if (frontmatter.description) {
-      enFm.description = await translateText(frontmatter.description, "ru", "en")
+      enFm.description = await gtranslateWithRetry(frontmatter.description, "ru", "en")
       await sleep(DELAY_MS)
     }
 
-    // Переводим тело статьи
-    // Защищаем блоки кода от перевода — заменяем на плейсхолдеры
+    // Защищаем блоки кода от перевода
     const codeBlocks: string[] = []
     const bodyWithPlaceholders = body.replace(/```[\s\S]*?```/g, (match) => {
       const idx = codeBlocks.push(match) - 1
@@ -227,15 +254,16 @@ async function translateFile(
 
     const translatedBody = await translateText(bodyWithPlaceholders, "ru", "en")
 
-    // Возвращаем блоки кода
-    const finalBody = translatedBody.replace(/__CODE_BLOCK_(\d+)__/g, (_, idx) => codeBlocks[Number(idx)])
+    const finalBody = translatedBody.replace(
+      /__CODE_BLOCK_(\d+)__/g,
+      (_, idx) => codeBlocks[Number(idx)],
+    )
 
     const output = buildFrontmatter(enFm) + finalBody
 
     ensureDir(enPath)
     fs.writeFileSync(enPath, output, "utf-8")
 
-    // Обновляем кэш
     cache[relPath] = {
       sourceHash: hash,
       translatedAt: new Date().toISOString(),
@@ -287,13 +315,12 @@ async function main() {
     const ruPath = path.join(RU_DIR, relPath)
     const enPath = path.join(EN_DIR, relPath)
 
-    // Если файл en/ уже существует и НЕ является авто — пропускаем
     if (fs.existsSync(enPath)) {
       const enContent = fs.readFileSync(enPath, "utf-8")
       const { frontmatter } = parseFrontmatter(enContent)
       if (frontmatter.autoTranslated !== "true") {
         hasManual++
-        continue // ручной перевод — не трогаем
+        continue
       }
     }
 

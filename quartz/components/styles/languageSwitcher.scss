@@ -1,0 +1,102 @@
+// languageSwitcher.scss
+// Стиль в духе Wikipedia — минималистичный, но узнаваемый.
+// Адаптирован под Nord-палитру из custom.scss.
+
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  font-family: var(--bodyFont), sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--lightgray);
+  background: transparent;
+  user-select: none;
+
+  // Тёмная тема (Nord)
+  :root[saved-theme="dark"] & {
+    border-color: #3B4252; // Nord1
+    background: rgba(59, 66, 82, 0.3);
+
+    .lang-current {
+      color: #88C0D0; // Nord8 — активный язык выделен голубым
+    }
+
+    .lang-divider {
+      color: #434C5E; // Nord2 — разделитель приглушён
+    }
+
+    .lang-other {
+      color: #81A1C1; // Nord9
+      &:hover {
+        color: #88C0D0; // Nord8
+      }
+    }
+
+    .lang-auto {
+      color: #A3BE8C; // Nord14 (зелёный) — автоперевод
+      &:hover {
+        color: #B5CFA2;
+      }
+    }
+  }
+
+  // Светлая тема
+  :root[saved-theme="light"] & {
+    border-color: #D8DEE9; // Nord4
+    background: rgba(216, 222, 233, 0.2);
+
+    .lang-current {
+      color: #5E81AC; // Nord10
+    }
+
+    .lang-divider {
+      color: #D8DEE9; // Nord4
+    }
+
+    .lang-other {
+      color: #4C566A; // Nord3
+      &:hover {
+        color: #5E81AC; // Nord10
+      }
+    }
+
+    .lang-auto {
+      color: #5E8343; // приглушённый зелёный (как strong в light)
+      &:hover {
+        color: #4a6a34;
+      }
+    }
+  }
+}
+
+.lang-current {
+  pointer-events: none;
+  padding: 2px 5px;
+}
+
+.lang-divider {
+  padding: 0 2px;
+  font-weight: 300;
+}
+
+.lang-other {
+  padding: 2px 5px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  border-radius: 3px;
+  transition: color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+
+// Пометка автоперевода — слегка курсивом чтобы отличался
+.lang-auto {
+  font-style: italic;
+}

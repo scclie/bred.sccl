@@ -23,6 +23,8 @@ import Breadcrumbs from "./Breadcrumbs"
 import Comments from "./Comments"
 import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
+import LanguageSwitcher from "./LanguageSwitcher"
+import TranslationNotice from "./TranslationNotice"
 
 export {
   ArticleTitle,
@@ -50,4 +52,6 @@ export {
   Comments,
   Flex,
   ConditionalRender,
+  LanguageSwitcher,
+  TranslationNotice,
 }

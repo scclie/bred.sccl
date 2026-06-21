@@ -5,11 +5,29 @@ import * as Component from "./quartz/components"
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [],
+  afterBody: [
+    Component.Comments({
+      provider: "giscus",
+      options: {
+        repo: "scclie/shiza-comments",
+        repoId: "R_kgDOTBPD2g",
+        category: "General",
+        categoryId: "DIC_kwDOTBPD2s4C_nyY",
+        mapping: "pathname",
+        strict: false,
+        reactionsEnabled: true,
+        inputPosition: "bottom",
+        lightTheme: "custom",
+        darkTheme: "custom",
+        themeUrl: "https://shiza.sccl.cc/gisco",
+        lang: "en",
+      },
+    }),
+  ],
   footer: Component.Footer({
     links: {
-      Contacts: "https://sccl.cc/contacts/",
-      GitHub: "https://github.com/scclie",
+      Contacts: "https://sccl.cc",
+      GitHub: "https://github.com",
     },
   }),
 }
@@ -17,26 +35,28 @@ export const sharedPageComponents: SharedLayout = {
 // components for pages that display a single page (e.g. a single note)
 export const defaultContentPageLayout: PageLayout = {
   beforeBody: [
+    Component.LanguageSwitcher(),
     Component.ConditionalRender({
       component: Component.Breadcrumbs(),
-      condition: (page) => page.fileData.slug !== "index",
+      condition: (page) => {
+        const slug = page.fileData.slug ?? ""
+        return slug !== "index" && slug !== "ru/index" && slug !== "en/index"
+      },
     }),
     Component.ArticleTitle(),
+    Component.TranslationNotice(),
     Component.ContentMeta(),
     Component.TagList(),
   ],
   left: [
     Component.PageTitle(),
-    // Component.Darkmode(),
     Component.MobileOnly(Component.Spacer()),
     Component.Flex({
       components: [
-        { Component: Component.Darkmode() },
         {
           Component: Component.Search(),
           grow: true,
         },
-        // { Component: Component.ReaderMode() },
       ],
     }),
     Component.Explorer({
@@ -45,7 +65,10 @@ export const defaultContentPageLayout: PageLayout = {
       folderDefaultState: "open",
       useSavedState: true,
       useCompactFolders: true,
-      filterFn: (node) => node.name !== "templates" && node.name !== "private",
+      filterFn: (node) => {
+        if (node.name === "templates" || node.name === "private") return false
+        return true
+      },
     }),
   ],
   right: [
@@ -54,16 +77,21 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Backlinks(),
     Component.RecentNotes({
       title: "Recents",
-      limit: 50,
+      limit: 10,
       showTags: false,
       linkToMore: "tags/",
     }),
   ],
 }
 
-// components for pages that display lists of pages  (e.g. tags or folders)
+// components for pages that display lists of pages (e.g. tags or folders)
 export const defaultListPageLayout: PageLayout = {
-  beforeBody: [Component.Breadcrumbs(), Component.ArticleTitle(), Component.ContentMeta()],
+  beforeBody: [
+    Component.LanguageSwitcher(),
+    Component.Breadcrumbs(),
+    Component.ArticleTitle(),
+    Component.ContentMeta(),
+  ],
   left: [
     Component.PageTitle(),
     Component.MobileOnly(Component.Spacer()),
