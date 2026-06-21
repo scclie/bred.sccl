@@ -22,19 +22,23 @@ date: 2026-06-16
 
 
 # Тирлист
-🟢 - Linear
+🔴 - Linear
+
 🟡 - Tactile
-🔴 - Clicky
+
+🔵 - Clicky
 
 | Ранг | Свитчи |
 | :--- | :--- |
-| **S** | 🟡  Silent Jade Yellow • 🟢  Cold Plum • 🟢  Jade Pink |
-| **A** | 🟡  Cream Yellow • 🟢  Cream Pink • 🟢  Silent Peach V2 • 🟢  Pink Lotus • 🟢  Hanny • 🟢  Lanny |
-| **B** | 🟡  Silent Lemon V2 • 🟡  Maple Leaf • 🟢  Milk Peach • 🟢  Bai Lan |
-| **C** | 🟡  Red Panda • 🟡  Milk Tea • 🟢  Silent Peach V1 • 🟢  Silent White • 🟢  Silent Ocean |
-| **D** | 🟡  Silent Lemon V1 • 🟢  Dustproof Silver • 🟢  Crystal Linear • 🟡 Outemu Silent Tom |
-| **F** | 🟢  Silver • 🟢  Black • 🟢  Red • 🟡  Brown • 🟡  Orange • 🟡  Purple |
-| **F-** | 🔴 Blue, Green, Gold, Ocean Clicky, Spring Breeze, Milk Blue, Jerry Clicky, Cream Blue, Jade Blue |
+| **S** | 🟡  Silent Jade Yellow • 🔴  Cold Plum • 🔴  Jade Pink |
+| **A** | 🟡  Cream Yellow • 🔴  Cream Pink • 🔴  Silent Peach V2 • 🔴  Pink Lotus • 🔴  Hanny • 🔴  Lanny |
+| **B** | 🟡  Silent Lemon V2 • 🟡  Maple Leaf • 🔴  Milk Peach • 🔴  Bai Lan |
+| **C** | 🟡  Red Panda • 🟡  Milk Tea • 🔴  Silent Peach V1 • 🔴  Silent White • 🔴  Silent Ocean |
+| **D** | 🟡  Silent Lemon V1 • 🔴  Dustproof Silver • 🔴  Crystal Linear • 🟡 Outemu Silent Tom |
+| **F** | 🔴  Silver • 🔴  Black • 🔴  Red • 🟡  Brown • 🟡  Orange • 🟡  Purple |
+| **F-** | 🔵 Blue, Green, Gold, Ocean Clicky, Spring Breeze, Milk Blue, Jerry Clicky, Cream Blue, Jade Blue |
+
+---
 
 # Описание каждого
 ## [LINEARS]
