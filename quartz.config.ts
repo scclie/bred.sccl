@@ -40,21 +40,38 @@ const config: QuartzConfig = {
           textHighlight: "#fff23688",
         },
         darkMode: {
-          "light": "#2E3440",      // Nord0 - Самый темный фон
-          "lightgray": "#3B4252",  // Nord1 - Более светлый фон
-          "gray": "#434C5E",       // Nord2 - Еще светлее, для элементов UI
-          "darkgray": "#D8DEE9",   // Nord4 - Текст на темном фоне
-          "dark": "#E5E9F0",       // Nord5 - Яркий текст/акценты
-          "secondary": "#81A1C1",  // Nord9 - Синий (акцент)
-          "tertiary": "#88C0D0",   // Nord8 - Голубой (акцент)
-          "highlight": "rgba(76, 86, 106, 0.3)",  // Nord3 с прозрачностью - подсветка
-          "textHighlight": "#A3BE8C88"  // Nord14 с прозрачностью - подсветка текста (зеленый)
+          light: "#2E3440", // Nord0 - Самый темный фон
+          lightgray: "#3B4252", // Nord1 - Более светлый фон
+          gray: "#434C5E", // Nord2 - Еще светлее, для элементов UI
+          darkgray: "#D8DEE9", // Nord4 - Текст на темном фоне
+          dark: "#E5E9F0", // Nord5 - Яркий текст/акценты
+          secondary: "#81A1C1", // Nord9 - Синий (акцент)
+          tertiary: "#88C0D0", // Nord8 - Голубой (акцент)
+          highlight: "rgba(76, 86, 106, 0.3)", // Nord3 с прозрачностью - подсветка
+          textHighlight: "#A3BE8C88", // Nord14 с прозрачностью - подсветка текста (зеленый)
         },
       },
     },
   },
   plugins: {
     transformers: [
+      {
+        name: "DiscordSmallText",
+        textTransform: (ctx, text) => {
+          return text.replace(/^-\s*#\s*(.+)$/gm, "<small>$1</small><br>")
+        },
+      },
+      Plugin.FrontMatter(),
+      Plugin.CreatedModifiedDate({
+        priority: ["frontmatter", "git", "filesystem"],
+      }),
+      Plugin.SyntaxHighlighting({
+        theme: {
+          light: "github-light",
+          dark: "github-dark",
+        },
+        keepBackground: false,
+      }),
       Plugin.FrontMatter(),
       Plugin.CreatedModifiedDate({
         priority: ["frontmatter", "git", "filesystem"],
@@ -88,8 +105,20 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      // Comment out CustomOgImages to speed up build time
-      Plugin.CustomOgImages(),
+      Plugin.CustomOgImages({
+              cfg: {
+                font: "Montserrat",
+                imageWidth: 1200,
+                imageHeight: 630,
+                fonts: [{
+                  name: "Montserrat",
+                  style: "normal",
+                  weight: 700,
+                  path: "./quartz/static/fonts/Montserrat-700.ttf", // Указываем точное имя файла
+                }]
+              }
+            }),
+
     ],
   },
 }

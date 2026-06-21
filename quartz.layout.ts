@@ -11,7 +11,6 @@ export const sharedPageComponents: SharedLayout = {
       GitHub: "https://github.com/papersaccul",
       "Discord Community": "https://discord.gg/CTQN7X4a3A",
       "Steam Profile": "https://steamcommunity.com/profiles/76561199186274147",
-
     },
   }),
 }
@@ -25,14 +24,14 @@ export const defaultContentPageLayout: PageLayout = {
     }),
     Component.ArticleTitle(),
     Component.ContentMeta(),
-    // Component.TagList(),
+    Component.TagList(),
   ],
   left: [
     Component.PageTitle(),
     // Component.Darkmode(),
     Component.MobileOnly(Component.Spacer()),
     Component.Flex({
-       components: [
+      components: [
         { Component: Component.Darkmode() },
         {
           Component: Component.Search(),
@@ -41,10 +40,16 @@ export const defaultContentPageLayout: PageLayout = {
         // { Component: Component.ReaderMode() },
       ],
     }),
-    // Component.Explorer(),
+    Component.Explorer({
+      title: "Explorer",
+      folderClickBehavior: "collapse",
+      folderDefaultState: "collapsed",
+      useSavedState: true,
+      filterFn: (node) => node.name !== "templates" && node.name !== "private",
+    }),
   ],
   right: [
-    // Component.Graph(),
+    Component.Graph(),
     Component.DesktopOnly(Component.TableOfContents()),
     Component.Backlinks(),
   ],

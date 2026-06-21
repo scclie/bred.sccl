@@ -23,33 +23,222 @@ const defaultOptions: SocialImageOptions = {
 
 /**
  * Generates social image (OG/twitter standard) and saves it as `.webp` inside the public folder
- * @param opts options for generating image
  */
 async function generateSocialImage(
-  { cfg, description, fonts, title, fileData }: ImageOptions,
+  { description, fonts, title, fileData, cfg }: ImageOptions,
   userOpts: SocialImageOptions,
 ): Promise<Readable> {
   const { width, height } = userOpts
-  const iconPath = joinSegments(QUARTZ, "static", "icon.png")
-  let iconBase64: string | undefined = undefined
+
+  // Считываем твой кастомный фон og-image.png из quartz/static/
+  const ogBgPath = joinSegments(QUARTZ, "static", "og-image.png")
+  let ogBgBase64: string | undefined = undefined
   try {
-    const iconData = await fs.readFile(iconPath)
-    iconBase64 = `data:image/png;base64,${iconData.toString("base64")}`
+    const bgData = await fs.readFile(ogBgPath)
+    ogBgBase64 = `data:image/png;base64,${bgData.toString("base64")}`
   } catch (err) {
-    console.warn(styleText("yellow", `Warning: Could not find icon at ${iconPath}`))
+    console.warn(styleText("yellow", `Warning: Could not find custom background at ${ogBgPath}`))
   }
 
-  const imageComponent = userOpts.imageStructure({
-    cfg,
-    userOpts,
-    title,
-    description,
-    fonts,
-    fileData,
-    iconBase64,
-  })
+  // Достаем метаданные: дату, время чтения и теги
+  const dateStr = fileData.dates?.created
+    ? new Date(fileData.dates.created).toLocaleDateString(cfg.locale, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : ""
+  const readingTime = fileData.description ? Math.ceil(fileData.description.trim().split(/\s+/).length / 200) : 1
+  const readingTimeStr = `${readingTime} min read`
+  const tags: string[] = (fileData.frontmatter?.tags as string[]) ?? []
 
-  const svg = await satori(imageComponent, {
+  // СБОРКА КАРТОЧКИ С СИСТЕМНЫМИ ИКОНКАМИ И УВЕЛИЧЕННЫМ ТЕКСТОМ
+  const imageComponent = {
+    type: "div",
+    props: {
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        width: "100%",
+        height: "100%",
+        padding: "60px 80px",
+        position: "relative",
+        backgroundImage: ogBgBase64 ? `url(${ogBgBase64})` : undefined,
+        backgroundSize: "100% 100%",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "#2E3440",
+      },
+      children: [
+        // ВЕРХНЯЯ ЧАСТЬ: Вотермарка sccl.cc
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              justifyContent: "flex-end",
+              width: "100%",
+            },
+            children: {
+              type: "div",
+              props: {
+                style: {
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "6px 16px",
+                  border: "2px solid #81A1C1",
+                  borderRadius: "20px",
+                  backgroundColor: "rgba(46, 52, 64, 0.7)",
+                },
+                children: {
+                  type: "span",
+                  props: {
+                    style: {
+                      color: "#88C0D0",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                      fontFamily: "Montserrat",
+                    },
+                    children: "sccl.cc",
+                  },
+                },
+              },
+            },
+          },
+        },
+
+        // СРЕДНЯЯ ЧАСТЬ: Заголовок и Описание
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              maxWidth: "70%",
+              marginBottom: "auto",
+              marginTop: "40px",
+            },
+            children: [
+              {
+                type: "span",
+                props: {
+                  style: {
+                    fontSize: "56px",
+                    fontWeight: "800",
+                    color: "#E5E9F0",
+                    fontFamily: "Montserrat",
+                    marginBottom: "16px",
+                  },
+                  children: title,
+                },
+              },
+              {
+                type: "span",
+                props: {
+                  style: {
+                    fontSize: "24px",
+                    color: "#D8DEE9",
+                    fontFamily: "Inter",
+                    lineHeight: "1.4",
+                  },
+                  children: description,
+                },
+              },
+            ],
+          },
+        },
+
+        // НИЖНЯЯ ЧАСТЬ: Крупные системные метаданные и увеличенные теги
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              borderTop: "1px solid rgba(67, 76, 94, 0.5)",
+              paddingTop: "24px", // Чуть больше отступ сверху
+            },
+            children: [
+              // Левая сторона: Календарь и Часы в line-формате (сделаны больше)
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", gap: "32px", alignItems: "center" },
+                  children: [
+                    dateStr && {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", gap: "10px" },
+                        children: [
+                          // Системная SVG иконка календаря Quartz
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D8DEE9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ opacity: 0.7 }}><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>,
+                          {
+                            type: "span",
+                            props: {
+                              style: { color: "#D8DEE9", fontSize: "22px", fontFamily: "Inter", opacity: 0.7 }, // Размер увеличен до 22px
+                              children: dateStr,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", gap: "10px" },
+                        children: [
+                          // Системная SVG иконка часов Quartz
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D8DEE9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ opacity: 0.7 }}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>,
+                          {
+                            type: "span",
+                            props: {
+                              style: { color: "#D8DEE9", fontSize: "22px", fontFamily: "Inter", opacity: 0.7 }, // Размер увеличен до 22px
+                              children: readingTimeStr,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ].filter(Boolean),
+                },
+              },
+              // Правая сторона: Крупные аккуратные плашки тегов
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", gap: "12px" },
+                  children: tags.slice(0, 3).map((tag) => ({
+                    type: "div",
+                    props: {
+                      style: {
+                        padding: "6px 16px", // Увеличили внутренние отступы плашек
+                        backgroundColor: "#3B4252",
+                        border: "1px solid #434C5E",
+                        borderRadius: "6px",
+                        display: "flex",
+                      },
+                      children: {
+                        type: "span",
+                        props: {
+                          style: { color: "#81A1C1", fontSize: "19px", fontFamily: "Inter", fontWeight: "600" }, // Размер увеличен до 19px
+                          children: tag.startsWith("#") ? tag : `#${tag}`,
+                        },
+                      },
+                    },
+                  })),
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  }
+
+  const svg = await satori(imageComponent as any, {
     width,
     height,
     fonts,
@@ -57,7 +246,6 @@ async function generateSocialImage(
       if (languageCode === "emoji") {
         return await loadEmoji(getIconCode(segment))
       }
-
       return languageCode
     },
   })
@@ -126,7 +314,6 @@ export const CustomOgImages: QuartzEmitterPlugin<Partial<SocialImageOptions>> = 
       const bodyFont = cfg.theme.typography.body
       const fonts = await getSatoriFonts(headerFont, bodyFont)
 
-      // find all slugs that changed or were added
       for (const changeEvent of changeEvents) {
         if (!changeEvent.file) continue
         if (changeEvent.file.data.frontmatter?.socialImage !== undefined) continue

@@ -1,3 +1,175 @@
 @use "./base.scss";
 
-// put your custom CSS here!
+// ==========================================
+// 1. КАСТОМНОЕ ЦВЕТОВОЕ КОДИРОВАНИЕ СТАТЕЙ (ARTICLE)
+// ==========================================
+article {
+  // --- НАСТРОЙКИ ДЛЯ ТЕМНОЙ ТЕМЫ ---
+  :root[saved-theme="dark"] & {
+    h1 { color: #88C0D0; } // Nord8 (Голубой)
+    h2 { color: #81A1C1; } // Nord9 (Светло-синий)
+    h3 { color: #5E81AC; } // Nord10 (Темно-синий)
+    h4, h5, h6 { color: #8FBCBB; } // Nord7 (Морская волна)
+
+    strong, b { color: #A3BE8C; } // Nord14 (Приятный зеленый)
+    em, i { color: #EBCB8B; }     // Nord13 (Теплый желтый)
+
+    a {
+      color: #81A1C1; // Nord9
+      border-bottom-color: rgba(129, 161, 193, 0.4);
+      &:hover { color: #88C0D0; }
+    }
+
+    mark {
+      background-color: rgba(163, 190, 140, 0.3); // Зеленый Nord14 с прозрачностью
+      color: #E5E9F0; // Nord5 (Яркий текст)
+    }
+  }
+
+  // --- НАСТРОЙКИ ДЛЯ СВЕТЛОЙ ТЕМЫ (Более контрастные цвета) ---
+  :root[saved-theme="light"] & {
+    h1 { color: #5E81AC; } // Более глубокий синий (Nord10)
+    h2 { color: #4C566A; } // Темно-серый сланец (Nord3)
+    h3 { color: #434C5E; } // Nord2
+    h4, h5, h6 { color: #2E3440; } // Самый темный (Nord0)
+
+    strong, b {
+      color: #5E8343; // Затемненный зеленый для идеальной читаемости на белом
+      font-weight: 700;
+    }
+    em, i {
+      color: #9A7426; // Приглушенный охрово-желтый
+      font-style: italic;
+    }
+
+    a {
+      color: #3B4252; // Контрастный Nord1 для ссылок
+      border-bottom-color: rgba(59, 66, 82, 0.4);
+      &:hover { color: #5E81AC; }
+    }
+
+    mark {
+      background-color: #EBCB8B; // Плотный маркерный желтый подложки (Nord13)
+      color: #2E3440; // Черный текст внутри маркера
+    }
+  }
+
+  // --- ОБЩИЕ БАЗОВЫЕ СТИЛИ (Применяются везде) ---
+  strong, b {
+    font-weight: 600;
+  }
+  em, i {
+    font-style: italic;
+  }
+  a {
+    text-decoration: none;
+    border-bottom: 1px dashed;
+    &:hover {
+      border-bottom-style: solid;
+    }
+  }
+  mark {
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+  }
+}
+
+// ==========================================
+// 2. СТИЛИЗАЦИЯ И АДАПТАЦИЯ КНОПКИ ГРАФА (.GRAPH)
+// ==========================================
+.graph {
+  position: relative !important;
+
+  button[class*="expand"], .graph-expand, [id*="graph"] + button, button:has(svg) {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+    cursor: pointer !important;
+    z-index: 99 !important;
+    transition: all 0.2s ease !important;
+
+    // Стили кнопок под разные темы
+    :root[saved-theme="dark"] & {
+      background-color: #3B4252 !important; // Nord1
+      border: 1px solid #81A1C1 !important; // Nord9
+      &::after { color: #E5E9F0 !important; } // Nord5
+      svg { color: #88C0D0 !important; } // Nord8
+      &:hover { background-color: #434C5E !important; border-color: #88C0D0 !important; }
+    }
+
+    :root[saved-theme="light"] & {
+      background-color: #E5E9F0 !important; // Светлый Nord5
+      border: 1px solid #4C566A !important; // Темный Nord3
+      &::after { color: #2E3440 !important; } // Текст Nord0
+      svg { color: #5E81AC !important; } // Иконка Nord10
+      &:hover { background-color: #D8DEE9 !important; border-color: #3B4252 !important; }
+    }
+
+    &::after {
+      content: "Graph" !important;
+      display: inline-block !important;
+      font-family: var(--bodyFont), sans-serif !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      visibility: visible !important;
+    }
+
+    svg {
+      width: 16px !important;
+      height: 16px !important;
+      position: static !important;
+    }
+  }
+}
+
+// ==========================================
+// 3. СТИЛИЗАЦИЯ СЛИВАЮЩЕГОСЯ EXPLORER
+// ==========================================
+.explorer {
+  button.folder-button {
+    color: var(--secondary) !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+
+    &:hover {
+      color: var(--tertiary) !important;
+    }
+  }
+
+  li a {
+    display: inline-block !important;
+    max-width: 200px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    color: var(--darkgray) !important;
+    font-size: 0.9rem !important;
+    padding: 3px 0 !important;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--secondary) !important;
+      text-decoration: none !important;
+    }
+  }
+
+  .folder-container {
+    border-left: 1px solid var(--lightgray) !important;
+    padding-left: 14px !important;
+    margin-left: 6px !important;
+  }
+
+  .folder-icon {
+    color: var(--secondary) !important;
+    margin-right: 4px !important;
+  }
+}
