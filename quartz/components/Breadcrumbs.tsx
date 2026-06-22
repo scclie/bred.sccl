@@ -29,9 +29,9 @@ interface BreadcrumbOptions {
 }
 
 const defaultOptions: BreadcrumbOptions = {
-  spacerSymbol: "/",
+  spacerSymbol: "❯",
   rootName: "index",
-  resolveFrontmatterTitle: true,
+  resolveFrontmatterTitle: false,
   showCurrentPage: true,
 }
 
@@ -60,18 +60,21 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
 
     const crumbs: CrumbData[] = pathNodes.map((node, idx) => {
       const crumb = formatCrumb(node.displayName, fileData.slug!, simplifySlug(node.slug))
+
       if (idx === 0) {
         crumb.displayName = options.rootName
       }
 
-      // For last node (current page), set empty path
+      // last node (current page)
       if (idx === pathNodes.length - 1) {
         crumb.path = ""
+
+        const last = slugParts.at(-1) ?? node.displayName
+        crumb.displayName = last + ".md"
       }
 
       return crumb
     })
-
     if (!options.showCurrentPage) {
       crumbs.pop()
     }

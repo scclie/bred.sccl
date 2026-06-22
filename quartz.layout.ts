@@ -33,7 +33,12 @@ export const sharedPageComponents: SharedLayout = {
 export const defaultContentPageLayout: PageLayout = {
   beforeBody: [
     Component.ConditionalRender({
-      component: Component.Breadcrumbs(),
+      component: Component.Breadcrumbs({
+        spacerSymbol: "/",
+        rootName: "index",
+        resolveFrontmatterTitle: false,
+        showCurrentPage: true,
+      }),
       condition: (page) => {
         const slug = page.fileData.slug ?? ""
         return slug !== "index" && slug !== "ru/index" && slug !== "en/index"
@@ -87,7 +92,18 @@ export const defaultContentPageLayout: PageLayout = {
 
 export const defaultListPageLayout: PageLayout = {
   beforeBody: [
-    Component.Breadcrumbs(),
+    Component.ConditionalRender({
+      component: Component.Breadcrumbs({
+        spacerSymbol: "/",
+        rootName: "index",
+        resolveFrontmatterTitle: false,
+        showCurrentPage: false,
+      }),
+      condition: (page) => {
+        const slug = page.fileData.slug ?? ""
+        return slug !== "index" && slug !== "ru/index" && slug !== "en/index"
+      },
+    }),
     Component.ArticleTitle(),
     Component.ContentMeta(),
     Component.LanguageSwitcher(),

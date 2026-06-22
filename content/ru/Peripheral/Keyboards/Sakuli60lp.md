@@ -1,6 +1,6 @@
 ---
 title: 'Sakuli60lp'
-description: "Handwired Wireless Hotswap Split Choc Low Profile Keyboard 60 keys. Craft OpenSource keyboard"
+description: "Craft Handwired Wireless Hotswap Split Choc Low Profile OpenSource Keyboard 60 keys."
 lang: ru
 tags:
   - "#shitpost"

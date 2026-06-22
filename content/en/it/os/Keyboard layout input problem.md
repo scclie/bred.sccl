@@ -3,51 +3,53 @@ title: 'Scan Code & Virtual Key: An Anglocentric Conspiracy of Operating Systems
 description: scan_code virtual_key Symbol
 lang: en
 tags: 
+  - "#it"
+  - "#shitpost"
 date: 2026-06-21
-autoTranslated: true
 ---
 
-How did you manage to shit on such a basic thing as keyboard input?
+How the fuck did they manage to screw up something as basic as keyboard input?
 
-# Shinda
-Keyboard input in Windows has several levels of abstraction:
-`scan_code` `virtual_key` `Symbol` *well, then there may be other symbols, ala shift, altgr, etc.*
+# Windows
+Keyboard input in Windows has several layers of abstraction:
+`scan_code` `virtual_key` `Symbol` *well, then there might be other modifiers like shift, altgr, etc.*
 
-, where `scan_code` is unchangeable, assigned by the driver (well, in modern firewood you can remap the matrix, but that’s not the point)
-`virtual_key` is useless crap that was born from the stupidity of the OS developers, but does not disappear due to the stupidity of the program developers who got attached to it. Initially created to support hotkeys in all languages, i.e. The usual qwerty layout is mapped into it, so that hotkeys work on the conditional ytsuken (the right way: bind the input to `sc`, not `vk`)
-`Symbol` - well, the letters are absolutely any in accordance with the layout. 
+where `scan_code` is immutable, assigned by the driver (well, in modern drivers you can remap the matrix, but whatever)
+`virtual_key` - useless shit that was born from the stupidity of OS devs, but won't die because of the stupidity of app devs who got hooked on it. Originally created to support hotkeys across all languages, i.e., it maps the standard qwerty layout so hotkeys work on, say, a ЙЦУКЕН layout (the right way: bind input to `sc`, not `vk`)
+`Symbol` - well, just any actual letters according to the current layout. 
 
-#Games?
-Fucking outdated DirectInput maps to `VK` - everything on it is shit. 
+# Games?
+The fucking outdated DirectInput maps by `VK` - anything relying on it is pure shit. 
 
-Fucking Unity came up with its own Input Manager, where `Input.getKey` is anally tied to `Symbol`
-It seems like they updated the input system - now you can grab keys through scanned codes like `Keyboard.current.wKey`, but in some situations shit still happens in the case of custom layouts.
+Shitty Unity came up with its own Input Manager, where `Input.getKey` is anally bound to `Symbol`
+Seems they updated the input system - now you can grab keys via scan codes like `Keyboard.current.wKey`, but still, in some situations, shit goes down with custom layouts.
 
-in UE, if the developer doesn’t hit the mark ala “use scan code”, the input will be via `vk`.
+In UE, if the dev doesn't tick the little "use scan code" checkbox - input will go through `vk`.
 
-It’s just that Uncle Gaben uses `scan_code` in the resource to enter a movement.
+But then again, Uncle Gabe in Source uses `scan_code` for movement input.
 
-# There are other examples of norms
-Somewhere before 1.9-1.12 (I don’t remember exactly)
-In the lane there was a different input code - everything was tied to `vk`.
-Those. conditionally, if you have it changed (and in some layouts it is changed, like in fr and de, if I’m not mistaken, I’m not talking about normal ones) - you had to rebind.
+# There are other decent examples
+Somewhere before 1.9-1.12 (don't remember exactly)
+Minecraft had a different input code - everything was bound to `vk`.
+So, like, if yours was changed (and in some layouts it is changed, like in FR and DE if I'm not mistaken, not to mention the *normal* ones) - you had to rebind everything.
 
-Then in newer versions they rewrote it to `sc` - everything began to work crap. 
+Then in newer versions they rewrote it to use `sc` - and it started working fucking great. 
 
-*fuck you in minicraft bedrock, we have directinput yo*
+*in Minecraft Bedrock they went fuck themselves, we're on directinput yo*
 
-# What about the programs?
-And the fucking aseprite fucking `Symbol` sucks and sincerely doesn’t understand what the fuck happens when you change the layout to ytsuken or any other. Your hotkeys are flying off to God knows where.
-So many are on `vk`, normal guys are on `sc`
+# What about apps?
+And the fucking Aseprite, damn it, smashes through `Symbol` and genuinely doesn't understand what the fuck is going on when you switch the layout to ЙЦУКЕН or anything else. Your hotkeys just fly off to god knows where.
+So many are on `vk`, the decent folks are on `sc`
 
-Otherwise, everything goes through WinAPI - respectively `vk`
+Otherwise, everyone goes through WinAPI - which means `vk` accordingly.
 
-# And Linux
-And there they also gave a shit, and even worse.
-At the kernel hardware level `scan_code`
-The kernel provides an abstraction of the same type, aka digests `scan_code` into conditional `key_q`, `key_w`, `key_e` (`linux_keycode`)
-Some xkb thread assumes that the kernel is crap and deletes its positions aka `<AE01>`, `<AE02>` ... `<AB01>`, `<AB02>` ... `<AC01>`, `<AC02>`
-And XKB maps this coordinate directly into symbols (Keysyms) - like `<AD01>` == `q`, or in Russian == `Cyrillic_shorti` (th).
+# What about Linux
+They fucked that up too, and probably even harder.
+At the hardware level, the kernel has `scan_code`
+The kernel provides an abstraction of the same type, basically digesting `scan_code` into so-called `key_q`, `key_w`, `key_e` (`linux_keycode`)
+Then some xkb takes whatever the kernel shat out and shits out its own positions like `<AE01>`, `<AE02>` ... `<AB01>`, `<AB02>` ... `<AC01>`, `<AC02>`
+And then XKB maps this coordinate directly to symbols (Keysyms) - like `<AD01>` == `q`, or in Russian == `Cyrillic_shorti` (й).
 
--# *Maybe someday operating systems will support languages other than English.*
--# *But apparently it’s too early.*
+
+-# *Maybe someday, operating systems will start supporting languages other than English.*
+-# *But apparently it's too early for that yet.*

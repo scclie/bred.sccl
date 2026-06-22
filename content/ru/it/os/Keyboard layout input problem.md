@@ -3,6 +3,7 @@ title: 'Scan Code & Virtual Key: Англоцентричный заговор �
 description: "scan_code virtual_key Symbol"
 lang: ru
 tags:
+  - "#it"
   - "#shitpost"
 date: 2026-06-21
 ---

@@ -4,7 +4,7 @@ description: "Фонетически эквивалентный вариант �
 lang: ru
 tags:
   - "#peripheral"
-date: 2025-06-22
+date: 2026-06-22
 ---
 
 Сам проект Colemak CAWS был создан сообществом вокруг Colemak для объеденения популярных модов `Curl`, `Angle`, `Wide`, `Symbols`, а основная работа над CAWS выполнена [DreymaR](https://dreymar.colemak.org/). Данный русский вариант является моей адаптацией для кириллицы.
@@ -37,7 +37,13 @@ date: 2025-06-22
 
 Почекать, сравнить можно на моём визуализаторе:
 
-[heatkeys.sccl.cc](https://heatkeys.sccl.cc)
+[heatkeys.sccl.cc](https://heatkeys.sccl.cc) **(можно потыкать прям тут!)**
+
+<iframe
+  src="https://heatkeys.sccl.cc"
+  style="width: 100%; height: 770px; border: 1px solid var(--secondary); border-radius: 8px;"
+  loading="lazy"
+></iframe>
 
 ## А чо тут?
 

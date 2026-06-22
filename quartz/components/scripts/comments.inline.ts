@@ -85,6 +85,12 @@ document.addEventListener("nav", () => {
     script.setAttribute("data-input-position", container.dataset.inputPosition!)
     script.setAttribute("data-lang", container.dataset.lang!)
 
+    const theme = document.documentElement.getAttribute("saved-theme")
+    if (theme) {
+      script.setAttribute("data-theme", getThemeUrl(getThemeName(theme)))
+    }
+    document.addEventListener("themechange", changeTheme)
+
     container.appendChild(script)
   }, 0)
 })
