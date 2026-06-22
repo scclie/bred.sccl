@@ -29,7 +29,11 @@ function boolToStringBool(b: boolean): string {
 // чтобы /ru/Games/Aim/Shaking и /en/Games/Aim/Shaking
 // использовали одну и ту же дискуссию Giscus
 function normalizeSlugForDiscussion(slug: string): string {
-  return slug.replace(/^(ru|en)\//, "")
+  return (slug ?? "")
+    .replace(/^\/?(ru|en)\//, "")
+    .replace(/\/$/, "")
+    .replace(/\.md$/, "")
+    .replace(/^$/, "index")
 }
 
 export default ((opts: Options) => {

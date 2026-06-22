@@ -60,33 +60,31 @@ type GiscusElement = Omit<HTMLElement, "dataset"> & {
 }
 
 document.addEventListener("nav", () => {
-  const giscusContainer = document.querySelector(".giscus") as GiscusElement
-  if (!giscusContainer) {
-    return
-  }
+  setTimeout(() => {
+    const container = document.querySelector(".giscus") as HTMLElement | null
+    if (!container) return
 
-  const giscusScript = document.createElement("script")
-  giscusScript.src = "https://giscus.app/client.js"
-  giscusScript.async = true
-  giscusScript.crossOrigin = "anonymous"
-  giscusScript.setAttribute("data-loading", "lazy")
-  giscusScript.setAttribute("data-emit-metadata", "0")
-  giscusScript.setAttribute("data-repo", giscusContainer.dataset.repo)
-  giscusScript.setAttribute("data-repo-id", giscusContainer.dataset.repoId)
-  giscusScript.setAttribute("data-category", giscusContainer.dataset.category)
-  giscusScript.setAttribute("data-category-id", giscusContainer.dataset.categoryId)
-  giscusScript.setAttribute("data-mapping", giscusContainer.dataset.mapping)
-  giscusScript.setAttribute("data-strict", giscusContainer.dataset.strict)
-  giscusScript.setAttribute("data-reactions-enabled", giscusContainer.dataset.reactionsEnabled)
-  giscusScript.setAttribute("data-input-position", giscusContainer.dataset.inputPosition)
-  giscusScript.setAttribute("data-lang", giscusContainer.dataset.lang)
-  const theme = document.documentElement.getAttribute("saved-theme")
-  if (theme) {
-    giscusScript.setAttribute("data-theme", getThemeUrl(getThemeName(theme)))
-  }
+    // 💥 удаляем только старый iframe
+    document.querySelectorAll("iframe.giscus-frame").forEach((el) => el.remove())
 
-  giscusContainer.appendChild(giscusScript)
+    // 💥 НЕ трогаем container
 
-  document.addEventListener("themechange", changeTheme)
-  window.addCleanup(() => document.removeEventListener("themechange", changeTheme))
+    // 💥 создаём script заново
+    const script = document.createElement("script")
+    script.src = "https://giscus.app/client.js"
+    script.async = true
+    script.crossOrigin = "anonymous"
+
+    script.setAttribute("data-repo", container.dataset.repo!)
+    script.setAttribute("data-repo-id", container.dataset.repoId!)
+    script.setAttribute("data-category", container.dataset.category!)
+    script.setAttribute("data-category-id", container.dataset.categoryId!)
+    script.setAttribute("data-mapping", container.dataset.mapping!)
+    script.setAttribute("data-term", container.dataset.term ?? "")
+    script.setAttribute("data-reactions-enabled", container.dataset.reactionsEnabled!)
+    script.setAttribute("data-input-position", container.dataset.inputPosition!)
+    script.setAttribute("data-lang", container.dataset.lang!)
+
+    container.appendChild(script)
+  }, 0)
 })
