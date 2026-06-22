@@ -1,10 +1,9 @@
 ---
 title: Outemu Switches
-description: Comparison of Outemu switches
+description: "I bought way too many Outemu switches so you don't have to: 38 switches, sound tests, a tier list, hidden gems, budget kings, and a lot of slander towards the clicky ones."
 lang: en
 tags: 
 date: 2026-06-16
-autoTranslated: true
 ---
 
 I had a chance to test 38 switches, so let’s go through each one:

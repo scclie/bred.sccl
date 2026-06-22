@@ -1,6 +1,6 @@
 ---
 title: 'Outemu Switches'
-description: "Сравнение свитчей Outemu"
+description: "Пришлось скупить Outemu, чтобы вам не пришлось: 38 свитчей, тесты звука, тирлист, топы, бюджетные находки и хейт в сторону кликающих моделей."
 lang: ru
 tags:
   - "#shitpost"

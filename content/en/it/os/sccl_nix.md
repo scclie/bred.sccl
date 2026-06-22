@@ -1,5 +1,5 @@
 ---
-title: "sccl_nix - Declarative paradise"
+title: "sccl_nix: Declarative paradise"
 description: "A modular NixOS configuration built on flakes, home-manager and disko, designed to scale across multiple machines and users without turning /etc/nixos into chaos. The architecture separates hosts, user profiles and shared modules to keep dotfiles maintainable, reproducible and extensible without copy-paste and hostname-based hacks."
 lang: en
 tags:
@@ -15,7 +15,7 @@ Proper documentation: [github/scclie/sccl_nix/README.md](https://github.com/sccl
 
 # Why ~~the f*&^~~ ?
 
-Bc an unstructured NixOS config is always the same story:
+Bc an unstructured [NixOs](https://nixos.org/) config is always the same story:
 
 - first you "organize it properly"
 - then you add a second host

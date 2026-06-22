@@ -106,5 +106,9 @@ main .pagination-loader-container {
 }
 
 main .gsc-loading-image {
-  background-image: url("shiza.sccl.cc/static/cat_loading.gif");
+  background-image: url("https://shiza.sccl.cc/static/cat_loading.gif");
+}
+
+.giscus-frame {
+  font-family: var(--bodyFont), monospace !important;
 }

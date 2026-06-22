@@ -1,6 +1,6 @@
 ---
 title: 'Sakuli60lp'
-description: "Craft Handwired Wireless Hotswap Split Choc Low Profile OpenSource Keyboard 60 keys."
+description: "Создание самодельной беспроводной сплит-клавиатуры на 60 клавиш с низкопрофильными переключателями Kailh Choc, поддержкой hotswap и открытым исходным кодом. Подробная документация, схемы, фотографии сборки и настройка прошивки."
 lang: ru
 tags:
   - "#shitpost"

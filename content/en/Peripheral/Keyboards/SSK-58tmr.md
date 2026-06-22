@@ -1,10 +1,9 @@
 ---
 title: SSK-58tmr
-description: Split Scclie Wireless Keyboard 60. Craft OpenSource keyboard
+description: "An experimental open-source wireless split keyboard project with 58–60 keys, TMR magnetic sensors, analog input, and ZMK support. Research notes on building a low-power alternative to Hall Effect keyboards."
 lang: en
 tags: 
 date: 2026-05-14
-autoTranslated: true
 ---
 
 > [!info] In the process of thinking (development has not started)

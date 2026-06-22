@@ -1,6 +1,6 @@
 ---
 title: Sakuli60lp
-description: "Craft Handwired Wireless Hotswap Split Choc Low Profile OpenSource Keyboard 60 keys."
+description: "Build a handwired wireless split mechanical keyboard with 60 keys, Kailh Choc low-profile switches, hotswap support, and an open-source ergonomic design. Documentation, photos, and project details included."
 lang: en
 tags: 
 date: 2026-06-21

@@ -3,7 +3,6 @@
  * https://github.com/primer/primitives/blob/main/LICENSE
  * Nord Variant adapted for Quartz
  */
-
 main {
   --color-prettylights-syntax-comment: #4c566a; /* Nord 3 */
   --color-prettylights-syntax-constant: #81a1c1; /* Nord 9 */
@@ -105,5 +104,9 @@ main .pagination-loader-container {
 }
 
 main .gsc-loading-image {
-  background-image: url("shiza.sccl.cc/static/cat_loading.gif");
+  background-image: url("https://shiza.sccl.cc/static/cat_loading.gif");
+}
+
+.giscus-frame {
+  font-family: var(--bodyFont), monospace !important;
 }

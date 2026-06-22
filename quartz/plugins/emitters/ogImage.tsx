@@ -48,9 +48,14 @@ async function generateSocialImage(
         year: "numeric",
       })
     : ""
-  const readingTime = fileData.description ? Math.ceil(fileData.description.trim().split(/\s+/).length / 200) : 1
+  const readingTime = fileData.description
+    ? Math.ceil(fileData.description.trim().split(/\s+/).length / 150)
+    : 1
   const readingTimeStr = `${readingTime} min read`
   const tags: string[] = (fileData.frontmatter?.tags as string[]) ?? []
+
+  const titleSize = scaleTitleSize(title)
+  const descriptionSize = scaleDescriptionSize(description)
 
   // СБОРКА КАРТОЧКИ С СИСТЕМНЫМИ ИКОНКАМИ И УВЕЛИЧЕННЫМ ТЕКСТОМ
   const imageComponent = {
@@ -59,7 +64,7 @@ async function generateSocialImage(
       style: {
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         width: "100%",
         height: "100%",
         padding: "60px 80px",
@@ -84,25 +89,35 @@ async function generateSocialImage(
               props: {
                 style: {
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "6px 16px",
-                  border: "2px solid #81A1C1",
-                  borderRadius: "20px",
-                  backgroundColor: "rgba(46, 52, 64, 0.7)",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
                 },
-                children: {
-                  type: "span",
-                  props: {
-                    style: {
-                      color: "#88C0D0",
-                      fontSize: "20px",
-                      fontWeight: "700",
-                      fontFamily: "Montserrat",
+                children: [
+                  {
+                    type: "span",
+                    props: {
+                      children: "> scclie://",
+                      style: {
+                        color: "#88C0D0",
+                        fontSize: "36px",
+                        fontWeight: "900",
+                        fontFamily: "Martian Mono",
+                      },
                     },
-                    children: "sccl.cc",
                   },
-                },
+                  {
+                    type: "span",
+                    props: {
+                      children: "notes",
+                      style: {
+                        color: "#88C0D0",
+                        fontSize: "36px",
+                        fontWeight: "900",
+                        fontFamily: "Martian Mono",
+                      },
+                    },
+                  },
+                ],
               },
             },
           },
@@ -124,10 +139,10 @@ async function generateSocialImage(
                 type: "span",
                 props: {
                   style: {
-                    fontSize: "56px",
-                    fontWeight: "800",
+                    fontSize: `${titleSize}px`,
+                    fontWeight: "900",
                     color: "#E5E9F0",
-                    fontFamily: "Montserrat",
+                    fontFamily: "Martian Mono",
                     marginBottom: "16px",
                   },
                   children: title,
@@ -137,9 +152,10 @@ async function generateSocialImage(
                 type: "span",
                 props: {
                   style: {
-                    fontSize: "24px",
+                    fontSize: `${descriptionSize}px`,
                     color: "#D8DEE9",
-                    fontFamily: "Inter",
+                    fontFamily: "Cascadia Mono",
+                    fontWeight: "900",
                     lineHeight: "1.4",
                   },
                   children: description,
@@ -174,11 +190,31 @@ async function generateSocialImage(
                         style: { display: "flex", alignItems: "center", gap: "10px" },
                         children: [
                           // Системная SVG иконка календаря Quartz
-                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D8DEE9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ opacity: 0.7 }}><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>,
+                          <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#D8DEE9"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style={{ opacity: 0.7 }}
+                          >
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                          </svg>,
                           {
                             type: "span",
                             props: {
-                              style: { color: "#D8DEE9", fontSize: "22px", fontFamily: "Inter", opacity: 0.7 }, // Размер увеличен до 22px
+                              style: {
+                                color: "#D8DEE9",
+                                fontSize: "22px",
+                                fontFamily: "Inter",
+                                opacity: 0.7,
+                              }, // Размер увеличен до 22px
                               children: dateStr,
                             },
                           },
@@ -191,11 +227,29 @@ async function generateSocialImage(
                         style: { display: "flex", alignItems: "center", gap: "10px" },
                         children: [
                           // Системная SVG иконка часов Quartz
-                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D8DEE9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ opacity: 0.7 }}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>,
+                          <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#D8DEE9"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style={{ opacity: 0.7 }}
+                          >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>,
                           {
                             type: "span",
                             props: {
-                              style: { color: "#D8DEE9", fontSize: "22px", fontFamily: "Inter", opacity: 0.7 }, // Размер увеличен до 22px
+                              style: {
+                                color: "#D8DEE9",
+                                fontSize: "22px",
+                                fontFamily: "Inter",
+                                opacity: 0.7,
+                              }, // Размер увеличен до 22px
                               children: readingTimeStr,
                             },
                           },
@@ -223,7 +277,12 @@ async function generateSocialImage(
                       children: {
                         type: "span",
                         props: {
-                          style: { color: "#81A1C1", fontSize: "19px", fontFamily: "Inter", fontWeight: "600" }, // Размер увеличен до 19px
+                          style: {
+                            color: "#81A1C1",
+                            fontSize: "19px",
+                            fontFamily: "Cascadia Mono",
+                            fontWeight: "600",
+                          }, // Размер увеличен до 19px
                           children: tag.startsWith("#") ? tag : `#${tag}`,
                         },
                       },
@@ -366,4 +425,24 @@ export const CustomOgImages: QuartzEmitterPlugin<Partial<SocialImageOptions>> = 
       }
     },
   }
+}
+
+function scaleTitleSize(title: string) {
+  const len = title.length
+
+  if (len < 40) return 56
+  if (len < 80) return 48
+  if (len < 120) return 40
+  if (len < 160) return 34
+  return 22
+}
+
+function scaleDescriptionSize(description: string) {
+  const len = description.length
+
+  if (len < 80) return 38
+  if (len < 140) return 34
+  if (len < 220) return 30
+  if (len < 320) return 24
+  return 18
 }

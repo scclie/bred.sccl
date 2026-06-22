@@ -1,6 +1,6 @@
 ---
 title: 'Scan Code & Virtual Key: Англоцентричный заговор операционных систем'
-description: "scan_code virtual_key Symbol"
+description: "Почему ввод с клавиатуры до сих пор работает через задницу: scan code, virtual key, символы, сломанные хоткеи, Unity, Unreal, Linux и бесконечный англоцентричный бардак с раскладками."
 lang: ru
 tags:
   - "#it"

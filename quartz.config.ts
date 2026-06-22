@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "> paper_wiki",
+    pageTitle: "> scclie://\nnotes",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -23,21 +23,21 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        header: "Montserrat",
-        body: "Fira Code",
-        code: "IBM Plex Mono",
+        header: "Martian Mono",
+        body: "Cascadia Mono",
+        code: "Cascadia Code",
       },
       colors: {
         lightMode: {
-          light: "#faf8f8",
-          lightgray: "#e5e5e5",
-          gray: "#b8b8b8",
-          darkgray: "#4e4e4e",
-          dark: "#2b2b2b",
-          secondary: "#284b63",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#fff23688",
+          light: "#ECEFF4", // Nord6 - основной фон
+          lightgray: "#E5E9F0", // Nord5
+          gray: "#D8DEE9", // Nord4
+          darkgray: "#4C566A", // Nord3
+          dark: "#2E3440", // Nord0
+          secondary: "#5E81AC", // Nord10
+          tertiary: "#88C0D0", // Nord8
+          highlight: "rgba(129, 161, 193, 0.15)", // Nord9
+          textHighlight: "#EBCB8B88", // Nord13
         },
         darkMode: {
           light: "#2E3440", // Nord0 - Самый темный фон
@@ -107,15 +107,15 @@ const config: QuartzConfig = {
       Plugin.NotFoundPage(),
       Plugin.CustomOgImages({
         cfg: {
-          font: "Montserrat",
+          font: "Cascadia Mono",
           imageWidth: 1200,
           imageHeight: 630,
           fonts: [
             {
-              name: "Montserrat",
+              name: "Cascadia Mono",
               style: "normal",
               weight: 700,
-              path: "./quartz/static/fonts/Montserrat-700.ttf", // Указываем точное имя файла
+              path: "./quartz/static/fonts/Cascadia Mono.ttf", // Указываем точное имя файла
             },
           ],
         },

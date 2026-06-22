@@ -1,6 +1,6 @@
 ---
 title: 'SSK-58tmr'
-description: "Split Scclie Wireless Keyboard 60. Craft OpenSource keyboard"
+description: "Экспериментальный проект беспроводной сплит-клавиатуры с 58–60 клавишами, магнитными TMR-сенсорами, аналоговым вводом и поддержкой ZMK. Заметки и исследования по созданию энергоэффективной альтернативы Hall Effect-клавиатурам."
 lang: ru
 tags:
   - "#shitpost"

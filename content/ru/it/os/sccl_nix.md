@@ -1,5 +1,5 @@
 ---
-title: "sccl_nix - Декларативный рай"
+title: "sccl_nix: Декларативный рай"
 description: "Модульная конфигурация NixOS на базе flakes, home-manager и disko, рассчитанная на масштабирование между несколькими машинами и пользователями без превращения /etc/nixos в хаос. Архитектура разделяет hosts, пользовательские profiles и общие shared-модули, чтобы dotfiles оставались поддерживаемыми, воспроизводимыми и расширяемыми без копипасты и if hostname костылей."
 lang: ru
 tags:
@@ -10,12 +10,12 @@ date: 2026-06-22
 ---
 
 # Если этот shitpost-like статья выглядит как шиза
-Нормальная дока: [github/scclie/sccl_nix/README.md](https://github.com/scclie/sccl_nix)
+Нормальная дока на ангельском: [github/scclie/sccl_nix/README.md](https://github.com/scclie/sccl_nix)
 
 
 # ~~На*&я~~ Зачем?
 
-Потому, что необдуманный nixos config - это всегда один и тот же сценарий:
+Потому, что необдуманный [NixOs](https://nixos.org/) config - это всегда один и тот же сценарий:
 
 - сначал "аккуратно структурируешь"
 - добавляешь второй хост

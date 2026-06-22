@@ -1,6 +1,6 @@
 ---
 title: How to Make a Good Mousepad Review
-description: Tips for accurately explaining mousepad characteristics
+description: "Most mousepad reviews are useless. Here's a guide on how to actually describe a gaming mousepad: texture, static and dynamic friction, stopping power, speed, X/Y balance, durability, base softness, and proper comparisons with other pads."
 lang: en
 tags:
   - "#games"
