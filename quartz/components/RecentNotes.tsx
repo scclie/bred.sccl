@@ -33,7 +33,24 @@ export default ((userOpts?: Partial<Options>) => {
     cfg,
   }: QuartzComponentProps) => {
     const opts = { ...defaultOptions(cfg), ...userOpts }
-    const pages = allFiles.filter(opts.filter).sort(opts.sort)
+
+    // Определяем текущий язык по первому сегменту slug текущей страницы
+    const currentSlug = fileData.slug ?? ""
+    const currentLang = currentSlug.startsWith("en/") ? "en" : "ru"
+
+    // Фильтруем страницы по языку: показываем только те, что в той же языковой папке
+    const langFilter = (f: QuartzPluginData) => {
+      const slug = f.slug ?? ""
+      if (currentLang === "en") return slug.startsWith("en/")
+      // ru: всё, что НЕ начинается с en/ (включая корень и папку ru/)
+      return !slug.startsWith("en/")
+    }
+
+    const pages = allFiles
+      .filter(langFilter)
+      .filter(opts.filter)
+      .sort(opts.sort)
+
     const remaining = Math.max(0, pages.length - opts.limit)
     return (
       <div class={classNames(displayClass, "recent-notes")}>

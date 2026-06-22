@@ -24,7 +24,7 @@ const config: QuartzConfig = {
       cdnCaching: true,
       typography: {
         header: "Montserrat",
-        body: "Inter",
+        body: "Fira Code",
         code: "IBM Plex Mono",
       },
       colors: {
@@ -106,19 +106,20 @@ const config: QuartzConfig = {
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
       Plugin.CustomOgImages({
-              cfg: {
-                font: "Montserrat",
-                imageWidth: 1200,
-                imageHeight: 630,
-                fonts: [{
-                  name: "Montserrat",
-                  style: "normal",
-                  weight: 700,
-                  path: "./quartz/static/fonts/Montserrat-700.ttf", // Указываем точное имя файла
-                }]
-              }
-            }),
-
+        cfg: {
+          font: "Montserrat",
+          imageWidth: 1200,
+          imageHeight: 630,
+          fonts: [
+            {
+              name: "Montserrat",
+              style: "normal",
+              weight: 700,
+              path: "./quartz/static/fonts/Montserrat-700.ttf", // Указываем точное имя файла
+            },
+          ],
+        },
+      }),
     ],
   },
 }

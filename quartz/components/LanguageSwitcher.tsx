@@ -1,5 +1,15 @@
 /**
  * LanguageSwitcher.tsx
+ *
+ * Кнопка переключения RU ↔ EN в стиле Wikipedia.
+ * Помещается в beforeBody (над заголовком) или в left-колонку.
+ *
+ * Логика:
+ *  - Читает текущий язык из URL (/ru/... или /en/...)
+ *  - Строит путь к паре (меняет префикс)
+ *  - Если у статьи в frontmatter autoTranslated: true — показывает пометку 🤖
+ *  - Сохраняет выбор языка в localStorage ("preferred-lang")
+ *  - При загрузке страницы без языкового префикса — редиректит на предпочтительный язык
  */
 
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"

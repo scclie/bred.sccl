@@ -25,6 +25,7 @@ import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
 import LanguageSwitcher from "./LanguageSwitcher"
 import TranslationNotice from "./TranslationNotice"
+import ExplorerLangFilter from "./ExplorerLangFilter"
 
 export {
   ArticleTitle,
@@ -54,4 +55,5 @@ export {
   ConditionalRender,
   LanguageSwitcher,
   TranslationNotice,
+  ExplorerLangFilter,
 }

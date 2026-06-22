@@ -24,7 +24,7 @@ const TranslationNotice: QuartzComponent = ({ fileData, displayClass }: QuartzCo
       style="
         background-color: var(--lightgray);
         padding: 0.75rem 1rem;
-        border-left: 4px solid var(--secondary);
+        border-left: 4px solid var(--tertiary);
         border-radius: 4px;
         margin-top: 1.0rem;
         margin-bottom: 1.0rem;

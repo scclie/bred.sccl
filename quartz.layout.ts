@@ -1,7 +1,6 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
 
-// components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
@@ -13,7 +12,7 @@ export const sharedPageComponents: SharedLayout = {
         repoId: "R_kgDOTBPD2g",
         category: "General",
         categoryId: "DIC_kwDOTBPD2s4C_nyY",
-        mapping: "pathname",
+        mapping: "specific",
         strict: false,
         reactionsEnabled: true,
         inputPosition: "bottom",
@@ -31,10 +30,8 @@ export const sharedPageComponents: SharedLayout = {
   }),
 }
 
-// components for pages that display a single page (e.g. a single note)
 export const defaultContentPageLayout: PageLayout = {
   beforeBody: [
-    Component.LanguageSwitcher(),
     Component.ConditionalRender({
       component: Component.Breadcrumbs(),
       condition: (page) => {
@@ -43,53 +40,10 @@ export const defaultContentPageLayout: PageLayout = {
       },
     }),
     Component.ArticleTitle(),
-    Component.TranslationNotice(),
     Component.ContentMeta(),
-    Component.TagList(),
-  ],
-  left: [
-    Component.PageTitle(),
-    Component.MobileOnly(Component.Spacer()),
-    Component.Flex({
-      components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
-      ],
-    }),
-    Component.Explorer({
-      title: "Explorer",
-      folderClickBehavior: "toggle",
-      folderDefaultState: "open",
-      useSavedState: true,
-      useCompactFolders: true,
-      filterFn: (node) => {
-        if (node.name === "templates" || node.name === "private") return false
-        return true
-      },
-    }),
-  ],
-  right: [
-    Component.Graph(),
-    Component.DesktopOnly(Component.TableOfContents()),
-    Component.Backlinks(),
-    Component.RecentNotes({
-      title: "Recents",
-      limit: 10,
-      showTags: false,
-      linkToMore: "tags/",
-    }),
-  ],
-}
-
-// components for pages that display lists of pages (e.g. tags or folders)
-export const defaultListPageLayout: PageLayout = {
-  beforeBody: [
     Component.LanguageSwitcher(),
-    Component.Breadcrumbs(),
-    Component.ArticleTitle(),
-    Component.ContentMeta(),
+    Component.TranslationNotice(),
+    Component.TagList(),
   ],
   left: [
     Component.PageTitle(),
@@ -103,7 +57,63 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer({
+      title: "",
+      folderClickBehavior: "toggle",
+      folderDefaultState: "open",
+      useSavedState: true,
+      useCompactFolders: true,
+      filterFn: (node) => {
+        if (node.name === "templates" || node.name === "private" || node.slugSegment === "tags") {
+          return false
+        }
+        return true
+      },
+    }),
+    Component.ExplorerLangFilter(),
+  ],
+  right: [
+    //Component.Graph(),
+    Component.DesktopOnly(Component.TableOfContents()),
+    Component.Backlinks(),
+    Component.RecentNotes({
+      title: "Recents",
+      limit: 5,
+      showTags: false,
+      linkToMore: "tags/",
+    }),
+  ],
+}
+
+export const defaultListPageLayout: PageLayout = {
+  beforeBody: [
+    Component.Breadcrumbs(),
+    Component.ArticleTitle(),
+    Component.ContentMeta(),
+    Component.LanguageSwitcher(),
+  ],
+  left: [
+    Component.PageTitle(),
+    Component.MobileOnly(Component.Spacer()),
+    Component.Flex({
+      components: [
+        {
+          Component: Component.Search(),
+          grow: true,
+        },
+        { Component: Component.Darkmode() },
+      ],
+    }),
+    Component.Explorer({
+      title: "",
+      filterFn: (node) => {
+        if (node.name === "templates" || node.name === "private" || node.slugSegment === "tags") {
+          return false
+        }
+        return true
+      },
+    }),
+    Component.ExplorerLangFilter(),
   ],
   right: [],
 }

@@ -25,15 +25,25 @@ function boolToStringBool(b: boolean): string {
   return b ? "1" : "0"
 }
 
+// Нормализует slug: убирает языковой префикс ru/ или en/
+// чтобы /ru/Games/Aim/Shaking и /en/Games/Aim/Shaking
+// использовали одну и ту же дискуссию Giscus
+function normalizeSlugForDiscussion(slug: string): string {
+  return slug.replace(/^(ru|en)\//, "")
+}
+
 export default ((opts: Options) => {
   const Comments: QuartzComponent = ({ displayClass, fileData, cfg }: QuartzComponentProps) => {
-    // check if comments should be displayed according to frontmatter
     const disableComment: boolean =
       typeof fileData.frontmatter?.comments !== "undefined" &&
       (!fileData.frontmatter?.comments || fileData.frontmatter?.comments === "false")
     if (disableComment) {
       return <></>
     }
+
+    // Используем нормализованный путь как term для mapping="specific"
+    // Это гарантирует, что ru/ и en/ версии одной статьи → одна дискуссия
+    const normalizedTerm = normalizeSlugForDiscussion(fileData.slug ?? "")
 
     return (
       <div
@@ -42,7 +52,8 @@ export default ((opts: Options) => {
         data-repo-id={opts.options.repoId}
         data-category={opts.options.category}
         data-category-id={opts.options.categoryId}
-        data-mapping={opts.options.mapping ?? "url"}
+        data-mapping="specific"
+        data-term={normalizedTerm}
         data-strict={boolToStringBool(opts.options.strict ?? true)}
         data-reactions-enabled={boolToStringBool(opts.options.reactionsEnabled ?? true)}
         data-input-position={opts.options.inputPosition ?? "bottom"}

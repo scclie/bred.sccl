@@ -14,5 +14,13 @@
   "Peripheral/Keyboards/SSK-58tmr.md": {
     "sourceHash": "1df2f1accafb1ae6942decf117c6688cdd00417f048b8c92e1350fceb161f0e8",
     "translatedAt": "2026-06-21T19:31:34.558Z"
+  },
+  "Peripheral/Keyboards/Rulemak-CAWS.md": {
+    "sourceHash": "e46ddaec2d48ebce71c4efc01969e178e3066e21757eaec58d27ab94de12c8c4",
+    "translatedAt": "2026-06-22T10:33:20.698Z"
+  },
+  "it/os/Keyboard layout input problem.md": {
+    "sourceHash": "28ae922f888a21d929a129fa555718189fba5eb7ae868cc3b9e0c46fef8c9cac",
+    "translatedAt": "2026-06-22T10:33:28.039Z"
   }
 }

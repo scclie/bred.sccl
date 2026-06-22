@@ -71,6 +71,16 @@ article {
   }
 }
 
+.page {
+  & > #quartz-body {
+    column-gap: 6rem;
+  }
+}
+
+:root {
+  --sidePanelWidth: 18rem;
+}
+
 // ==========================================
 // 2. .GRAPH
 // ==========================================
@@ -131,8 +141,8 @@ article {
 // ==========================================
 // 3. EXPLORER
 // ==========================================
-// Твой оригинальный и сохраненный блок стилей explorer
 .explorer {
+width: 100%;
   button.folder-button {
     color: var(--secondary) !important;
     font-weight: 700 !important;
@@ -141,19 +151,14 @@ article {
     &:hover {
       color: var(--tertiary) !important;
     }
-
-    // ХАК ДЛЯ ЧИТАЕМОСТИ: Маскируем слэши в склеенных путях (IT / OS)
-    // Мы делаем разделитель более тусклым, чтобы он визуально отделял папки
     &::after, & {
       text-shadow: none !important;
     }
   }
 
-  // Делаем слэши внутри текста папок более тонкими и серыми
   button.folder-button {
     display: inline-block;
 
-    // Если Кварц выводит кастомный текст, приглушаем разделители
     & {
       letter-spacing: 0.3px;
     }
@@ -161,7 +166,7 @@ article {
 
   li a {
     display: inline-block !important;
-    max-width: 200px !important;
+    max-width: 100% !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
@@ -188,6 +193,19 @@ article {
   }
 }
 
+// Убираем кнопку-заголовок Explorer (полоска от title="")
+.explorer > button.desktop-explorer {
+  display: none !important;
+}
+
+// Убираем лишний отступ у первого уровня дерева (после promote папки ru/en
+// дочерние элементы оказываются на верхнем уровне, но стиль .folder-container
+// добавляет border-left — для верхнего уровня он не нужен)
+.explorer-content > ul.explorer-ul > li > .folder-container {
+  border-left: none !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
 
 
 
