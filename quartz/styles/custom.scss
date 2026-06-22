@@ -39,7 +39,15 @@
   font-display: swap;
 }
 
+.page-title {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .page-title a {
+  display: inline-block;
+  text-align: right;
+  white-space: pre-line;
   font-weight: 900 !important;
   overflow-wrap: break-word;
   word-break: break-word;
