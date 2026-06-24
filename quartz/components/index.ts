@@ -11,6 +11,7 @@ import ContentMeta from "./ContentMeta"
 import Spacer from "./Spacer"
 import TableOfContents from "./TableOfContents"
 import Explorer from "./Explorer"
+import SlimExplorer from "./SlimExplorer"
 import TagList from "./TagList"
 import Graph from "./Graph"
 import Backlinks from "./Backlinks"
@@ -26,6 +27,7 @@ import ConditionalRender from "./ConditionalRender"
 import LanguageSwitcher from "./LanguageSwitcher"
 import TranslationNotice from "./TranslationNotice"
 import ExplorerLangFilter from "./ExplorerLangFilter"
+import SlimExplorer from "./SlimExplorer"
 
 export {
   ArticleTitle,
@@ -56,4 +58,5 @@ export {
   LanguageSwitcher,
   TranslationNotice,
   ExplorerLangFilter,
+  SlimExplorer,
 }

@@ -62,25 +62,22 @@ export const defaultContentPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-    Component.Explorer({
+    Component.SlimExplorer({
       title: "",
-      folderClickBehavior: "toggle",
       folderDefaultState: "open",
       useSavedState: true,
-      useCompactFolders: true,
       filterFn: (node) => {
-        if (node.name === "templates" || node.name === "private" || node.slugSegment === "tags") {
+        if (node.slugSegment === "templates" || node.slugSegment === "private" || node.slugSegment === "tags") {
           return false
         }
         return true
       },
     }),
-    Component.ExplorerLangFilter(),
   ],
   right: [
     //Component.Graph(),
     Component.DesktopOnly(Component.TableOfContents()),
-    Component.Backlinks(),
+    //Component.Backlinks(),
     Component.RecentNotes({
       title: "Recents",
       limit: 5,
@@ -120,16 +117,15 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-    Component.Explorer({
+    Component.SlimExplorer({
       title: "",
       filterFn: (node) => {
-        if (node.name === "templates" || node.name === "private" || node.slugSegment === "tags") {
+        if (node.slugSegment === "templates" || node.slugSegment === "private" || node.slugSegment === "tags") {
           return false
         }
         return true
       },
     }),
-    Component.ExplorerLangFilter(),
   ],
   right: [],
 }

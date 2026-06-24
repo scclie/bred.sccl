@@ -109,6 +109,21 @@ main .gsc-loading-image {
   background-image: url("https://shiza.sccl.cc/static/cat_loading.gif");
 }
 
+@font-face {
+  font-family: 'Cascadia Mono';
+  src: url('https://wiki.sccl.cc/static/fonts/CascadiaMono-Variable_wght.ttf') format('truetype');
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Cascadia Mono';
+  src: url('https://wiki.sccl.cc/static/fonts/CascadiaMono-Italic-Variable.ttf') format('truetype');
+  font-weight: 200 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 .giscus-frame {
-  font-family: var(--bodyFont), monospace !important;
+  font-family: 'Cascadia Mono', monospace !important;
 }

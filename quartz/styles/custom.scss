@@ -34,7 +34,7 @@
 @font-face {
   font-family: "Martian Mono";
   src: url("/static/fonts/MartianMono.ttf") format("truetype");
-  font-weight: 400;
+  font-weight: 100 800;
   font-style: normal;
   font-display: swap;
 }
@@ -51,7 +51,12 @@
   font-weight: 900 !important;
   overflow-wrap: break-word;
   word-break: break-word;
+}
+:root[saved-theme="dark"] .page-title a {
   color: #EBCB8B;
+}
+:root[saved-theme="light"] .page-title a {
+  color: #D08770;
 }
 
 
@@ -132,6 +137,17 @@ article {
   }
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800 !important;
+}
+
+:root[saved-theme="dark"] .toc-header h3 {
+  color: #EBCB8B !important;
+}
+:root[saved-theme="light"] .toc-header h3 {
+  color: #D08770 !important;
+}
+
 :root {
   --sidePanelWidth: 18rem;
 }
@@ -172,11 +188,9 @@ article {
     margin-right: 4px !important;
   }
 
-  // Все кнопки папок (базовые стили — перекрываются ниже для уровней)
-  button.folder-button {
-    display: inline-block;
-    letter-spacing: 0.3px;
-    text-shadow: none !important;
+  // Folder titles (depth >= 1, toggleable)
+  .folder-title {
+    cursor: pointer;
     color: var(--secondary) !important;
     font-weight: 700 !important;
     font-size: 0.95rem !important;
@@ -187,7 +201,6 @@ article {
   }
 
   // folder-container по умолчанию — БЕЗ полоски
-  // (полоску добавляем только для вложенных уровней ниже)
   .folder-container {
     border-left: none !important;
     padding-left: 0 !important;
@@ -195,71 +208,12 @@ article {
   }
 }
 
-// ── Первый уровень: GAMES, IT, PERIPHERAL ─────────────────────────────────────
-// После promote эти папки стоят прямо в ul.explorer-ul > li
-
-.explorer-content ul.explorer-ul > li {
-  margin-top: 1.2rem !important;
-
-  &:first-child {
-    margin-top: 0.2rem !important;
-  }
-
-  // folder-container первого уровня — без полоски, без отступов
-  > .folder-container {
-    border-left: none !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
-
-    // Стрелку скрываем — первый уровень всегда открыт
-    > svg.folder-icon {
-      display: none !important;
-    }
-
-    // Кнопка некликабельна
-    > div > button.folder-button {
-      cursor: default !important;
-      pointer-events: none !important;
-    }
-  }
-
-  // folder-outer первого уровня — всегда открыт, без полоски
-  > .folder-outer {
-    border-left: none !important;
-    display: block !important;
-    max-height: none !important;
-    overflow: visible !important;
-  }
-}
-
-// Текст заголовков первого уровня — тёмная тема
-:root[saved-theme="dark"] .explorer-content ul.explorer-ul > li > .folder-container button.folder-button span.folder-title {
-  color: #D8DEE9 !important; // Nord4 — почти белый
-  font-size: 0.75rem !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.08em !important;
-  text-transform: uppercase !important;
-}
-
-// Текст заголовков первого уровня — светлая тема
-:root[saved-theme="light"] .explorer-content ul.explorer-ul > li > .folder-container button.folder-button span.folder-title {
-  color: #2E3440 !important; // Nord0
-  font-size: 0.75rem !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.08em !important;
-  text-transform: uppercase !important;
-}
-
-// ── Второй уровень и глубже: Aim, OS, Keyboards, Switches ────────────────────
-// li li .folder-container = любой folder-container внутри хотя бы двух li
-
-.explorer-content ul.explorer-ul > li > .folder-outer > ul.content {
+// ── Вложенные папки ──────────────────────────────────────────────────────────
+.explorer-content ul.explorer-ul .folder-node > .folder-outer > ul.content {
   border-left: none !important;
 }
 
-
-// Отступ для содержимого первого уровня (чтобы Aim не прилипал к левому краю)
-.explorer-content ul.explorer-ul > li > .folder-outer > ul.content {
+.explorer-content ul.explorer-ul .folder-node > .folder-outer > ul.content {
   padding-left: 0.5rem !important;
 }
 
@@ -274,10 +228,15 @@ article {
   padding-top: 1.5rem;
 
   h3 {
-    color: var(--secondary) !important;
     font-weight: 700 !important;
     font-size: 0.95rem !important;
     margin-bottom: 0.8rem !important;
+  }
+  :root[saved-theme="dark"] & h3 {
+    color: #EBCB8B !important;
+  }
+  :root[saved-theme="light"] & h3 {
+    color: #D08770 !important;
   }
 
   // Ограничиваем высоту самого списка заметок и включаем скролл
@@ -313,9 +272,9 @@ article {
     li {
       display: flex !important;
       flex-direction: column !important;
-      margin-bottom: 12px !important;
-      padding-left: 10px !important;
-      border-left: 2px solid var(--lightgray) !important;
+      margin-bottom: 8px !important;
+      padding-left: 0 !important;
+      border-left: none !important;
 
       a {
         display: inline-block !important;

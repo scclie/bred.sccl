@@ -685,12 +685,13 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
 
       if (opts.mermaid) {
         plugins.push(() => {
-          return (tree: HtmlRoot, _file) => {
+          return (tree: HtmlRoot, file) => {
             visit(tree, "element", (node: Element, _idx, parent) => {
               if (
                 node.tagName === "code" &&
                 ((node.properties?.className ?? []) as string[])?.includes("mermaid")
               ) {
+                file.data.hasMermaid = true
                 parent!.children = [
                   {
                     type: "element",
@@ -752,42 +753,22 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
         })
       }
 
+      // lazy-load images
+      plugins.push(() => {
+        return (tree: HtmlRoot, _file) => {
+          visit(tree, "element", (node: Element) => {
+            if (node.tagName === "img" && !node.properties?.loading) {
+              node.properties = { ...node.properties, loading: "lazy" }
+            }
+          })
+        }
+      })
+
       return plugins
     },
     externalResources() {
       const js: JSResource[] = []
       const css: CSSResource[] = []
-
-      if (opts.enableCheckbox) {
-        js.push({
-          script: checkboxScript,
-          loadTime: "afterDOMReady",
-          contentType: "inline",
-        })
-      }
-
-      if (opts.callouts) {
-        js.push({
-          script: calloutScript,
-          loadTime: "afterDOMReady",
-          contentType: "inline",
-        })
-      }
-
-      if (opts.mermaid) {
-        js.push({
-          script: mermaidScript,
-          loadTime: "afterDOMReady",
-          contentType: "inline",
-          moduleType: "module",
-        })
-
-        css.push({
-          content: mermaidStyle,
-          inline: true,
-        })
-      }
-
       return { js, css }
     },
   }
@@ -797,6 +778,6 @@ declare module "vfile" {
   interface DataMap {
     blocks: Record<string, Element>
     htmlAst: HtmlRoot
-    hasMermaidDiagram: boolean | undefined
+    hasMermaid: boolean
   }
 }
