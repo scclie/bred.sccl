@@ -54,7 +54,7 @@ export default {
       searchBarPlaceholder: "Search for something",
     },
     tableOfContents: {
-      title: "Table of Contents",
+      title: "Content",
     },
     contentMeta: {
       readingTime: ({ minutes }) => `${minutes} min read`,
@@ -67,7 +67,7 @@ export default {
     },
     error: {
       title: "Not Found",
-      notFound: "Either this page is private or doesn't exist.",
+      notFound: "NOOOO THERE IS NOTHING :SOB:",
       home: "Return to Homepage",
     },
     folderContent: {

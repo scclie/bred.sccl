@@ -56,84 +56,78 @@ async function generateSocialImage(
 
   const titleSize = scaleTitleSize(title)
   const descriptionSize = scaleDescriptionSize(description)
+  const topMargin = calcTitleTopMargin(description, tags)
 
   // СБОРКА КАРТОЧКИ С СИСТЕМНЫМИ ИКОНКАМИ И УВЕЛИЧЕННЫМ ТЕКСТОМ
   const imageComponent = {
     type: "div",
     props: {
-      style: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
-        width: "100%",
-        height: "100%",
-        padding: "60px 80px",
-        position: "relative",
-        backgroundImage: ogBgBase64 ? `url(${ogBgBase64})` : undefined,
-        backgroundSize: "100% 100%",
-        backgroundRepeat: "no-repeat",
-        backgroundColor: "#2E3440",
-      },
-      children: [
-        // ВЕРХНЯЯ ЧАСТЬ: Вотермарка sccl.cc
-        {
-          type: "div",
-          props: {
-            style: {
-              display: "flex",
-              justifyContent: "flex-end",
-              width: "100%",
-            },
-            children: {
-              type: "div",
-              props: {
-                style: {
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-end",
-                },
-                children: [
-                  {
-                    type: "span",
-                    props: {
-                      children: "> scclie://",
-                      style: {
-                        color: "#88C0D0",
-                        fontSize: "36px",
-                        fontWeight: "900",
-                        fontFamily: "Martian Mono",
-                      },
-                    },
-                  },
-                  {
-                    type: "span",
-                    props: {
-                      children: "notes",
-                      style: {
-                        color: "#88C0D0",
-                        fontSize: "36px",
-                        fontWeight: "900",
-                        fontFamily: "Martian Mono",
-                      },
-                    },
-                  },
-                ],
+        style: {
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          width: "100%",
+          height: "100%",
+          padding: "60px 80px",
+          position: "relative",
+          backgroundImage: ogBgBase64 ? `url(${ogBgBase64})` : undefined,
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+          backgroundColor: "#2E3440",
+        },
+        children: [
+          // ВЕРХНЯЯ ЧАСТЬ: Вотермарка sccl.cc — всегда в правом верхнем углу
+          {
+            type: "div",
+            props: {
+              style: {
+                position: "absolute",
+                top: "60px",
+                right: "80px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
               },
+              children: [
+                {
+                  type: "span",
+                  props: {
+                    children: "> scclie://",
+                    style: {
+                      color: "#88C0D0",
+                      fontSize: "36px",
+                      fontWeight: "900",
+                      fontFamily: "Martian Mono",
+                    },
+                  },
+                },
+                {
+                  type: "span",
+                  props: {
+                    children: "notes",
+                    style: {
+                      color: "#88C0D0",
+                      fontSize: "36px",
+                      fontWeight: "900",
+                      fontFamily: "Martian Mono",
+                    },
+                  },
+                },
+              ],
             },
           },
-        },
 
-        // СРЕДНЯЯ ЧАСТЬ: Заголовок и Описание
-        {
-          type: "div",
-          props: {
-            style: {
-              display: "flex",
-              flexDirection: "column",
-              maxWidth: "70%",
-              marginBottom: "auto",
-              marginTop: "40px",
-            },
+          // СРЕДНЯЯ ЧАСТЬ: Заголовок и Описание — на 1/3 от верха
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                maxWidth: "70%",
+                marginBottom: "auto",
+                marginTop: `${topMargin}px`,
+              },
             children: [
               {
                 type: "span",
@@ -445,4 +439,12 @@ function scaleDescriptionSize(description: string) {
   if (len < 220) return 30
   if (len < 320) return 24
   return 18
+}
+
+function calcTitleTopMargin(description: string, tags: string[]): number {
+  const descLen = description.length
+  const tagCount = tags.length
+  const descPenalty = Math.min(descLen * 0.25, 90)
+  const tagPenalty = tagCount * 8
+  return Math.max(40, 180 - descPenalty - tagPenalty)
 }

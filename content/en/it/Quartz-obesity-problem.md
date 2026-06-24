@@ -157,27 +157,14 @@ Whether you need it or not - up to you.
 
 # Does this even help?
 
-Before:
-
-```text
-Google Fonts:          ~2.5 MB
-KaTeX:                 ~900 KB/page
-Inline scripts:        ~600 KB
-Mermaid on all:        ~14 KB/page
-Images:                A lot.
-Explorer:              many divs
-```
-
-After:
-
-```text
-Google Fonts:          0
-KaTeX:                 0
-postscript.js:        102 KB (cached)
-Mermaid:              only where needed
-Images:               loading="lazy"
-Explorer:             somewhat lighter
-```
+| Component       | Before             | After                      |
+| --------------- | ------------------ | -------------------------- |
+| Google Fonts    | ~2.5 MB            | 0                          |
+| KaTeX           | ~900 KB/page       | 0                          |
+| Inline scripts  | ~600 KB            | `postscript.js` 102 KB     |
+| Mermaid         | on every page      | only where needed          |
+| Images          | A lot.             | `loading="lazy"`           |
+| Explorer        | many divs          | somewhat lighter           |
 
 A page without mermaid and without images now weighs ~10 KB HTML + 41 KB index.css + 102 KB postscript.js.
 

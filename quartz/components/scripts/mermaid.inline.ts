@@ -143,7 +143,7 @@ const cssVars = [
 ] as const
 
 let mermaidImport = undefined
-document.addEventListener("nav", async () => {
+async function initMermaid() {
   const center = document.querySelector(".center") as HTMLElement
   const nodes = center.querySelectorAll("code.mermaid") as NodeListOf<HTMLElement>
   if (nodes.length === 0) return
@@ -255,4 +255,7 @@ document.addEventListener("nav", async () => {
       expandBtn.removeEventListener("click", showMermaid)
     })
   }
-})
+}
+
+initMermaid()
+document.addEventListener("nav", initMermaid)
