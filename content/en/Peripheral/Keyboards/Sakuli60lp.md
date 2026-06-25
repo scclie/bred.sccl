@@ -2,7 +2,12 @@
 title: Sakuli60lp
 description: "Build a handwired wireless split mechanical keyboard with 60 keys, Kailh Choc low-profile switches, hotswap support, and an open-source ergonomic design."
 lang: en
-tags: 
+autoTranslated: "true"
+translationLock: "true"
+tags:
+  - "#shitpost"
+  - "#project"
+  - "#peripheral"
 date: 2026-06-21
 ---
 

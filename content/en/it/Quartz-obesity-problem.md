@@ -2,6 +2,8 @@
 title: "Quartz: Time to lose weight"
 description: "Your Quartz static site ballooned to 50 KB per page? Breakdown of bloat sources: fonts, KaTeX, Mermaid, inline scripts, images, and the Explorer. How to slim it down and how much you can cut."
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags:
 - "#it"
 - "#shitpost"

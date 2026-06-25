@@ -2,7 +2,12 @@
 title: SSK-58tmr
 description: "An experimental open-source wireless split keyboard project with 58–60 keys, TMR magnetic sensors, analog input, and ZMK support. Research notes on building a low-power alternative to Hall Effect keyboards."
 lang: en
-tags: 
+autoTranslated: "true"
+translationLock: "true"
+tags:
+  - "#shitpost"
+  - "#project"
+  - "#peripheral"
 date: 2026-05-14
 ---
 

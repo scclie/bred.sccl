@@ -2,8 +2,9 @@
 title: 'Shaking. Visuomotor Feedback Loop'
 description: "Smooth beer or lsd shake"
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags:
-  - "#games"
   - "#aim"
 date: 2025-11-04
 ---

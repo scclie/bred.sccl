@@ -4,7 +4,7 @@ description: "Фонетически эквивалентный вариант �
 lang: ru
 tags:
   - "#peripheral"
-date: 2026-06-22
+date: 2025-04-13
 ---
 
 Сам проект Colemak CAWS был создан сообществом вокруг Colemak для объеденения популярных модов `Curl`, `Angle`, `Wide`, `Symbols`, а основная работа над CAWS выполнена [DreymaR](https://dreymar.colemak.org/). Данный русский вариант является моей адаптацией для кириллицы.

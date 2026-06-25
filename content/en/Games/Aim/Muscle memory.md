@@ -2,8 +2,9 @@
 title: Muscle Memory, Part of the Aiming Skill Set
 description: visuomotor coordination > muscle memory
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags:
-  - "#games"
   - "#aim"
 date: 2025-09-22
 ---

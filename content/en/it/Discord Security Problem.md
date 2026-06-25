@@ -2,6 +2,8 @@
 title: "Discord: Security Problem"
 description: "Discord and the secret technology of 'an open file containing your password'. Maximum openness of the client to completely random people."
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags:
   - "#it"
   - "#security"
@@ -85,7 +87,7 @@ Yeah.
 
 You don't.
 
-The new login isn't even registered as a new one — the old session simply "moves" to another machine.
+The new login isn't even registered as a new one - the old session simply "moves" to another machine.
 
 The only thing you might notice is that you got logged out from the device where the token was stolen.
 

@@ -158,6 +158,13 @@ h1, h2, h3, h4, h5, h6 {
 // ==========================================
 .explorer {
   width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+
+  & > .explorer-content {
+    max-height: 100%;
+  }
 
   // Кнопка-заголовок Explorer (полоска от title="") — скрываем
   > button.desktop-explorer {

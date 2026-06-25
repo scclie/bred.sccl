@@ -2,7 +2,11 @@
 title: Outemu Switches
 description: "I bought way too many Outemu switches so you don't have to: 38 switches, sound tests, a tier list, hidden gems, budget kings, and a lot of slander towards the clicky ones."
 lang: en
-tags: 
+autoTranslated: "true"
+translationLock: "true"
+tags:
+  - "#shitpost"
+  - "#peripheral"
 date: 2026-06-16
 ---
 

@@ -2,11 +2,13 @@
 title: "sccl_nix: Declarative paradise"
 description: "A modular NixOS configuration built on flakes, home-manager and disko, designed to scale across multiple machines and users without turning /etc/nixos into chaos. The architecture separates hosts, user profiles and shared modules to keep dotfiles maintainable, reproducible and extensible without copy-paste and hostname-based hacks."
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags:
   - "#os"
   - "#project"
   - "#shitpost"
-date: 2026-06-22
+date: 2026-02-13
 ---
 
 # If this shitpost-like article looks like insanity
@@ -60,7 +62,7 @@ This is basically the “human layer”
 - shell configuration
 - all that user-level mess
 
-One host can contain as many profiles as you want — different users, different purposes, whatever.
+One host can contain as many profiles as you want - different users, different purposes, whatever.
 
 The system is built per-host, and profiles are attached on top.
 

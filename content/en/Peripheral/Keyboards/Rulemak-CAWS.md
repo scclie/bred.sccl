@@ -2,9 +2,11 @@
 title: 'Rulemak CAWS'
 description: "Russian phonetically equivalent variant of Colemak CAWS layout"
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags:
   - "#peripheral"
-date: 2026-06-22
+date: 2025-04-13
 ---
 
 The Colemak CAWS project itself was created by the Colemak community to unite popular mods: `Curl`, `Angle`, `Wide`, `Symbols`, with the main work on CAWS done by [DreymaR](https://dreymar.colemak.org/). This Russian variant is my adaptation for Cyrillic.
@@ -21,7 +23,7 @@ The Russian layout is built as a phonetic analogue of the English one:
 
 and so on, where possible.
 
-This approach means you don't have to learn a new layout from scratch — you can start typing confidently right away, knowing only the base layout: many words and combinations are typed with similar finger movements regardless of which layout you're using.
+This approach means you don't have to learn a new layout from scratch - you can start typing confidently right away, knowing only the base layout: many words and combinations are typed with similar finger movements regardless of which layout you're using.
 
 ## Why It Works
 
@@ -67,7 +69,7 @@ The remaining letters had to be shoved wherever they'd fit:
 
 - `Ъ` ended up under the pinky, much as I'd prefer otherwise, since it's used extremely rarely.
 - `Ю` took the place of `\`. This letter isn't too frequent either, so this turned out to be the least painful placement option.
-- `Ё` — some idiot in the Russian layout stuck it in the ass-end of the world — in this variant it's on `Е`, but on the *AltGr* layer.
+- `Ё` - some idiot in the Russian layout stuck it in the ass-end of the world - in this variant it's on `Е`, but on the *AltGr* layer.
 
 The layout doesn't try to be perfect for Russian. The goal was to make the Russian part as similar as possible to the English one, so you don't have to keep two different layouts in your head, while preserving the ergonomics and convenience of Colemak.
 
@@ -90,4 +92,4 @@ But you can run the installer and pray the system doesn't croak.
 [[rumkcaws.7z]]
 
 ## Linux
--# No version for Linux, I use split and DH there anyway — the layout itself is basically for a laptop.
+-# No version for Linux, I use split and DH there anyway - the layout itself is basically for a laptop.

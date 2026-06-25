@@ -2,8 +2,9 @@
 title: The Casualization of Aim - Why "Pure" Aim Skill Doesn't Decide Competitive Games
 description: Why aim trainers don't f*&%ing work?
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags:
-  - "#games"
   - "#aim"
 date: 2025-09-22
 ---
@@ -25,7 +26,7 @@ Hence, the crutch systems come into play:
 *   **Moving Accuracy:** A mechanic almost entirely removed from tactical shooters. In the same *CS*, firing while moving is synonymous with "miss." This is a conscious decision that shifts the focus from shooting mechanics to positioning and tactics (counter-strafing, stop-shots).
 ![[strafe_rng.png]]
 
-*   **Bloom, damage falloff, complex ballistics** — all these are layers of RNG that add a factor of luck to the equation. Sometimes a wild shot will hit, while a perfectly aimed one will miss.
+*   **Bloom, damage falloff, complex ballistics** - all these are layers of RNG that add a factor of luck to the equation. Sometimes a wild shot will hit, while a perfectly aimed one will miss.
 ![[ballistics.png]]
 
 The core idea is to **lower the skill ceiling for aim** (to neutralize the aim advantage). The difference between a good and a god-like aimer is negated by the fact that **even a god can't guarantee a hit** due to RNG, and against a slow target, their superiority won't be as noticeable. A novice always has a chance for a random hit or a "lucky" headshot.

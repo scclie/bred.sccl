@@ -2,6 +2,8 @@
 title: 'Scan Code & Virtual Key: An Anglocentric Conspiracy of Operating Systems'
 description: "Why keyboard input is still a complete mess: scan codes, virtual keys, symbols, broken hotkeys, Unity, Unreal, Linux, and the never-ending anglocentric disaster of keyboard layouts."
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags: 
   - "#it"
   - "#shitpost"

@@ -3,7 +3,6 @@ title: 'Мышечная память, часть навыка прицелив�
 description: "моторно-зрительная координация > muscle memory"
 lang: ru
 tags:
-  - "#games"
   - "#aim"
 date: 2025-09-22
 ---

@@ -318,7 +318,7 @@ async function main() {
     if (fs.existsSync(enPath)) {
       const enContent = fs.readFileSync(enPath, "utf-8")
       const { frontmatter } = parseFrontmatter(enContent)
-      if (frontmatter.autoTranslated !== "true") {
+      if (frontmatter.autoTranslated !== "true" || frontmatter.translationLock === "true") {
         hasManual++
         continue
       }

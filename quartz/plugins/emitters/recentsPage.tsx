@@ -83,7 +83,16 @@ export const RecentsPage: QuartzEmitterPlugin = () => {
       }
     },
     async *partialEmit(ctx, content, resources, _changeEvents) {
-      yield* this.emit!(ctx, content, resources)
+      const allFiles = content.map((c) => c[1].data)
+      const slugs: FullSlug[] = [
+        joinSegments("recents", "index") as FullSlug,
+        joinSegments("en", "recents", "index") as FullSlug,
+        joinSegments("ru", "recents", "index") as FullSlug,
+      ]
+
+      for (const slug of slugs) {
+        yield processRecentsPage(ctx, slug, allFiles, opts, resources)
+      }
     },
   }
 }

@@ -6,7 +6,7 @@ tags:
   - "#os"
   - "#project"
   - "#shitpost"
-date: 2026-06-22
+date: 2026-02-13
 ---
 
 # Если этот shitpost-like статья выглядит как шиза
