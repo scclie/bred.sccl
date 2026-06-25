@@ -8,7 +8,7 @@ tags:
   - "#it"
   - "#security"
   - "#shitpost"
-date: 2026-06-18
+date: 2026-06-17
 ---
 
 # Discord and the secret technology of "an open file containing your password"

@@ -6,7 +6,7 @@ tags:
 - "#it"
 - "#shitpost"
 - "#web"
-date: 2026-06-24
+date: 2026-06-23
 ---
 
 Сидиш, пилиш [Quartz](https://github.com/jackyzha0/quartz)

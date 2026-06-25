@@ -8,7 +8,7 @@ tags:
 - "#it"
 - "#shitpost"
 - "#web"
-date: 2026-06-25
+date: 2026-06-24
 ---
 
 My site [sccl.cc](https://sccl.cc) was originally built with [Astro](https://astro.build).

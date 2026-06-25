@@ -8,7 +8,7 @@ tags:
 - "#it"
 - "#shitpost"
 - "#web"
-date: 2026-06-25
+date: 2026-06-24
 ---
 
 *this article is more about my carelessness, and to some extent, stupidity*

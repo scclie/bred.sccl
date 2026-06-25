@@ -6,7 +6,7 @@ tags:
 - "#it"
 - "#shitpost"
 - "#web"
-date: 2026-06-25
+date: 2026-06-24
 ---
 
 Мой сайт [sccl.cc](https://sccl.cc) изначально был на [Astro](https://astro.build).

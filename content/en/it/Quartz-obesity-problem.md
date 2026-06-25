@@ -8,7 +8,7 @@ tags:
 - "#it"
 - "#shitpost"
 - "#web"
-date: 2026-06-24
+date: 2026-06-23
 ---
 
 You're sitting there, tinkering with your [Quartz](https://github.com/jackyzha0/quartz) wiki.
