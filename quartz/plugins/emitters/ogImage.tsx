@@ -56,7 +56,17 @@ async function generateSocialImage(
 
   const titleSize = scaleTitleSize(title)
   const descriptionSize = scaleDescriptionSize(description)
-  const topMargin = calcTitleTopMargin(description, tags)
+  const topMargin = calcTitleTopMargin(description, tags, title)
+  const titleLineHeight = 1.3
+  const titleMaxHeight = titleSize * titleLineHeight * 2
+
+  // Available height for description = container - padding - topMargin - title - titleMargin - bottomSection
+  const bottomSectionHeight = 56
+  const paddingVertical = 60 * 2
+  const descAvailableHeight = Math.max(
+    30,
+    height - paddingVertical - bottomSectionHeight - topMargin - titleMaxHeight - 8 + 15,
+  )
 
   // СБОРКА КАРТОЧКИ С СИСТЕМНЫМИ ИКОНКАМИ И УВЕЛИЧЕННЫМ ТЕКСТОМ
   const imageComponent = {
@@ -65,7 +75,7 @@ async function generateSocialImage(
         style: {
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-start",
+          justifyContent: "space-between",
           width: "100%",
           height: "100%",
           padding: "60px 80px",
@@ -117,7 +127,7 @@ async function generateSocialImage(
             },
           },
 
-          // СРЕДНЯЯ ЧАСТЬ: Заголовок и Описание — на 1/3 от верха
+          // СРЕДНЯЯ ЧАСТЬ: Заголовок и Описание
           {
             type: "div",
             props: {
@@ -125,34 +135,56 @@ async function generateSocialImage(
                 display: "flex",
                 flexDirection: "column",
                 maxWidth: "70%",
-                marginBottom: "auto",
                 marginTop: `${topMargin}px`,
               },
             children: [
               {
-                type: "span",
+                type: "div",
                 props: {
                   style: {
-                    fontSize: `${titleSize}px`,
-                    fontWeight: "900",
-                    color: "#E5E9F0",
-                    fontFamily: "Martian Mono",
+                    display: "flex",
+                    height: `${titleMaxHeight}px`,
+                    overflow: "hidden",
                     marginBottom: "16px",
                   },
-                  children: title,
+                  children: {
+                    type: "div",
+                    props: {
+                      style: {
+                        display: "flex",
+                        width: "100%",
+                        fontSize: `${titleSize}px`,
+                        fontWeight: "900",
+                        color: "#E5E9F0",
+                        fontFamily: "Martian Mono",
+                        lineHeight: "1.3",
+                      },
+                      children: title,
+                    },
+                  },
                 },
               },
               {
-                type: "span",
+                type: "div",
                 props: {
                   style: {
-                    fontSize: `${descriptionSize}px`,
-                    color: "#D8DEE9",
-                    fontFamily: "Cascadia Mono",
-                    fontWeight: "900",
-                    lineHeight: "1.4",
+                    display: "flex",
+                    height: `${descAvailableHeight}px`,
+                    overflow: "hidden",
                   },
-                  children: description,
+                  children: {
+                    type: "span",
+                    props: {
+                      style: {
+                        fontSize: `${descriptionSize}px`,
+                        color: "#D8DEE9",
+                        fontFamily: "Cascadia Mono",
+                        fontWeight: "900",
+                        lineHeight: "1.4",
+                      },
+                      children: description,
+                    },
+                  },
                 },
               },
             ],
@@ -441,10 +473,12 @@ function scaleDescriptionSize(description: string) {
   return 18
 }
 
-function calcTitleTopMargin(description: string, tags: string[]): number {
+function calcTitleTopMargin(description: string, tags: string[], title: string): number {
   const descLen = description.length
   const tagCount = tags.length
-  const descPenalty = Math.min(descLen * 0.25, 90)
+  const titleLen = title.length
+  const descPenalty = Math.min(descLen * 0.2, 80)
   const tagPenalty = tagCount * 8
-  return Math.max(40, 180 - descPenalty - tagPenalty)
+  const titlePenalty = Math.min(titleLen * 0.3, 50)
+  return Math.max(30, 160 - descPenalty - tagPenalty - titlePenalty)
 }

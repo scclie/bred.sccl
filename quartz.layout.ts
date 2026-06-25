@@ -26,6 +26,7 @@ export const sharedPageComponents: SharedLayout = {
     links: {
       Contacts: "https://sccl.cc",
       GitHub: "https://github.com",
+      RSS: "/index.xml",
     },
   }),
 }

@@ -2,12 +2,11 @@
 title: "Self-hosted password manager on Cloudflare Workers"
 description: "Deploying NodeWarden (Bitwarden-compatible server) on Cloudflare Workers for free, no credit card needed. Why, how, and is it secure."
 lang: en
-autoTranslated: "true"
-translationLock: "true"
 tags:
 - "#it"
 - "#security"
 - "#shitpost"
+- "#selfhosted"
 date: 2026-06-25
 ---
 
@@ -50,7 +49,7 @@ So:
 - Free (Workers - 100k req/day)
 - Zero maintenance
 - Cloudflare handles the infra
-- Database - **Cloudflare D1** (free: 5 GB, 5M rows read/mo)
+- Database - Cloudflare D1 (free: 5 GB, 5M rows read/mo)
 
 Works with all Bitwarden clients: browser extension, mobile app, CLI.
 
@@ -67,7 +66,7 @@ Quick steps:
 5. Add `JWT_SECRET`: Dashboard -> your worker -> Settings -> Variables. Any string >=32 chars, e.g. `openssl rand -base64 32`.
 6. Deploy: Cloudflare Dashboard -> Workers & Pages -> Create -> Pages -> Connect to GitHub, pick your fork. Cloudflare pulls code, builds, and deploys on every push to `main`. No GitHub Actions needed.
 
-**Important:** Cloudflare's free plan requires a credit card to create R2 buckets. NodeWarden has a `deploy:kv` mode that uses KV instead of R2 (for file attachments). Database is D1 either way - no card needed.
+**Important:** Cloudflare's free plan requires a credit card to create R2. NodeWarden has a `deploy:kv` mode that uses KV instead of R2 (for file attachments). Database is D1 either way - no card needed.
 
 ---
 
@@ -77,10 +76,10 @@ Quick steps:
 
 Under the hood it's standard Bitwarden end-to-end encryption:
 
-* Master password -> KDF -> **master key** (symmetric, AES-256). Lives in the browser only, never leaves.
-* Master key -> HKDF -> **encryption key** - this encrypts all passwords, TOTP keys, notes. Server only sees encrypted garbage.
-* An asymmetric key pair is also generated: **public key** stored on the server openly, **private key** encrypted with the encryption key and sent to the server (needed for syncing between devices).
-* Master password -> KDF -> **client hash** - sent to the server. Server salts it again (server hash) and stores only that.
+* Master password -> KDF -> master key (symmetric, AES-256). Lives in the browser only, never leaves.
+* Master key -> HKDF -> encryption key - this encrypts all passwords, TOTP keys, notes. Server only sees encrypted garbage.
+* An asymmetric key pair is also generated: public key stored on the server openly, private key encrypted with the encryption key and sent to the server (needed for syncing between devices).
+* Master password -> KDF -> client hash - sent to the server. Server salts it again (server hash) and stores only that.
 * The server cannot decrypt the vault. At all. It has no keys - only a hash to verify your password at login.
 
 Server stores only encrypted data. Even if someone steals the database - they get useless blobs that can't be cracked without the master key.
@@ -97,11 +96,33 @@ How realistic is that? Depends on your paranoia level and security hygiene.
 
 ---
 
-# Send - expiring links
+# Features
 
-Bitwarden feature: create a self-destructing link. Type - text or file. Expires by time (1-31 days) or by view count - deletes after N opens.
+NodeWarden supports most Bitwarden features. Here's what's available:
 
-You can optionally add a password on top of the link. You can revoke any Send manually at any time, even before it expires.
+## Send
+
+Create expiring links. Text or file. Dies by time or by view count. Optional password on top. Can be revoked manually any time.
+
+## Backup Center
+
+Automatic backups on a schedule. Encrypted - useless without the master password.
+
+## TOTP (Verification Codes)
+
+Built-in TOTP generator. Attach to any password entry and use instead of Google Authenticator.
+
+## Passkeys
+
+Replace your master password with WebAuthn. Login with fingerprint/face/PIN.
+
+## 2FA on login
+
+Two-factor auth at login. But if someone steals the database + your password, 2FA won't help.
+
+## API Key
+
+For Bitwarden CLI and automation.
 
 ---
 
@@ -112,7 +133,8 @@ You can optionally add a password on top of the link. You can revoke any Send ma
 - Zero maintenance
 - E2E encryption
 - Bitwarden-compatible (any client)
-- Public links (Send)
+- TOTP, Send, Passkeys, 2FA, Backup Center, API Key
+- Cloud backups (WebDAV/S3)
 
 **Cons:**
 - Depends on Cloudflare & GitHub
