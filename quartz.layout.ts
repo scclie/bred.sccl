@@ -82,7 +82,7 @@ export const defaultContentPageLayout: PageLayout = {
       title: "Recents",
       limit: 5,
       showTags: false,
-      linkToMore: "tags/",
+      linkToMore: "recents/",
     }),
   ],
 }

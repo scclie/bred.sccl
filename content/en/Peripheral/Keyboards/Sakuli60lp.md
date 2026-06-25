@@ -1,6 +1,6 @@
 ---
 title: Sakuli60lp
-description: "Build a handwired wireless split mechanical keyboard with 60 keys, Kailh Choc low-profile switches, hotswap support, and an open-source ergonomic design. Documentation, photos, and project details included."
+description: "Build a handwired wireless split mechanical keyboard with 60 keys, Kailh Choc low-profile switches, hotswap support, and an open-source ergonomic design."
 lang: en
 tags: 
 date: 2026-06-21
@@ -24,8 +24,8 @@ date: 2026-06-21
 == ~<6000 rub.
 + many man-hours of work on the development and assembly of various tools and equipment
 
-Share without pay - hardcore handwired
+Crap without a pcb - hardcore handwired
 In general, I don’t see any point in making a board at all for mechanics; this is done only in large-scale production, because it’s faster and cheaper, but it doesn’t mean it’s better and of higher quality. Without a board, you can also screw up any keyboard shape, change the height and tilt of the buttons, etc.
 
-Tutu software ZMK
+Here is ZMK software
 Presumably the charge should last up to several months of daily work-gaming for 15 hours a day. (the calculator is generally hesit for 10 months, but let’s be realistic)
