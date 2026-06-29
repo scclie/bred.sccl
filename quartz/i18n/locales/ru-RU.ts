@@ -67,6 +67,9 @@ export default {
       lastFewNotes: ({ count }) =>
         `Последн${getForm(count, "яя", "ие", "ие")} ${count} замет${getForm(count, "ка", "ки", "ок")}`,
     },
+    rssFull: {
+      recentNotes: "Все заметки (полное содержание)",
+    },
     error: {
       title: "Страница не найдена",
       notFound: "Эта страница приватная или не существует",

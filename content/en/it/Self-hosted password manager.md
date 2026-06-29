@@ -6,7 +6,6 @@ tags:
 - "#it"
 - "#security"
 - "#shitpost"
-- "#selfhosted"
 date: 2026-06-25
 ---
 

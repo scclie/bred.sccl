@@ -17,6 +17,7 @@ export type ContentDetails = {
   tags: string[]
   content: string
   richContent?: string
+  rawContent?: string
   date?: Date
   description?: string
 }
@@ -27,6 +28,8 @@ interface Options {
   rssLimit?: number
   rssFullHtml: boolean
   rssSlug: string
+  enableRSSFull: boolean
+  rssFullSlug: string
   includeEmptyFiles: boolean
 }
 
@@ -36,6 +39,8 @@ const defaultOptions: Options = {
   rssLimit: 10,
   rssFullHtml: false,
   rssSlug: "index",
+  enableRSSFull: false,
+  rssFullSlug: "index-full",
   includeEmptyFiles: true,
 }
 
@@ -93,6 +98,46 @@ function generateRSSFeed(cfg: GlobalConfiguration, idx: ContentIndexMap, limit?:
   </rss>`
 }
 
+function generateRSSFullFeed(cfg: GlobalConfiguration, idx: ContentIndexMap): string {
+  const base = cfg.baseUrl ?? ""
+
+  const createURLEntry = (slug: SimpleSlug, content: ContentDetails): string => `<item>
+    <title>${escapeHTML(content.title)}</title>
+    <link>https://${joinSegments(base, encodeURI(slug))}</link>
+    <guid>https://${joinSegments(base, encodeURI(slug))}</guid>
+    <description><![CDATA[ ${content.rawContent ?? ""} ]]></description>
+    <pubDate>${content.date?.toUTCString()}</pubDate>
+  </item>`
+
+  const items = Array.from(idx)
+    .sort(([_, f1], [__, f2]) => {
+      if (f1.date && f2.date) {
+        return f2.date.getTime() - f1.date.getTime()
+      } else if (f1.date && !f2.date) {
+        return -1
+      } else if (!f1.date && f2.date) {
+        return 1
+      }
+
+      return f1.title.localeCompare(f2.title)
+    })
+    .map(([slug, content]) => createURLEntry(simplifySlug(slug), content))
+    .join("")
+
+  return `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+      <title>${escapeHTML(cfg.pageTitle)}</title>
+      <link>https://${base}</link>
+      <description>${i18n(cfg.locale).pages.rssFull.recentNotes} on ${escapeHTML(
+        cfg.pageTitle,
+      )}</description>
+      <generator>Quartz -- quartz.jzhao.xyz</generator>
+      ${items}
+    </channel>
+  </rss>`
+}
+
 export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
   opts = { ...defaultOptions, ...opts }
   return {
@@ -113,6 +158,9 @@ export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
             content: file.data.text ?? "",
             richContent: opts?.rssFullHtml
               ? escapeHTML(toHtml(tree as Root, { allowDangerousHtml: true }))
+              : undefined,
+            rawContent: opts?.enableRSSFull
+              ? toHtml(tree as Root, { allowDangerousHtml: true })
               : undefined,
             date: date,
             description: file.data.description ?? "",
@@ -138,14 +186,24 @@ export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
         })
       }
 
+      if (opts?.enableRSSFull) {
+        yield write({
+          ctx,
+          content: generateRSSFullFeed(cfg, linkIndex),
+          slug: (opts?.rssFullSlug ?? "index-full") as FullSlug,
+          ext: ".xml",
+        })
+      }
+
       const fp = joinSegments("static", "contentIndex") as FullSlug
       const simplifiedIndex = Object.fromEntries(
         Array.from(linkIndex).map(([slug, content]) => {
-          // remove description and from content index as nothing downstream
-          // actually uses it. we only keep it in the index as we need it
-          // for the RSS feed
+          // remove description, date, rawContent from content index as nothing
+          // downstream actually uses them. we only keep them in the index as
+          // we need them for the RSS feed
           delete content.description
           delete content.date
+          delete content.rawContent
           return [slug, content]
         }),
       )
@@ -158,17 +216,30 @@ export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
       })
     },
     externalResources: (ctx) => {
+      const base = ctx.cfg.configuration.baseUrl
+      const links: JSX.Element[] = []
       if (opts?.enableRSS) {
-        return {
-          additionalHead: [
-            <link
-              rel="alternate"
-              type="application/rss+xml"
-              title="RSS Feed"
-              href={`https://${ctx.cfg.configuration.baseUrl}/index.xml`}
-            />,
-          ],
-        }
+        links.push(
+          <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="RSS Feed"
+            href={`https://${base}/${opts?.rssSlug ?? "index"}.xml`}
+          />,
+        )
+      }
+      if (opts?.enableRSSFull) {
+        links.push(
+          <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="RSS Full Feed"
+            href={`https://${base}/${opts?.rssFullSlug ?? "index-full"}.xml`}
+          />,
+        )
+      }
+      if (links.length > 0) {
+        return { additionalHead: links }
       }
     },
   }

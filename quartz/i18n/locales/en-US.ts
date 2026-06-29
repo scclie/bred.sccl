@@ -65,6 +65,9 @@ export default {
       recentNotes: "Recent notes",
       lastFewNotes: ({ count }) => `Last ${count} notes`,
     },
+    rssFull: {
+      recentNotes: "All notes (full content)",
+    },
     error: {
       title: "Not Found",
       notFound: "NOOOO THERE IS NOTHING :SOB:",

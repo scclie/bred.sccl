@@ -68,6 +68,9 @@ export interface Translation {
       recentNotes: string
       lastFewNotes: (variables: { count: number }) => string
     }
+    rssFull: {
+      recentNotes: string
+    }
     error: {
       title: string
       notFound: string

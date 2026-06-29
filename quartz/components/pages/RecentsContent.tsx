@@ -30,6 +30,7 @@ export default (() => {
         if (slug.startsWith("tags/")) return false
         if (slug.endsWith("/recents/index")) return false
         if (slug === "recents" || slug === "recents/index") return false
+        if (slug === "search") return false
         return true
       })
       .filter((file) => file.frontmatter?.title)
