@@ -85,8 +85,9 @@ export default (() => {
           </ul>
         </div>
         {isRootRecents && (
-          <script>
-            {`
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
 (function() {
   var LANGS = ["ru", "en"];
   function getPreferredLang() {
@@ -117,14 +118,17 @@ export default (() => {
   filterRecents();
   document.addEventListener("nav", filterRecents);
 })();
-`}
-          </script>
+`,
+            }}
+          />
         )}
       </div>
     )
   }
 
-  RecentsContent.css = concatenateResources(style, `
+  RecentsContent.css = concatenateResources(
+    style,
+    `
 li.section-li > .recents-entry {
   display: flex;
   flex-direction: column;
@@ -175,7 +179,8 @@ li.section-li:not(:last-child) {
   text-align: right;
   justify-content: flex-end;
 }
-`)
+`,
+  )
 
   return RecentsContent
 }) satisfies QuartzComponentConstructor
