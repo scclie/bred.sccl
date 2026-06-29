@@ -42,6 +42,8 @@ What you actually want: free, zero maintenance, and it just works.
 
 # NodeWarden - Bitwarden-compatible server on Cloudflare Workers
 
+![[nodewarden.webp]]
+
 [NodeWarden](https://github.com/shuaiplus/nodewarden) is a fork of the Bitwarden server that runs directly on **Cloudflare Workers**.
 
 So:

@@ -41,6 +41,8 @@ docker run bitwarden/self-host
 
 # NodeWarden - Bitwarden-совместимый сервер на Cloudflare Workers
 
+![[nodewarden.webp]]
+
 [NodeWarden](https://github.com/shuaiplus/nodewarden) - форк Bitwarden-сервера, который работает прямо на **Cloudflare Workers**.
 
 То есть:
