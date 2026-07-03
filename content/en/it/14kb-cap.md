@@ -1,6 +1,6 @@
 ---
-title: "14KB ceiling: squeezing into 1 RTT"
-description: "Why squeeze a site into 1 HTTP request, why many small packets are way worse than big ones? Transport layer bullshit: DNS, TLS, TCP slow start. The story of optimizing sccl.cc to 12 KB gzip in one packet."
+title: "14kb ceiling: squeezing into 1 RTT"
+description: "Why compress a site into 1 HTTP request, why many small packets are way worse than big ones? Transport layer breakdown (DNS, TLS, TCP slow start). The story of optimizing sccl.cc to 12 KB gzip in a single packet."
 lang: en
 tags:
 - "#it"
@@ -11,127 +11,110 @@ date: 2026-07-01
 
 # Why 14 KB?
 
-Look at real requests.
+Here's some real requests for reference.
 
-**A site that fits in 14 KB:**
+**A site that fits in 14kb:**
 ![[site_download.webp]]
 
-**A site that doesn't:**
+**One that doesn't:**
 ![[big_site_download.webp]]
 
-Download 1 ms vs 63 ms.
-
-Time difference — 63х
-
-Payload difference — 7х
+Download is the actual site content.
+1 ms vs 63 ms - a 63x speed difference, with only a 7x weight difference.
 
 ## TCP Slow Start
 
-Here's the thing — TCP won't give you the content in one packet. Even when the server is ready to respond, TCP says "hold up brother, we have congestion control":
+Fucking TCP won't spit out content in one packet. Even when the server is ready to respond - TCP says: "hold up bro, we have congestion control":
 
-It starts with initcwnd — 10 segments (RFC 6928), that's ~1460 bytes each.
-- Server sends 14 KB — waits for ACK,
-- ACK arrives — window doubles to 20 segments (~29 KB),
-- Now sends 29 KB — waits again...
+It starts with initcwnd - 10 segments (RFC 6928) - that's 1460 bytes each.
+- Server sent 14 KB - waits for ACK,
+- ACK arrived - window doubles to 20 segments (~29kb),
+- Sent 29KB now - waits again...
 
-*And so on until everything is sent.*
+*And so on until everything is transmitted.*
 
-Each loop is one RTT.
-
-Bigger response → more rounds.
-
-If your response fits in 14.6 KB — it goes out in one packet.
+Each loop is one RTT, so the bigger the response (our content), the more rounds. If the response fits in 14.6 KB - it flies out as a single packet.
 
 No waiting && no doubling && no extra RTTs.
 
 :: One round trip.
 
-On large files (images, heavy content) this doesn't matter — TCP *has time to ramp up*.
+For large files (images and other heavy content) this isn't a problem, because TCP *manages to ramp up*. But in most cases websites have files under 100kb - and that's a real problem.
 
-But most websites serve files under 100 KB — and that's a real problem.
+And that's assuming you only have one request. What about separate fonts, scripts, images - each goes through the full cycle. One page pulls 5-10-20 sequential requests, and each one wastes time on protocol chitchat instead of transferring useful data.
 
-And that's assuming just one request. If you have separate fonts, scripts, images — each one goes through the full circle. Its own setup, its own slow start, its own RTTs. One site turns into 5-10-30 sequential requests, and each one wastes time on protocol chatter instead of actual data.
-
-Bad example — [New-York Times](https://www.nytimes.com/) — 891 HTTP requests for 9 MB of content, 6 seconds of blocking time. And it's literally a standard newspaper layout with nothing heavy.
+As a very bad example - [New-York Times](https://www.nytimes.com/) - 891 http requests for 9mb of content, 6 seconds of blocking time, even though the site is literally a standard newspaper layout with nothing heavy.
 
 ## Clubs
 
-There's [14KB Club](https://14kbclub.com) — sites under 14 KB raw. They count uncompressed size, so a site that's ~20-30 KB but fits in 1 RTT thanks to gzip won't get in — questionable rules.
+There's the [14KB Club](https://14kbclub.com) - sites under 14 KB raw. They count uncompressed size, so basically they won't let in a site that's, say, 20-30kb, but thanks to gzip compression could fit in 1rtt, and in reality would be only 50-200 ns (nanoseconds) slower than an uncompressed site.
 
-[512KB Club](https://512kb.club) — if you don't fit here, it's the biggest disrespect to users and the internet as a whole. Delete your fucking site.
+[512KB Club](https://512kb.club) - if you don't fit in here, it's a fucking disrespect to users and the internet as a whole. Delete your site.
 
-*this butthurt doesn't apply to useful content like photos/video*
+*this rant does not apply to useful content on a site, like photo-video*
 
 ---
 
-# My shit
+# My efforts
 
-Got a little site [sccl.cc](https://sccl.cc).
+I have this site [sccl.cc](https://sccl.cc). It's built on [Zine](https://zine-ssg.io) - an SSG in Zig. Three pages: contacts, projects, peripherals.
 
-Built with [Zine](https://zine-ssg.io) — SSG in Zig. Three pages: contacts, projects, peripherals.
+Originally the server was serving:
 
-Originally the server served:
-
-- HTML (~15 KB)
-- Space Mono 400 woff2 (~40 KB)
-- Avatar png (~2 MB)
-- Favicon png (~1 MB)
+- HTML (~15kb)
+- Space Mono, Martian Mono woff2 (~40kb)
+- Avatar png (~2mb)
+- Favicon png (~1mb)
 
 ![[50kb_scclcc.webp]]
--# the screenshot is already a little bit opatemized, it was worse :skull:
+-# screenshot is already a bit optimized, it was worse :skull:
 
-*(before migrating to Zine it was 150+ KB, see [[/ru/it/Migration-from-Astro-to-Zine.md]])*
+*(before migrating to zine it was 150+kb, see [[/en/it/Migration-from-Astro-to-Zine.md]])*
 
-Four requests per page for content that weighs almost nothing.
+Four requests per page, for content that collectively weighs practically nothing.
 
-That's with full setup (DNS + TCP + TLS) happening once (keep-alive, HTTP/2). But still — each new tab, each page navigation — new setup. And the font and avatar hang as separate requests.
+All this considering the full setup (DNS + TCP + TLS) happens once (keep-alive, HTTP/2). But even then - for every new tab, every navigation from another page - a new setup.
 
 ## Optimization
 
-Plan: everything in one HTML. Base64 inline everything, zero external requests. And make it fit in initcwnd.
+Plan: everything in one HTML. Base64 inline everything, zero external requests. And fits in initcwnd.
 
 ### Font
 
-The fattest part — I had 2 fonts with bold versions.
+This was the fattest thing on the site:
 
-Decided to keep only one.
+I had 2 fonts, plus their bold versions downloaded separately, totaling 40kb.
 
-And from the font file, strip everything except ASCII chars actually used on the site.
+Honestly, custom fonts are fucking unnecessary in most situations, but I really wanted to give in to aesthetics and keep one, stripping the font file down to only ASCII characters actually used on the site.
 
-Disable hinting, disable layout features.
-
-Result: 4.2 KB. Then base64 into @font-face → 5.7 KB of text in HTML.
-
-This is the only concession to aesthetics. *Better to have no custom fonts at all.*
+Result: 4.2kb, which in base64 became 5.7kb of text in the HTML.
 
 ### Avatar
+Initial was ultra fat, even though it's pixel art, rendered at 400% resolution.
 
-Initial was ultra chonky.
+After running through a shakalizer - the image was first reduced to three colors, which in PNG still weighed 1.9kb. But converting to WebP got it down to 702b.
 
-But ran it through a shakler — reduced the image to 3 colors first.
-
-In PNG it was 1.9 KB.
-
-Converted to WebP: 702 B. Base64 → 940 B.
+Base64 → 940b.
 
 ### Favicon
 
-199 B, kept it in PNG.
+Same manipulations as the avatar - got to 199b, but kept it as png since for tiny images it works better.
 
-268 B in base64.
+268b in base64.
 
 ### JS
 
-Honestly could've cut hard here, but I managed to keep all site functionality and stuff all JS inline.
-Animated buttons, animated background, an easter egg with animation — basically all the unnecessary shit without which you could squeeze the site to 5 KB. (which wouldn't make it faster)
+There was a lot to cut here, since I have plenty of truly useless scripts made *for aesthetics*. But I still wanted to keep all the functionality on the site, so all that crap went inline.
+
+I've got animated buttons, an animated background, and an easter egg with animation - all totaling about 4kb, without which the site would work perfectly fine.
 
 ## Result
 
-**Before:** 4 requests, ~50 KB total
+**Before:** 4 requests, ~50kb total
 
-**After:** 1 request, 12 KB gzip / 27 KB raw
+**After:** 1 request, 12kb gzip / 27kb raw
 
-Fits in initcwnd. One TCP packet. One round trip for data.
+Fits in initcwnd: One TCP packet - one round trip for data.
 
 ![[12kb_scclcc.webp]]
 
@@ -139,21 +122,21 @@ Fits in initcwnd. One TCP packet. One round trip for data.
 
 Inlining everything is a tradeoff.
 
-When navigating to another page, the browser downloads the same font again — the font is inside HTML, it doesn't cache separately. With a separate file, the font would be cached after the first load, and the next page would load without it.
+When navigating to another page, the browser downloads the same font again - the font is inside the HTML, it doesn't get cached separately. With a separate file, the font would be cached after the first load, and the second page would load without it.
 
-Also worth noting that inlining usually weighs slightly more than an external dependency, and if we don't need to fit in initcwnd anyway — there's no point.
+Also keep in mind that inline usually weighs a bit more than an external dependency, and if we're already not exceeding initcwnd - then we don't need inlining.
 
 ### Example
 **1. Everything in one HTML (base64 fonts)**
-- 2 pages at 14 KB each
+- 2 pages at 14kb each
 - each loads in 1 round trip
-- but you burn the full 14 KB every time, even if the font repeats
+- but each time you eat the full 14kb, even if the font is repeated
 
 **2. HTML + separate font**
-- 2 pages at 8 KB + 4 KB font separately
+- 2 pages at 8kb + 4kb font separate
 - first visit: 2 requests (HTML + font)
-- navigation between pages: only 8 KB (font cached)
+- navigation between pages: only 8kb (font cached)
 
-In practice, nobody feels the difference between 14 KB and 8 KB load time.
+In the real internet, you won't feel the difference between 14kb and 8kb load speed.
 
-But delays between packets — you do.
+But delays between packets - you will.
