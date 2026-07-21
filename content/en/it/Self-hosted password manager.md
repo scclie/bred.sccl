@@ -1,6 +1,6 @@
 ---
 title: "Self-hosted password manager on Cloudflare Workers"
-description: "Deploying NodeWarden (Bitwarden-compatible server) on Cloudflare Workers for free, no credit card needed. Why, how, and is it secure."
+description: "Deploying NodeWarden (Bitwarden-compatible server) on Cloudflare Workers for free, no credit card needed. Why, how, and how secure it is."
 lang: en
 tags:
 - "#it"
@@ -9,21 +9,21 @@ tags:
 date: 2026-06-25
 ---
 
-# Why tho?
+# Why?
 
 Options for storing passwords:
 
-1. In your head - *good luck*
-2. In a text file - *sec^Wnot secure*
-3. Google Chrome / Firefox / ... - *passwords are stored who knows where*
-4. Bitwarden / 1Password / ProtonPass - *fine, but you gotta pay, and data is on someone else's servers*
-5. Your own server - *let's go*
+1. In your head...
+2. In a text file - *secure*
+3. Google Chrome / Firefox / ... - *passwords stored who knows where*
+4. Bitwarden / 1Password / ProtonPass - *okay, but you gotta pay, and data on someone else's servers*
+5. Your own server - *pog*
 
 ---
 
-# Why not just run Bitwarden on a VPS?
+# Why not just run regular Bitwarden on a VPS?
 
-You can. Bitwarden officially supports:
+You can. Bitwarden officially can be spun up with
 
 ```
 docker run bitwarden/self-host
@@ -31,11 +31,11 @@ docker run bitwarden/self-host
 
 But:
 
-* Need a VPS - $3-5/mo
-* Need Docker, need to monitor it, update it, back it up
-* For one person - kinda overkill
+* Need a VPS - from $5/mo
+* Need Docker, need to make sure it doesn't crash, need to update, need to backup
+* For one person - overkill, but cool
 
-What you actually want: free, zero maintenance, and it just works.
+What I want: free, nothing to admin, and it just works.
 
 ---
 
@@ -43,57 +43,62 @@ What you actually want: free, zero maintenance, and it just works.
 
 ![[nodewarden.webp]]
 
-[NodeWarden](https://github.com/shuaiplus/nodewarden) is a fork of the Bitwarden server that runs directly on **Cloudflare Workers**.
+[NodeWarden](https://github.com/shuaiplus/nodewarden) - a fork of the Bitwarden server that runs directly on **Cloudflare Workers**.
 
 So:
+- Free (Workers - 100k requests/day)
+- Nothing to admin
+- Cloudflare updates the infrastructure itself
+- Database - Cloudflare D1 (free: 5 GB, 5 million rows read/mo)
 
-- Free (Workers - 100k req/day)
-- Zero maintenance
-- Cloudflare handles the infra
-- Database - Cloudflare D1 (free: 5 GB, 5M rows read/mo)
-
-Works with all Bitwarden clients: browser extension, mobile app, CLI.
+Compatible with all Bitwarden clients: browser extension, mobile app, CLI.
 
 ---
 
-# Setup
+# Deployment
 
-Quick steps:
+Briefly:
 
 1. Fork [shuaiplus/nodewarden](https://github.com/shuaiplus/nodewarden).
 2. Clone locally: `git clone <your-fork> && cd <your-repo> && npm install`
-3. Edit `wrangler.toml`: `name`, `database_name`, etc.
-4. D1 database is auto-created on first deploy - wrangler handles it from config.
+3. Edit `wrangler.toml`: `name`, `database_name` etc.
+4. D1 database is created automatically on first deploy - wrangler will spin up `database_name` from config.
 5. Add `JWT_SECRET`: Dashboard -> your worker -> Settings -> Variables. Any string >=32 chars, e.g. `openssl rand -base64 32`.
-6. Deploy: Cloudflare Dashboard -> Workers & Pages -> Create -> Pages -> Connect to GitHub, pick your fork. Cloudflare pulls code, builds, and deploys on every push to `main`. No GitHub Actions needed.
+6. Deploy: Cloudflare Dashboard -> Workers & Pages -> Create -> Pages -> Connect to GitHub, select your fork. Cloudflare pulls the code, builds and deploys on every push to `main`. Build command - `npm run build`, worker deploys alongside Pages. No GitHub Actions needed.
 
-**Important:** Cloudflare's free plan requires a credit card to create R2. NodeWarden has a `deploy:kv` mode that uses KV instead of R2 (for file attachments). Database is D1 either way - no card needed.
+**Important:** Cloudflare has a free plan, but to create R2 you need to attach a credit card.
+
+NodeWarden has a `deploy:kv` mode that uses KV instead of R2 (file attachments). Database is D1 in both cases - nothing to attach, fully free. (if you can, you can attach an empty card, but the free limits are more than enough)
 
 ---
 
-# Is it secure?
+# Is it safe?
 
-*short answer: yes*
+*overall: yes*
 
-Under the hood it's standard Bitwarden end-to-end encryption:
+In detail:
 
-* Master password -> KDF -> master key (symmetric, AES-256). Lives in the browser only, never leaves.
-* Master key -> HKDF -> encryption key - this encrypts all passwords, TOTP keys, notes. Server only sees encrypted garbage.
-* An asymmetric key pair is also generated: public key stored on the server openly, private key encrypted with the encryption key and sent to the server (needed for syncing between devices).
-* Master password -> KDF -> client hash - sent to the server. Server salts it again (server hash) and stores only that.
-* The server cannot decrypt the vault. At all. It has no keys - only a hash to verify your password at login.
+Under the hood it's the standard Bitwarden end-to-end encryption scheme:
 
-Server stores only encrypted data. Even if someone steals the database - they get useless blobs that can't be cracked without the master key.
+* Master password -> KDF -> master key (symmetric, AES-256). Lives only in the browser, never leaves.
+* Master key -> HKDF -> encryption key - encrypts all passwords, TOTP keys, notes. The server only sees encrypted garbage.
+* Additionally, an asymmetric key pair is generated: public key stored openly on the server, private key is encrypted with the encryption key and also sent to the server (needed for sync between devices).
+* Master password -> KDF -> client hash - sent to the server. The server salts it again (server hash) and stores only that.
+* The server cannot decrypt the vault. At all. It has no keys - only a hash for verifying the password at login.
+
+The server only stores encrypted data. Even if the database is stolen - the attacker gets useless data that can't be cracked without the master key.
 
 ---
 
 # Caveats
 
-**Dependency on Cloudflare & GitHub**
+There are nuances:
 
-Cloudflare *theoretically* could modify your worker if your GitHub or CF account gets compromised.
+**Dependency on CF and GitHub**
 
-How realistic is that? Depends on your paranoia level and security hygiene.
+Cloudflare *theoretically* could modify your worker if they get hacked or cf itself gets compromised.
+
+How realistic that is - depends on your paranoia and hygiene.
 
 ---
 
@@ -103,23 +108,30 @@ NodeWarden supports most Bitwarden features. Here's what's available:
 
 ## Send
 
-Create expiring links. Text or file. Dies by time or by view count. Optional password on top. Can be revoked manually any time.
+Create a temporary link with text or a file attached.
+
+Burns after time or number of views.
+
+You can optionally password-protect the link. Sends can be manually revoked at any time.
 
 ## Backup Center
 
-Automatic backups on a schedule. Encrypted - useless without the master password.
+Schedule automatic backups.
+Backups are encrypted - without the master password they're useless.
 
 ## TOTP (Verification Codes)
 
-Built-in TOTP generator. Attach to any password entry and use instead of Google Authenticator.
+Built-in TOTP generator - attach to a password and use instead of Google Authenticator or similar.
 
 ## Passkeys
 
-Replace your master password with WebAuthn. Login with fingerprint/face/PIN.
+Replace the master password with a WebAuthn key.
 
 ## 2FA on login
 
-Two-factor auth at login. But if someone steals the database + your password, 2FA won't help.
+Two-factor authentication at login.
+
+But if someone steals the database + password, 2FA won't help.
 
 ## API Key
 
@@ -127,18 +139,18 @@ For Bitwarden CLI and automation.
 
 ---
 
-# TL;DR
+# Verdict?
 
 **Pros:**
 - Free
-- Zero maintenance
+- Nothing to admin
 - E2E encryption
-- Bitwarden-compatible (any client)
+- Bitwarden compatibility (any client)
 - TOTP, Send, Passkeys, 2FA, Backup Center, API Key
 - Cloud backups (WebDAV/S3)
 
 **Cons:**
-- Depends on Cloudflare & GitHub
-- No password sharing between users (everyone sees only their own vault)
+- Dependency on Cloudflare and GitHub
+- No password sharing between users (each sees only their own vault)
 
-Good "set and forget" option for those who don't want to pay for Bitwarden Premium, don't want to give Google all their passwords, and don't want to admin a VPS.
+A solid "set it and forget it" option for those who don't want to pay for Bitwarden Premium, don't want to give passwords to Google, and don't want to admin a VPS.
