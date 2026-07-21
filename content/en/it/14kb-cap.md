@@ -1,7 +1,9 @@
 ---
-title: "14KB ceiling: squeezing into 1 RTT"
+title: "max 14KB aka 1 RTT"
 description: "Why squeeze a site into 1 HTTP request, why many small packets are way worse than big ones? Transport layer bullshit: DNS, TLS, TCP slow start. The story of optimizing sccl.cc to 12 KB gzip in one packet."
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags:
 - "#it"
 - "#shitpost"
