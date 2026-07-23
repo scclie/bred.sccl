@@ -47,6 +47,15 @@ export default ((userOpts?: Partial<Options>) => {
     }
 
     const pages = allFiles
+      .filter((f) => {
+        const slug = f.slug ?? ""
+        if (slug === "index" || slug === "en/index" || slug === "ru/index") return false
+        if (slug.startsWith("tags/")) return false
+        if (slug === "recents" || slug === "recents/index" || slug.endsWith("/recents/index")) return false
+        if (slug === "search") return false
+        return true
+      })
+      .filter((f) => f.frontmatter?.title)
       .filter(langFilter)
       .filter(opts.filter)
       .sort(opts.sort)

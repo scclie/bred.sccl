@@ -4,6 +4,19 @@
     margin: 0;
     padding: 0;
   }
+
+  .explorer-lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--lightgray);
+    user-select: none;
+  }
 }
 
 .explorer-page-tree {

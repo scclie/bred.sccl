@@ -54,30 +54,8 @@ function renderNode(
   )
 }
 
-// Merge children from multiple language folders into one merged folder
-function mergeLangFolders(
-  folders: FileTrieNode[],
-): FileTrieNode[] {
-  const merged = new Map<string, FileTrieNode>()
-
-  for (const folder of folders) {
-    for (const child of folder.children) {
-      const key = child.slugSegment
-      if (merged.has(key)) {
-        // Merge children into existing folder
-        const existing = merged.get(key)!
-        for (const grandChild of child.children) {
-          if (!existing.children.some((c) => c.slugSegment === grandChild.slugSegment)) {
-            existing.children.push(grandChild)
-          }
-        }
-      } else {
-        merged.set(key, child)
-      }
-    }
-  }
-
-  return Array.from(merged.values()).sort((a, b) =>
+function sortTrieChildren(nodes: FileTrieNode[]): FileTrieNode[] {
+  return nodes.sort((a, b) =>
     a.displayName.localeCompare(b.displayName, undefined, {
       numeric: true,
       sensitivity: "base",
@@ -109,14 +87,50 @@ export default (() => {
       )
     })
 
-    // Merge content folders across languages
-    const mergedFolders = mergeLangFolders(langFolders)
+    const enFolders = sortTrieChildren(langFolders.filter((n) => n.slugSegment === "en"))
+    const ruFolders = sortTrieChildren(langFolders.filter((n) => n.slugSegment === "ru"))
+
+    // Collect all content folders from both languages for each
+    const renderLangTree = (folders: FileTrieNode[]) => {
+      const allChildren = folders.flatMap((f) => f.children)
+      // Deduplicate by slugSegment, merge children
+      const merged = new Map<string, FileTrieNode>()
+      for (const child of allChildren) {
+        const key = child.slugSegment
+        if (merged.has(key)) {
+          const existing = merged.get(key)!
+          for (const grandChild of child.children) {
+            if (!existing.children.some((c) => c.slugSegment === grandChild.slugSegment)) {
+              existing.children.push(grandChild)
+            }
+          }
+        } else {
+          merged.set(key, child)
+        }
+      }
+      return sortTrieChildren(Array.from(merged.values()))
+    }
+
+    const enTree = renderLangTree(enFolders)
+    const ruTree = renderLangTree(ruFolders)
 
     return (
       <div class={classNames(displayClass, "explorer-page")}>
-        <ul class="explorer-page-tree">
-          {mergedFolders.map((folder) => renderNode(folder, currentSlug))}
-        </ul>
+        <div class="explorer-lang-toggle">
+          <span class="lang-current" id="explorer-lang-current">RU</span>
+          <span class="lang-divider">|</span>
+          <a href="javascript:void(0)" class="lang-other" id="explorer-lang-switch">EN</a>
+        </div>
+        <div id="explorer-tree-en" style="display: none">
+          <ul class="explorer-page-tree">
+            {enTree.map((folder) => renderNode(folder, currentSlug))}
+          </ul>
+        </div>
+        <div id="explorer-tree-ru">
+          <ul class="explorer-page-tree">
+            {ruTree.map((folder) => renderNode(folder, currentSlug))}
+          </ul>
+        </div>
       </div>
     )
   }
