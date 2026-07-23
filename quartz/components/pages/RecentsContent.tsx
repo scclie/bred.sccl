@@ -151,6 +151,11 @@ li.section-li:not(:last-child) {
   gap: 1em;
 }
 
+.recents-entry .recents-row:last-child {
+  flex-direction: column;
+  gap: 0.2em;
+}
+
 .recents-entry .recents-title {
   flex: 1;
   min-width: 0;
@@ -176,8 +181,9 @@ li.section-li:not(:last-child) {
 
 .recents-entry .recents-tags {
   margin: 0;
-  white-space: nowrap;
-  text-align: right;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
   justify-content: flex-end;
 }
 `,

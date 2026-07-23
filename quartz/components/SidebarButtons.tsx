@@ -15,6 +15,9 @@ const SidebarButtons: QuartzComponent = (props: QuartzComponentProps) => {
         <a href="/search">[search]</a>
       </div>
       <button class="darkmode">[theme]</button>
+      <a href="/recents" class="recents-link">
+        [recents]
+      </a>
     </div>
   )
 }
@@ -55,6 +58,20 @@ SidebarButtons.css = `
 }
 .sidebar-buttons .darkmode:hover {
   color: var(--tertiary);
+}
+.sidebar-buttons .recents-link {
+  display: none;
+}
+@media all and (max-width: 800px) {
+  .sidebar-buttons {
+    white-space: normal;
+  }
+  .sidebar-buttons .recents-link {
+    display: inline;
+    margin-left: 1rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 `
 

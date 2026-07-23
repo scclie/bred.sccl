@@ -1,3 +1,4 @@
+@use "./variables.scss" as *;
 @use "./base.scss";
 
 // ==========================================
@@ -213,6 +214,11 @@ article {
   background: transparent;
   align-self: start !important;
   margin-bottom: 1.5rem;
+
+  @media all and ($mobile) {
+    border-width: 1px;
+    padding: 0.75rem;
+  }
 }
 
 .center-sticky {
@@ -227,6 +233,10 @@ article {
     padding-top: 0.625rem;
     border-top: 1px solid var(--secondary);
     min-height: 28rem;
+
+    @media all and ($mobile) {
+      min-height: auto;
+    }
   }
 }
 
@@ -237,6 +247,10 @@ article {
   border: none !important;
   padding-left: 0.75rem !important;
   padding-right: 0.25rem !important;
+
+  @media all and ($mobile) {
+    padding: 0.5rem 1rem !important;
+  }
 }
 .sidebar.right {
   border: none !important;

@@ -8,7 +8,7 @@ html {
   scroll-behavior: smooth;
   text-size-adjust: none;
   overflow-x: hidden;
-  width: 100vw;
+  width: 100%;
 }
 
 body {
@@ -238,9 +238,11 @@ a {
         position: initial;
         display: flex;
         height: unset;
-        flex-direction: row;
         padding: 0;
         padding-top: 2rem;
+        & .recent-notes {
+          display: none;
+        }
       }
     }
 
@@ -249,6 +251,7 @@ a {
       margin-right: 0;
       flex-direction: column;
       @media all and ($mobile) {
+        display: none;
         margin-left: inherit;
         margin-right: inherit;
       }
@@ -293,6 +296,7 @@ a {
       @media all and ($mobile) {
         margin-right: 0;
         margin-left: 0;
+        min-width: 0;
       }
     }
   }

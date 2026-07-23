@@ -51,6 +51,13 @@ export const defaultContentPageLayout: PageLayout = {
         return slug === "explorer"
       },
     }),
+    Component.ConditionalRender({
+      component: Component.RecentsContent(),
+      condition: (page) => {
+        const slug = page.fileData.slug ?? ""
+        return slug === "recents"
+      },
+    }),
   ],
   left: [
     Component.PageTitle(),
