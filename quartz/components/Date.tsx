@@ -27,5 +27,8 @@ export function formatDate(d: Date, locale: ValidLocale = "en-US"): string {
 }
 
 export function Date({ date, locale }: Props) {
+  if (!date || isNaN(date.getTime())) {
+    return null
+  }
   return <time datetime={date.toISOString()}>{formatDate(date, locale)}</time>
 }

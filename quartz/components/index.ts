@@ -28,6 +28,9 @@ import ConditionalRender from "./ConditionalRender"
 import LanguageSwitcher from "./LanguageSwitcher"
 import TranslationNotice from "./TranslationNotice"
 import ExplorerLangFilter from "./ExplorerLangFilter"
+import ExplorerLink from "./ExplorerLink"
+import ExplorerPage from "./ExplorerPage"
+import SidebarButtons from "./SidebarButtons"
 import SlimExplorer from "./SlimExplorer"
 
 export {
@@ -60,5 +63,8 @@ export {
   LanguageSwitcher,
   TranslationNotice,
   ExplorerLangFilter,
+  ExplorerLink,
+  ExplorerPage,
+  SidebarButtons,
   SlimExplorer,
 }

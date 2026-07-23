@@ -1,55 +1,62 @@
-import { Date, getDate } from "./Date"
+import { Date as DateComponent, formatDate } from "./Date"
 import { QuartzComponentConstructor, QuartzComponentProps } from "./types"
-import readingTime from "reading-time"
 import { classNames } from "../util/lang"
-import { i18n } from "../i18n"
 import { JSX } from "preact"
 import style from "./styles/contentMeta.scss"
 
 interface ContentMetaOptions {
-  /**
-   * Whether to display reading time
-   */
-  showReadingTime: boolean
   showComma: boolean
 }
 
 const defaultOptions: ContentMetaOptions = {
-  showReadingTime: true,
   showComma: true,
 }
 
 export default ((opts?: Partial<ContentMetaOptions>) => {
-  // Merge options with defaults
   const options: ContentMetaOptions = { ...defaultOptions, ...opts }
 
   function ContentMetadata({ cfg, fileData, displayClass }: QuartzComponentProps) {
-    const text = fileData.text
+    const segments: (string | JSX.Element)[] = []
 
-    if (text) {
-      const segments: (string | JSX.Element)[] = []
+    // Show created date
+    const created = fileData.dates?.created
+    if (created && !isNaN(created.getTime())) {
+      segments.push(<DateComponent date={created} locale={cfg.locale} />)
+    }
 
-      if (fileData.dates) {
-        segments.push(<Date date={getDate(cfg, fileData)!} locale={cfg.locale} />)
+    // Show lastmod from frontmatter (manually set by author, NOT from git)
+    const lastmod = fileData.frontmatter?.modified
+    if (lastmod && typeof lastmod === "string") {
+      const modDate = new globalThis.Date(lastmod)
+      if (!isNaN(modDate.getTime())) {
+        // Don't show "updated" if same day as created
+        const sameDay =
+          created &&
+          !isNaN(created.getTime()) &&
+          created.getFullYear() === modDate.getFullYear() &&
+          created.getMonth() === modDate.getMonth() &&
+          created.getDate() === modDate.getDate()
+
+        if (!sameDay) {
+          segments.push(
+            <span>
+              {"updated "}
+              <DateComponent date={modDate} locale={cfg.locale} />
+            </span>,
+          )
+        }
       }
+    }
 
-      // Display reading time if enabled
-      if (options.showReadingTime) {
-        const { minutes, words: _words } = readingTime(text)
-        const displayedTime = i18n(cfg.locale).components.contentMeta.readingTime({
-          minutes: Math.ceil(minutes),
-        })
-        segments.push(<span>{displayedTime}</span>)
-      }
-
-      return (
-        <p show-comma={options.showComma} class={classNames(displayClass, "content-meta")}>
-          {segments}
-        </p>
-      )
-    } else {
+    if (segments.length === 0) {
       return null
     }
+
+    return (
+      <p show-comma={options.showComma} class={classNames(displayClass, "content-meta")}>
+        {segments}
+      </p>
+    )
   }
 
   ContentMetadata.css = style

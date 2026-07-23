@@ -22,14 +22,7 @@ export const sharedPageComponents: SharedLayout = {
       },
     }),
   ],
-  footer: Component.Footer({
-    links: {
-      Contacts: "https://sccl.cc",
-      GitHub: "https://github.com",
-      RSS: "/index.xml",
-      "RSS Full": "/index-full.xml",
-    },
-  }),
+  footer: Component.Footer(),
 }
 
 export const defaultContentPageLayout: PageLayout = {
@@ -43,7 +36,7 @@ export const defaultContentPageLayout: PageLayout = {
       }),
       condition: (page) => {
         const slug = page.fileData.slug ?? ""
-        return slug !== "index" && slug !== "ru/index" && slug !== "en/index"
+        return slug !== "index" && slug !== "ru/index" && slug !== "en/index" && slug !== "explorer"
       },
     }),
     Component.ArticleTitle(),
@@ -51,41 +44,27 @@ export const defaultContentPageLayout: PageLayout = {
     Component.LanguageSwitcher(),
     Component.TranslationNotice(),
     Component.TagList(),
+    Component.ConditionalRender({
+      component: Component.ExplorerPage(),
+      condition: (page) => {
+        const slug = page.fileData.slug ?? ""
+        return slug === "explorer"
+      },
+    }),
   ],
   left: [
     Component.PageTitle(),
     Component.MobileOnly(Component.Spacer()),
-    Component.Flex({
-      components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
-        { Component: Component.Darkmode() },
-      ],
-    }),
-    Component.SlimExplorer({
-      title: "",
-      folderDefaultState: "open",
-      useSavedState: true,
-      filterFn: (node) => {
-        if (node.slugSegment === "templates" || node.slugSegment === "private" || node.slugSegment === "tags") {
-          return false
-        }
-        return true
-      },
-    }),
-  ],
-  right: [
-    //Component.Graph(),
-    Component.DesktopOnly(Component.TableOfContents()),
-    //Component.Backlinks(),
+    Component.SidebarButtons(),
     Component.RecentNotes({
       title: "Recents",
-      limit: 5,
+      limit: 7,
       showTags: false,
       linkToMore: "recents/",
     }),
+  ],
+  right: [
+    Component.DesktopOnly(Component.TableOfContents()),
   ],
 }
 
@@ -110,24 +89,16 @@ export const defaultListPageLayout: PageLayout = {
   left: [
     Component.PageTitle(),
     Component.MobileOnly(Component.Spacer()),
-    Component.Flex({
-      components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
-        { Component: Component.Darkmode() },
-      ],
-    }),
-    Component.SlimExplorer({
-      title: "",
-      filterFn: (node) => {
-        if (node.slugSegment === "templates" || node.slugSegment === "private" || node.slugSegment === "tags") {
-          return false
-        }
-        return true
-      },
-    }),
+    Component.SidebarButtons(),
+    // Component.SlimExplorer({
+    //   title: "",
+    //   filterFn: (node) => {
+    //     if (node.slugSegment === "templates" || node.slugSegment === "private" || node.slugSegment === "tags") {
+    //       return false
+    //     }
+    //     return true
+    //   },
+    // }),
   ],
   right: [],
 }

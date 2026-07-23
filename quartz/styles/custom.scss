@@ -1,4 +1,8 @@
 @use "./base.scss";
+
+// ==========================================
+// FONTS
+// ==========================================
 @font-face {
   font-family: "Cascadia Mono";
   src: url("/static/fonts/CascadiaMono-Variable_wght.ttf") format("truetype");
@@ -39,6 +43,56 @@
   font-display: swap;
 }
 
+// ==========================================
+// GLOBAL SCROLLBAR (6px thin, like sccl.cc)
+// ==========================================
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--lightgray);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--secondary);
+}
+
+// Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--lightgray) transparent;
+}
+
+// ==========================================
+// SELECTION
+// ==========================================
+:root[saved-theme="dark"] {
+  ::selection {
+    background: var(--secondary);
+    color: #000;
+  }
+}
+:root[saved-theme="light"] {
+  ::selection {
+    background: var(--secondary);
+    color: #000;
+  }
+}
+
+// ==========================================
+// FOCUS STATES
+// ==========================================
+*:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}
+
+// ==========================================
+// PAGE TITLE
+// ==========================================
 .page-title {
   display: flex;
   justify-content: flex-start;
@@ -59,6 +113,21 @@
   color: #D08770;
 }
 
+// ==========================================
+// SIDEBAR LINKS (terminal hover effect)
+// ==========================================
+.sidebar a {
+  position: relative;
+  padding: 2px 4px;
+  margin: 0 -4px;
+  border-radius: 3px;
+  border-bottom: none !important;
+
+  &:hover {
+    background-color: var(--secondary);
+    color: #000 !important;
+  }
+}
 
 // ==========================================
 // ARTICLE
@@ -131,16 +200,56 @@ article {
   }
 }
 
-.page {
-  & > #quartz-body {
-    column-gap: 6rem;
+// ==========================================
+// LAYOUT SPACING
+// ==========================================
+
+// ==========================================
+// CENTER BLOCK (card style like gif.sccl.cc)
+// ==========================================
+.center {
+  border: 2px solid var(--secondary);
+  padding: 2rem;
+  background: transparent;
+  align-self: start !important;
+  margin-bottom: 1.5rem;
+}
+
+.center-sticky {
+  .page-header {
+    padding-bottom: 0.9375rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--secondary);
   }
+
+  .page-footer {
+    margin-top: 1.25rem;
+    padding-top: 0.625rem;
+    border-top: 1px solid var(--secondary);
+    min-height: 28rem;
+  }
+}
+
+// ==========================================
+// SIDEBARS
+// ==========================================
+.sidebar.left {
+  border: none !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.25rem !important;
+}
+.sidebar.right {
+  border: none !important;
+  padding-left: 3rem !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 800 !important;
 }
 
+// ==========================================
+// TOC
+// ==========================================
 :root[saved-theme="dark"] .toc-header h3 {
   color: #EBCB8B !important;
 }
@@ -148,87 +257,16 @@ h1, h2, h3, h4, h5, h6 {
   color: #D08770 !important;
 }
 
+// ==========================================
+// SIDEBAR PANEL WIDTH
+// ==========================================
 :root {
-  --sidePanelWidth: 18rem;
+  --sidePanelWidth: 16rem;
 }
 
-
 // ==========================================
-// 3. EXPLORER
+// RECENT NOTES
 // ==========================================
-.explorer {
-  width: 100%;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-
-  & > .explorer-content {
-    max-height: 100%;
-  }
-
-  // Кнопка-заголовок Explorer (полоска от title="") — скрываем
-  > button.desktop-explorer {
-    display: none !important;
-  }
-
-  // Все ссылки-файлы
-  li a {
-    display: inline-block !important;
-    max-width: 100% !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    color: var(--darkgray) !important;
-    font-size: 0.9rem !important;
-    padding: 3px 0 !important;
-    transition: color 0.15s ease;
-
-    &:hover {
-      color: var(--secondary) !important;
-      text-decoration: none !important;
-    }
-  }
-
-  // Стрелка-иконка у папок
-  .folder-icon {
-    color: var(--secondary) !important;
-    margin-right: 4px !important;
-  }
-
-  // Folder titles (depth >= 1, toggleable)
-  .folder-title {
-    cursor: pointer;
-    color: var(--secondary) !important;
-    font-weight: 700 !important;
-    font-size: 0.95rem !important;
-
-    &:hover {
-      color: var(--tertiary) !important;
-    }
-  }
-
-  // folder-container по умолчанию — БЕЗ полоски
-  .folder-container {
-    border-left: none !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
-  }
-}
-
-// ── Вложенные папки ──────────────────────────────────────────────────────────
-.explorer-content ul.explorer-ul .folder-node > .folder-outer > ul.content {
-  border-left: none !important;
-}
-
-.explorer-content ul.explorer-ul .folder-node > .folder-outer > ul.content {
-  padding-left: 0.5rem !important;
-}
-
-
-// ==========================================
-// 4. RECENTS
-// ==========================================
-// Компактный правый архив статей с фиксированной высотой и внутренним скроллом
 .recent-notes {
   margin-top: 2rem;
   border-top: 1px solid var(--lightgray);
@@ -246,35 +284,15 @@ h1, h2, h3, h4, h5, h6 {
     color: #D08770 !important;
   }
 
-  // Ограничиваем высоту самого списка заметок и включаем скролл
   ul {
     list-style: none !important;
     padding-left: 0 !important;
     margin: 0 !important;
 
-    max-height: 400px;           // Фиксированная высота блока (можно настроить под себя)
-    overflow-y: auto;            // Включает вертикальную прокрутку, если статей слишком много
-    overflow-x: hidden;          // Прячем горизонтальный скролл на всякий случай
-    padding-right: 6px !important; // Отступ справа, чтобы текст не прижимался к скроллбару
-
-    // --- Кастомизация скроллбара под Nord-тему, чтобы он не выглядел дефолтным и уродливым ---
-    &::-webkit-scrollbar {
-      width: 4px;                // Очень тонкая, аккуратная линия прокрутки
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent;   // Прозрачный трек рельсы
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: var(--lightgray); // Цвет ползунка прокрутки из темы
-      border-radius: 4px;
-    }
-    &::-webkit-scrollbar-thumb:hover {
-      background-color: var(--secondary); // Ползунок подсвечивается при наведении
-    }
-
-    // Поддержка скроллбара для Firefox
-    scrollbar-width: thin;
-    scrollbar-color: var(--lightgray) transparent;
+    max-height: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 6px !important;
 
     li {
       display: flex !important;
@@ -284,8 +302,8 @@ h1, h2, h3, h4, h5, h6 {
       border-left: none !important;
 
       a {
-        display: inline-block !important;
-        max-width: 180px !important;
+        display: block !important;
+        width: 100% !important;
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
@@ -295,11 +313,12 @@ h1, h2, h3, h4, h5, h6 {
         text-decoration: none !important;
         border-bottom: none !important;
         margin: 0 !important;
-        padding: 0 !important;
-        transition: color 0.15s ease;
+        padding: 2px 4px !important;
+        border-radius: 3px !important;
 
         &:hover {
-          color: var(--tertiary) !important;
+          background-color: var(--secondary) !important;
+          color: #000 !important;
         }
       }
 
@@ -312,5 +331,157 @@ h1, h2, h3, h4, h5, h6 {
         line-height: 1.2 !important;
       }
     }
+  }
+}
+
+// ==========================================
+// BREADCRUMBS (terminal style >)
+// ==========================================
+.breadcrumbs {
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+
+  a {
+    border-bottom: none !important;
+    padding: 2px 4px;
+    margin: 0 -4px;
+    border-radius: 3px;
+
+    &:hover {
+      background-color: var(--secondary);
+      color: #000 !important;
+    }
+  }
+}
+
+// ==========================================
+// TAG LIST (terminal style)
+// ==========================================
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+
+  a {
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border-bottom: none !important;
+
+    &:hover {
+      background-color: var(--secondary);
+      color: #000 !important;
+    }
+  }
+}
+
+// ==========================================
+// CONTENT META (date, reading time)
+// ==========================================
+.content-meta {
+  font-size: 0.85rem;
+}
+
+// ==========================================
+// ARTICLE TITLE
+// ==========================================
+.article-title {
+  border-bottom: 1px solid var(--lightgray);
+  padding-bottom: 0.5rem;
+}
+
+// ==========================================
+// BLOCKQUOTE (terminal accent)
+// ==========================================
+blockquote {
+  border-left: 3px solid var(--secondary) !important;
+  padding-left: 1rem !important;
+  margin: 1rem 0;
+
+  :root[saved-theme="dark"] & {
+    background-color: rgba(59, 66, 82, 0.3);
+    border-left-color: #88C0D0;
+  }
+  :root[saved-theme="light"] & {
+    background-color: rgba(236, 239, 244, 0.5);
+    border-left-color: #5E81AC;
+  }
+}
+
+// ==========================================
+// CODE BLOCKS (clean border)
+// ==========================================
+pre {
+  border: 1px solid var(--lightgray) !important;
+  border-radius: 5px !important;
+}
+
+code {
+  border-radius: 3px;
+}
+
+// ==========================================
+// TABLES (clean)
+// ==========================================
+th {
+  border-bottom: 2px solid var(--secondary) !important;
+}
+
+tr {
+  border-bottom: 1px solid var(--lightgray);
+}
+
+// ==========================================
+// HR
+// ==========================================
+hr {
+  border: none !important;
+  height: 1px !important;
+  background-color: var(--lightgray) !important;
+  margin: 2rem 0 !important;
+}
+
+// ==========================================
+// LANGUAGE SWITCHER (terminal style)
+// ==========================================
+.language-switcher {
+  a {
+    border-bottom: none !important;
+    padding: 2px 6px;
+    margin: 0 2px;
+    border-radius: 3px;
+
+    &:hover {
+      background-color: var(--secondary);
+      color: #000 !important;
+    }
+  }
+}
+
+// ==========================================
+// SEARCH BUTTON (terminal style)
+// ==========================================
+.search-button {
+  border-bottom: none !important;
+  padding: 4px 8px;
+  border-radius: 3px;
+
+  &:hover {
+    background-color: var(--secondary);
+    color: #000 !important;
+  }
+}
+
+// ==========================================
+// DARKMODE BUTTON (terminal style)
+// ==========================================
+.darkmode {
+  border-bottom: none !important;
+  padding: 4px 8px;
+  border-radius: 3px;
+
+  &:hover {
+    background-color: var(--secondary);
+    color: #000 !important;
   }
 }

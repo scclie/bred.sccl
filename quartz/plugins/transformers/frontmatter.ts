@@ -140,6 +140,7 @@ declare module "vfile" {
         tags: string[]
         aliases: string[]
         modified: string
+        lastmod: string
         created: string
         published: string
         description: string

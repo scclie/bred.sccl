@@ -11,7 +11,6 @@
   border: 1px solid;
   border-radius: 5px;
   opacity: 0;
-  transition: 0.2s;
 
   & > svg {
     fill: var(--light);
@@ -31,7 +30,6 @@
 pre {
   &:hover > .expand-button {
     opacity: 1;
-    transition: 0.2s;
   }
 }
 
@@ -68,7 +66,6 @@ pre {
       padding: 2rem;
       position: relative;
       transform-origin: 0 0;
-      transition: transform 0.1s ease;
       overflow: visible;
       min-height: 200px;
       min-width: 200px;
@@ -111,7 +108,6 @@ pre {
         cursor: pointer;
         font-size: 16px;
         font-family: var(--bodyFont);
-        transition: all 0.2s ease;
 
         &:hover {
           background: var(--lightgray);

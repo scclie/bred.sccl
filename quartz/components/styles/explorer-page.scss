@@ -1,0 +1,77 @@
+.explorer-page {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.explorer-page-tree {
+  margin: 0;
+  padding: 0;
+
+  & > .explorer-page-folder {
+    margin-bottom: 1rem;
+  }
+}
+
+.explorer-page-folder {
+  .explorer-page-children {
+    padding-left: 1.2rem;
+    margin-top: 0.25rem;
+    border-left: 1px solid var(--lightgray);
+  }
+
+  .explorer-page-folder {
+    .explorer-page-children {
+      padding-left: 1rem;
+    }
+  }
+}
+
+.explorer-page-folder-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--dark);
+  font-size: inherit;
+  font-family: inherit;
+}
+
+.explorer-page-arrow {
+  font-size: 0.7em;
+  color: var(--secondary);
+  width: 1em;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.explorer-page-folder-toggle a {
+  color: var(--secondary);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--tertiary);
+  }
+}
+
+.explorer-page-file {
+  padding: 0.15rem 0;
+  padding-left: 0.5rem;
+
+  a {
+    color: var(--dark);
+    opacity: 0.8;
+    text-decoration: none;
+
+    &:hover {
+      opacity: 1;
+      color: var(--tertiary);
+    }
+  }
+}
