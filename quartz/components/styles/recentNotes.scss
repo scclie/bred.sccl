@@ -21,4 +21,19 @@
       }
     }
   }
+
+  & > p > a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .recent-notes-footer {
+    display: flex;
+    justify-content: space-between;
+
+    a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
 }

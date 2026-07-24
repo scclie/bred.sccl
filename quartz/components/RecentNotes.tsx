@@ -7,6 +7,8 @@ import { Date, getDate } from "./Date"
 import { GlobalConfiguration } from "../cfg"
 import { i18n } from "../i18n"
 import { classNames } from "../util/lang"
+// @ts-ignore
+import randomNoteScript from "./scripts/random-note.inline"
 
 interface Options {
   title?: string
@@ -53,6 +55,7 @@ export default ((userOpts?: Partial<Options>) => {
         if (slug.startsWith("tags/")) return false
         if (slug === "recents" || slug === "recents/index" || slug.endsWith("/recents/index")) return false
         if (slug === "search") return false
+        if (slug === "explorer") return false
         return true
       })
       .filter((f) => f.frontmatter?.title)
@@ -61,6 +64,7 @@ export default ((userOpts?: Partial<Options>) => {
       .sort(opts.sort)
 
     const remaining = Math.max(0, pages.length - opts.limit)
+    const allPageSlugs = pages.map((p) => resolveRelative(fileData.slug!, p.slug!))
     return (
       <div class={classNames(displayClass, "recent-notes")}>
         <h3>{opts.title ?? i18n(cfg.locale).components.recentNotes.title}</h3>
@@ -89,11 +93,14 @@ export default ((userOpts?: Partial<Options>) => {
             )
           })}
         </ul>
-        {opts.linkToMore && remaining > 0 && (
-          <p>
-            <a href={resolveRelative(fileData.slug!, `${currentLang}/${opts.linkToMore}` as SimpleSlug)}>
-              {i18n(cfg.locale).components.recentNotes.seeRemainingMore({ remaining })}
-            </a>
+        {(opts.linkToMore && remaining > 0 || true) && (
+          <p class="recent-notes-footer">
+            {opts.linkToMore && remaining > 0 && (
+              <a href={resolveRelative(fileData.slug!, `${currentLang}/${opts.linkToMore}` as SimpleSlug)}>
+                {i18n(cfg.locale).components.recentNotes.seeRemainingMore({ remaining })}
+              </a>
+            )}
+            <a href="javascript:void(0)" class="random-note-btn" data-slugs={JSON.stringify(allPageSlugs)}>[random note]</a>
           </p>
         )}
       </div>
@@ -101,5 +108,6 @@ export default ((userOpts?: Partial<Options>) => {
   }
 
   RecentNotes.css = style
+  RecentNotes.afterDOMLoaded = randomNoteScript
   return RecentNotes
 }) satisfies QuartzComponentConstructor

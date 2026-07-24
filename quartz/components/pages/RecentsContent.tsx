@@ -31,6 +31,7 @@ export default (() => {
         if (slug.endsWith("/recents/index")) return false
         if (slug === "recents" || slug === "recents/index") return false
         if (slug === "search") return false
+        if (slug === "explorer") return false
         return true
       })
       .filter((file) => file.frontmatter?.title)
