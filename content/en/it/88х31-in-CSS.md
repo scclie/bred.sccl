@@ -85,5 +85,3 @@ We grab all images at once with one request.
 We get a total of two requests.
 
 The downside is that the images themselves weigh a bit more, and if we have like a hundred of them, it all becomes pointless.
-
-Fucking great?

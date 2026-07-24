@@ -53,7 +53,8 @@ export default ((userOpts?: Partial<Options>) => {
         const slug = f.slug ?? ""
         if (slug === "index" || slug === "en/index" || slug === "ru/index") return false
         if (slug.startsWith("tags/")) return false
-        if (slug === "recents" || slug === "recents/index" || slug.endsWith("/recents/index")) return false
+        if (slug === "recents" || slug === "recents/index" || slug.endsWith("/recents/index"))
+          return false
         if (slug === "search") return false
         if (slug === "explorer") return false
         return true
@@ -65,6 +66,8 @@ export default ((userOpts?: Partial<Options>) => {
 
     const remaining = Math.max(0, pages.length - opts.limit)
     const allPageSlugs = pages.map((p) => resolveRelative(fileData.slug!, p.slug!))
+    const currentPageSlug = resolveRelative(fileData.slug!, currentSlug)
+
     return (
       <div class={classNames(displayClass, "recent-notes")}>
         <h3>{opts.title ?? i18n(cfg.locale).components.recentNotes.title}</h3>
@@ -87,22 +90,48 @@ export default ((userOpts?: Partial<Options>) => {
                       <Date date={getDate(cfg, page)!} locale={cfg.locale} />
                     </p>
                   )}
-
                 </div>
               </li>
             )
           })}
         </ul>
-        {(opts.linkToMore && remaining > 0 || true) && (
-          <p class="recent-notes-footer">
-            {opts.linkToMore && remaining > 0 && (
-              <a href={resolveRelative(fileData.slug!, `${currentLang}/${opts.linkToMore}` as SimpleSlug)}>
-                {i18n(cfg.locale).components.recentNotes.seeRemainingMore({ remaining })}
-              </a>
-            )}
-            <a href="javascript:void(0)" class="random-note-btn" data-slugs={JSON.stringify(allPageSlugs)}>[random note]</a>
-          </p>
-        )}
+        <p class="recent-notes-footer">
+          {opts.linkToMore && remaining > 0 && (
+            <a
+              href={resolveRelative(
+                fileData.slug!,
+                `${currentLang}/${opts.linkToMore}` as SimpleSlug,
+              )}
+            >
+              {i18n(cfg.locale).components.recentNotes.seeRemainingMore({ remaining })}
+            </a>
+          )}
+          <a
+            href="javascript:void(0)"
+            class="random-note-btn"
+            data-slugs={JSON.stringify(allPageSlugs)}
+          >
+            [random note]
+          </a>
+        </p>
+        <p class="recent-notes-nav">
+          <a
+            href="javascript:void(0)"
+            class="recent-nav-btn recent-prev-btn"
+            data-slugs={JSON.stringify(allPageSlugs)}
+            data-current={currentPageSlug}
+          >
+            [&lt;- prev]
+          </a>
+          <a
+            href="javascript:void(0)"
+            class="recent-nav-btn recent-next-btn"
+            data-slugs={JSON.stringify(allPageSlugs)}
+            data-current={currentPageSlug}
+          >
+            [next -&gt;]
+          </a>
+        </p>
       </div>
     )
   }
