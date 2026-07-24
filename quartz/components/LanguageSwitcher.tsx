@@ -1,17 +1,3 @@
-/**
- * LanguageSwitcher.tsx
- *
- * Кнопка переключения RU ↔ EN в стиле Wikipedia.
- * Помещается в beforeBody (над заголовком) или в left-колонку.
- *
- * Логика:
- *  - Читает текущий язык из URL (/ru/... или /en/...)
- *  - Строит путь к паре (меняет префикс)
- *  - Если у статьи в frontmatter autoTranslated: true — показывает пометку 🤖
- *  - Сохраняет выбор языка в localStorage ("preferred-lang")
- *  - При загрузке страницы без языкового префикса — редиректит на предпочтительный язык
- */
-
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { classNames } from "../util/lang"
 // @ts-ignore
@@ -21,24 +7,29 @@ const LanguageSwitcher: QuartzComponent = ({ fileData, displayClass }: QuartzCom
   const slug = fileData.slug ?? ""
   const fm = fileData.frontmatter as Record<string, unknown> | undefined
 
-  // Определяем текущий язык по первому сегменту пути
   const parts = slug.split("/")
   const currentLang: "ru" | "en" | null = parts[0] === "ru" ? "ru" : parts[0] === "en" ? "en" : null
 
-  // Если мы вне ru/en — не показываем переключатель
-  if (!currentLang) return null
+  const isIndex = slug === "index" || slug === "ru/index" || slug === "en/index"
 
-  const otherLang: "ru" | "en" = currentLang === "ru" ? "en" : "ru"
+  let pairUrl: string
+  let otherLang: "ru" | "en"
 
-  // Строим slug пары (меняем первый сегмент)
-  const pairSlug = [otherLang, ...parts.slice(1)].join("/")
-  const pairUrl = `/${pairSlug}`
+  if (isIndex) {
+    // На любом index: ru/index → /en/, en/index → /ru/, index → /en/
+    otherLang = currentLang === "en" ? "ru" : "en"
+    pairUrl = `/${otherLang}/`
+  } else if (currentLang) {
+    // На обычных страницах: ru/foo → /en/foo
+    otherLang = currentLang === "ru" ? "en" : "ru"
+    pairUrl = `/${[otherLang, ...parts.slice(1)].join("/")}`
+  } else {
+    return null
+  }
 
-  // Флаги
   const isAutoTranslated = fm?.autoTranslated === true || fm?.autoTranslated === "true"
-
-  // Метки кнопок
   const labels: Record<"ru" | "en", string> = { ru: "RU", en: "EN" }
+  const activeLang = currentLang || "ru"
   const langLabel = otherLang === "en" && isAutoTranslated ? "🤖 EN" : labels[otherLang]
   const title =
     otherLang === "en" && isAutoTranslated
@@ -50,7 +41,7 @@ const LanguageSwitcher: QuartzComponent = ({ fileData, displayClass }: QuartzCom
   return (
     <div class={classNames(displayClass, "lang-switcher")}>
       <span class="lang-current" aria-current="true">
-        {labels[currentLang]}
+        {labels[activeLang]}
       </span>
       <span class="lang-divider">|</span>
       <a
@@ -69,30 +60,18 @@ const LanguageSwitcher: QuartzComponent = ({ fileData, displayClass }: QuartzCom
 
 LanguageSwitcher.css = style
 
-// Клиентский скрипт: сохраняет выбор и при входе без префикса редиректит
 LanguageSwitcher.afterDOMLoaded = `
 (function() {
-  const STORAGE_KEY = "preferred-lang";
-  const LANGS = ["ru", "en"];
-
-  // Сохраняем выбор при клике
-  const link = document.getElementById("lang-switcher-link");
+  var STORAGE_KEY = "preferred-lang";
+  var link = document.getElementById("lang-switcher-link");
   if (link) {
     link.addEventListener("click", function() {
-      const lang = this.dataset.lang;
-      if (lang) localStorage.setItem(STORAGE_KEY, lang);
+      var lang = this.dataset.lang;
+      if (lang) {
+        localStorage.setItem(STORAGE_KEY, lang);
+        document.documentElement.setAttribute("data-lang", lang);
+      }
     });
-  }
-
-  // Определяем текущий язык из URL
-  const parts = window.location.pathname.replace(/^\\//, "").split("/");
-  const currentLang = LANGS.includes(parts[0]) ? parts[0] : null;
-
-  if (currentLang) {
-    // Обновляем localStorage под текущую страницу
-    localStorage.setItem(STORAGE_KEY, currentLang);
-    // Помечаем <html> для CSS-фильтрации Explorer
-    document.documentElement.setAttribute("data-lang", currentLang);
   }
 })();
 `

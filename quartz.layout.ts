@@ -39,9 +39,8 @@ export const defaultContentPageLayout: PageLayout = {
         return slug !== "index" && slug !== "ru/index" && slug !== "en/index" && slug !== "explorer"
       },
     }),
-    Component.ArticleTitle(),
+    Component.TitleBar(),
     Component.ContentMeta(),
-    Component.LanguageSwitcher(),
     Component.TranslationNotice(),
     Component.TagList(),
     Component.ConditionalRender({
@@ -89,14 +88,19 @@ export const defaultListPageLayout: PageLayout = {
         return slug !== "index" && slug !== "ru/index" && slug !== "en/index"
       },
     }),
-    Component.ArticleTitle(),
+    Component.TitleBar(),
     Component.ContentMeta(),
-    Component.LanguageSwitcher(),
   ],
   left: [
     Component.PageTitle(),
     Component.MobileOnly(Component.Spacer()),
     Component.SidebarButtons(),
+    Component.RecentNotes({
+      title: "Recents",
+      limit: 7,
+      showTags: false,
+      linkToMore: "recents/",
+    }),
     // Component.SlimExplorer({
     //   title: "",
     //   filterFn: (node) => {

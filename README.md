@@ -11,6 +11,7 @@ my personal blog
 - **Bilingual content** — `content/ru/` + `content/en/` with client-side language filtering across all components (no redirects)
 - **SidebarButtons** — custom `[explorer]` `[search]` `[theme]` `[recents]` links in terminal style
 - **ExplorerPage** - custom page with folder toggles and RU/EN language filter toggle (client-side, not navigation)
+- **SearchPage** - custom page with index search.
 - **RecentsContent** — custom page with language filtering
 - **Random note** — `[random note]` button picks a random page from current language list
 - **Prev/Next navigation** — `[<- prev]` `[next ->]` buttons walk through recents by date

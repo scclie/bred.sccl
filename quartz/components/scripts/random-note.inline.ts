@@ -32,9 +32,29 @@ function initNavButtons() {
   })
 }
 
+function getPreferredLang() {
+  const STORAGE_KEY = "preferred-lang"
+  const saved = localStorage.getItem(STORAGE_KEY)
+  if (saved && (saved === "ru" || saved === "en")) return saved
+  const parts = window.location.pathname.replace(/^\//, "").split("/")
+  if (parts[0] === "ru" || parts[0] === "en") return parts[0]
+  return "ru"
+}
+
+function initRecentLangFilter() {
+  const lang = getPreferredLang()
+
+  document.querySelectorAll(".recent-ul > .recent-li[data-lang]").forEach((li) => {
+    const itemLang = li.getAttribute("data-lang")
+    ;(li as HTMLElement).style.display = itemLang === lang ? "" : "none"
+  })
+}
+
 initRandomNote()
 initNavButtons()
+initRecentLangFilter()
 document.addEventListener("nav", () => {
   initRandomNote()
   initNavButtons()
+  initRecentLangFilter()
 })

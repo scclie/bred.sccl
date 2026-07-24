@@ -36,16 +36,13 @@ export default ((userOpts?: Partial<Options>) => {
   }: QuartzComponentProps) => {
     const opts = { ...defaultOptions(cfg), ...userOpts }
 
-    // Определяем текущий язык по первому сегменту slug текущей страницы
     const currentSlug = fileData.slug ?? ""
     const currentLang = currentSlug.startsWith("en/") ? "en" : "ru"
 
-    // Фильтруем страницы по языку: показываем только те, что в той же языковой папке
     const langFilter = (f: QuartzPluginData) => {
       const slug = f.slug ?? ""
       if (currentLang === "en") return slug.startsWith("en/")
-      // ru: всё, что НЕ начинается с en/ (включая корень и папку ru/)
-      return !slug.startsWith("en/")
+      return slug.startsWith("ru/")
     }
 
     const pages = allFiles
@@ -74,9 +71,10 @@ export default ((userOpts?: Partial<Options>) => {
         <ul class="recent-ul">
           {pages.slice(0, opts.limit).map((page) => {
             const title = page.frontmatter?.title ?? i18n(cfg.locale).propertyDefaults.title
+            const pageLang = (page.slug ?? "").startsWith("en/") ? "en" : "ru"
 
             return (
-              <li class="recent-li">
+              <li class="recent-li" data-lang={pageLang}>
                 <div class="section">
                   <div class="desc">
                     <h3>

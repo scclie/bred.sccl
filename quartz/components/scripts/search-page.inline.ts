@@ -10,7 +10,6 @@ const searchPageStyles = `
   color: var(--dark);
   background: var(--light);
   border: 1px solid var(--lightgray);
-  border-radius: 7px;
   margin-bottom: 2em;
 }
 .search-page-input:focus {
@@ -27,7 +26,6 @@ const searchPageStyles = `
 .search-page-results a {
   display: block;
   padding: 1em;
-  border-radius: 7px;
   background: var(--light);
   border: 1px solid var(--lightgray);
 }
@@ -54,7 +52,6 @@ const searchPageStyles = `
 }
 .highlight {
   background: color-mix(in srgb, var(--tertiary) 60%, rgba(255, 255, 255, 0));
-  border-radius: 5px;
 }
 `
 

@@ -22,7 +22,7 @@ document.querySelectorAll(".explorer-page-folder-toggle").forEach((btn) => {
 })
 
 // Explorer language filter
-const STORAGE_KEY = "explorer-lang"
+const STORAGE_KEY = "preferred-lang"
 let currentLang = localStorage.getItem(STORAGE_KEY) || "ru"
 
 function getOtherLang(lang: string) {
@@ -45,6 +45,7 @@ function filterByLang(lang: string) {
 }
 
 function initExplorerLang() {
+  currentLang = localStorage.getItem(STORAGE_KEY) || "ru"
   updateToggleUI(currentLang)
   filterByLang(currentLang)
 
@@ -54,6 +55,7 @@ function initExplorerLang() {
       e.preventDefault()
       currentLang = getOtherLang(currentLang)
       localStorage.setItem(STORAGE_KEY, currentLang)
+      document.documentElement.setAttribute("data-lang", currentLang)
       updateToggleUI(currentLang)
       filterByLang(currentLang)
     })

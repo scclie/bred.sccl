@@ -32,6 +32,7 @@ import ExplorerLink from "./ExplorerLink"
 import ExplorerPage from "./ExplorerPage"
 import SidebarButtons from "./SidebarButtons"
 import SlimExplorer from "./SlimExplorer"
+import TitleBar from "./TitleBar"
 
 export {
   ArticleTitle,
@@ -67,4 +68,5 @@ export {
   ExplorerPage,
   SidebarButtons,
   SlimExplorer,
+  TitleBar,
 }

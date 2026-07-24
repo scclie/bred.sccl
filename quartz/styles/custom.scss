@@ -504,3 +504,11 @@ hr {
     color: #000 !important;
   }
 }
+
+// ==========================================
+// HIDE FOLDER LISTING ON LANG ROOTS
+// ==========================================
+body[data-slug^="ru/"] .page-listing,
+body[data-slug^="en/"] .page-listing {
+  display: none;
+}
