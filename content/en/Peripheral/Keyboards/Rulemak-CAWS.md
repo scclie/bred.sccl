@@ -93,3 +93,4 @@ But you can run the installer and pray the system doesn't croak.
 
 ## Linux
 -# No version for Linux, I use split and DH there anyway - the layout itself is basically for a laptop.
+U can create an xkb config using [[/en/it/xkb.sccl.md]]
