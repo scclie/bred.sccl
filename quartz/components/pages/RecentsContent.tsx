@@ -40,7 +40,7 @@ export default (() => {
 
     return (
       <div class="popover-hint">
-        <div class="page-listing">
+        <div class="page-listing recents-listing">
           <p>{i18n(cfg.locale).pages.tagContent.itemsUnderTag({ count: pages.length })}</p>
           <ul class="section-ul">
             {pages.map((page) => {

@@ -5,6 +5,7 @@ lang: en
 autoTranslated: "true"
 translationLock: "true"
 tags: 
+  - "#os"
   - "#it"
   - "#shitpost"
 date: 2026-06-21

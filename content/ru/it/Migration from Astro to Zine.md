@@ -32,6 +32,57 @@ Zine - это SSG на Zig. Один бинарник, без зависимос
 
 В целом переехать достачно просто - над переписать лэйауты с Astro на SuperHTML, перекинуть уже имеющеся скрипты.  Самое муторное эт, что astro юзает свои блядские `.astro` файлы со своей странной смесью js и html, а SuperHTML это просто html с плюхами.
 
+## Деплой
+Zine скомпилен в standalone-бинарник со статической линковкой. Никаких зависимостей и рантаймов - скачал, запустил. В `npm` его нет, из пакетных менеджеров не установишь. Значит над как-то доставлять его на раннер.
+
+Мысли:
+- качать curl-ом при каждом билде
+- закоммитить в репозиторий
+
+Первый вариант - костыль. Второй звучит надёжнее...
+
+### Пихаем в репу
+
+Первая мысль была - закоммитить zine в репозиторий, чтоб билдилось из коробки:
+
+```bash
+cp /tmp/zine bin/zine
+git add bin/zine && git commit
+git push
+> remote: error: File bin/zine is 152.19 MB; this exceeds GitHub's file size limit
+```
+
+И тут вспоминается, что GitHub не пускает больше 100 МБ.
+
+*пора хостить свой git*
+-# *может быть... потом...*
+
+Ок, откатываем, делаем вид, что ничего не было. Лезем в доку Zine - там рекомендуют `kristoff-it/setup-zine@v1` в GitHub Actions.
+
+### GitHub Actions
+
+Пихаем `kristoff-it/setup-zine@v1` в gh actions:
+
+```yaml
+- uses: kristoff-it/setup-zine@v1
+  with:
+    version: v0.11.3
+- run: zine release
+- uses: cloudflare/wrangler-action@v3
+  with:
+    apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    command: pages deploy public/ --project-name sccl-cc
+```
+
+Всё логично: экшен ставит zine, zine билдит сайт, wrangler пушит на cf pages. 
+
+Из секретов нужны только `CLOUDFLARE_API_TOKEN` и `CLOUDFLARE_ACCOUNT_ID` 
+
+(права `Account → Cloudflare Pages → Edit`).
+
+*над было сразу по доке следовать, но хотелось изначально без gh actions делать*
+
 # Плюшки?
 
 **Скорость.** Билд за миллисекунды вместо секунд.
@@ -49,5 +100,3 @@ Zine в бете.
 Но для личного сайта это топ.
 
 Один бинарник, пара .smd-файлов, один лэйаут и готово.
-
-Как мне пришлось деплоить это чудо описано в [[/ru/it/How-to-ZINE-on-CF.md]].

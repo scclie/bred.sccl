@@ -62,6 +62,7 @@ const config: QuartzConfig = {
         },
       },
       Plugin.FrontMatter(),
+      Plugin.HardLineBreaks(),
       Plugin.CreatedModifiedDate({
         priority: ["frontmatter", "git", "filesystem"],
       }),

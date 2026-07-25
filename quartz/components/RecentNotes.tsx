@@ -100,6 +100,7 @@ export default ((userOpts?: Partial<Options>) => {
                 fileData.slug!,
                 `${currentLang}/${opts.linkToMore}` as SimpleSlug,
               )}
+              data-router-ignore
             >
               {i18n(cfg.locale).components.recentNotes.seeRemainingMore({ remaining })}
             </a>

@@ -7,7 +7,7 @@ translationLock: "true"
 tags:
   - "#shitpost"
   - "#peripheral"
-date: 2026-06-16
+date: 2026-06-17
 ---
 
 I had a chance to test 38 switches, so let’s go through each one:

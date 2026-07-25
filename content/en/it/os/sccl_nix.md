@@ -6,6 +6,7 @@ autoTranslated: "true"
 translationLock: "true"
 tags:
   - "#os"
+  - "#linux"
   - "#project"
   - "#shitpost"
 date: 2026-02-13
@@ -123,4 +124,4 @@ flowchart TD
 
 # The catch?
 
-ofc, with enough skill you can still mess it up completely by wiring dependencies *in all the wrong places*
+ofc, with enough skill you can still mess it up completely

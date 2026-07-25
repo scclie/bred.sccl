@@ -54,7 +54,7 @@ export const defaultContentPageLayout: PageLayout = {
       component: Component.RecentsContent(),
       condition: (page) => {
         const slug = page.fileData.slug ?? ""
-        return slug === "recents"
+        return slug === "recents" || slug === "en/recents" || slug === "ru/recents"
       },
     }),
   ],
@@ -64,14 +64,12 @@ export const defaultContentPageLayout: PageLayout = {
     Component.SidebarButtons(),
     Component.RecentNotes({
       title: "Recents",
-      limit: 7,
+      limit: 8,
       showTags: false,
       linkToMore: "recents/",
     }),
   ],
-  right: [
-    Component.DesktopOnly(Component.TableOfContents()),
-  ],
+  right: [Component.DesktopOnly(Component.TableOfContents())],
 }
 
 export const defaultListPageLayout: PageLayout = {
@@ -97,7 +95,7 @@ export const defaultListPageLayout: PageLayout = {
     Component.SidebarButtons(),
     Component.RecentNotes({
       title: "Recents",
-      limit: 7,
+      limit: 8,
       showTags: false,
       linkToMore: "recents/",
     }),
