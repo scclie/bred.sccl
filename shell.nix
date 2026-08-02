@@ -8,5 +8,6 @@ pkgs.mkShell {
 
   shellHook = ''
     echo "quartz dev shell (node $(node -v))"
+    echo "run: npx quartz build --serve"
   '';
 }
