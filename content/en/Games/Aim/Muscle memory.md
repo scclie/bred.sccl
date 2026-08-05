@@ -8,7 +8,7 @@ tags:
   - "#aim"
 date: 2025-09-22
 ---
-A myth lives in the mind of the average competitive gamer: that muscle memory is the holy grail of aim. The idea is that you just need to grind thousands of hours on one sensitivity, so that your hand, without any input from the brain, performs perfect movements. To memorize, like a virtuoso violinist scales, every centimeter of the mousepad, every micro-movement of the mouse. This idea is just as harmful and dangerous a coping mechanism as the belief that "aim is everything" (see [[EN Casualization of aim]]).
+A myth lives in the mind of the average competitive gamer: that muscle memory is the holy grail of aim. The idea is that you just need to grind thousands of hours on one sensitivity, so that your hand, without any input from the brain, performs perfect movements. To memorize, like a virtuoso violinist scales, every centimeter of the mousepad, every micro-movement of the mouse. This idea is just as harmful and dangerous a coping mechanism as the belief that "aim is everything" (see [[/en/Games/Aim/Casualization of aim|EN Casualization of aim]]).
 
 ![[muscle_memory.png]]
 

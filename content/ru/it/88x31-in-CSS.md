@@ -1,80 +1,151 @@
 ---
 title: "Пихаем 88x31 картинки в CSS"
-description: "Оптимизируем загрузку картинок на сайте. Грузим base64 картинки через стиль."
+description: "Как засунуть десятки баннеров 88x31 в один HTTP-запрос. История формата от Netscape Now! 1996 до Neocities. И ещё один шаг в бесконечной оптимизации sccl.cc."
 lang: ru
 tags:
 - "#it"
 - "#shitpost"
 - "#web"
 date: 2026-07-23
+
 ---
 
 # Ну и нахуй всё это?
 
-Т.к. я стремлюсь к максимальной быстроте загрузке [своего сайта](https://sccl.cc/) - я стараюсь его держать в рамках 1rtt (подробнее в [[/ru/it/14kb-cap.md]])
-К тому же с этого я получаю ещё и бенефит в виде обхода расиянских ТСПУ, т.к. первый пакет ими не ловится.
-Но мне захотелось добавить баннеры-переходы на другие сайты - как быть?
+У меня на сайте [sccl.cc](https://sccl.cc) есть целая история оптимизаций.
 
-# Чо обычно делают?
-У бол-ва обычно это выглядит как дохуя http запросов по одному на каждую картинку 
+Сначала был переезд с Astro на Zine - [[/ru/it/Migration from Astro to Zine|об этом отдельный шитпост]]. Потом впихивание всего в 1 RTT - [[/ru/it/14kb-cap|тут уже навалена глубокая статья]].
+
+-# если кратко: сайт ужат до 13kb gzip, грузится одним TCP-пакетом, один round trip на данные.
+
+Вроде сайт летает. Но хочется добавить 88x31 баннеры.
+
+Ну эти маленькие кнопочки, которые все пихают в футер сайта. Типа "Powered by something", ссылки на друзей, клубы типа 512kb.club и 14kb.club.
+
+Это ж классика веба. Как без них.
+
+Но есть нюанс: сайт оптимизирован до одного запроса. А тут у тебя дцать баннеров, каждый по 200++ байт но каждый - отдельный HTTP-запрос.
+
+Нужно чота придумывать.
+
+---
+
+# 88x31: откуда вообще
+
+Формат 88 на 31 пиксель - это одна из старейших традиций веба.
+
+Началось всё с Netscape. В 1996 году они запустили программу "[Netscape Now!](https://web.archive.org/web/19961026040131/http://www3.netscape.com/comprod/mirror/netscape_now_program.html)" - кнопки которые можно было вставить на сайт чтоб показать что ты юзаешь их браузер.
+
+Потом идею подхватили. Microsoft со своим Internet Explorer. GeoCities для своих пользователей. Потом "Best viewed in...", "Powered by..." - понеслась.
+
+Эпоха browser wars сделала эти кнопки вездесущими. Это был способ показать принадлежность: я юзаю этот браузер, я хостюсь на этой платформе, я состою в этом веб-ринге.
+
+Сейчас формат переживает второе рождение. [Neocities](https://neocities.org), indie web revival, всякие клубы (512kb.club, 14kb.club, no-js.club) - у каждого свой баннер. И народ массово клеит их на сайты.
+
+[neonaut.neocities.org](https://neonaut.neocities.org/cyber/88x31) собрал архив из 13 051 баннера с 11 011 неоситизенов. 82 мегабайта чистого 88x31. Есть даже счётчик умерших сайтов ;k
+
+-# к слову, это тот же neonaut который написал эссе про [историю 88x31](https://neonaut.neocities.org/cyber/88x31) - оттуда и факты выше. рекомендую.
+
+---
+
+# Проблема: 67 запросов
+
+Обычно баннеры вставляют `<img src="...">` и похуй.
+
+Выглядит это примерно так:
 
 ![[88x31_http_requests.webp]]
 
-Что звучит максимально хуёво.
+Каждый баннер - отдельный HTTP-запрос. Шрифт, стили, скрипт, 67 картинок.
 
-Благо бол-во таки не пихают hotlink, и хостят сами эти картинки.
-*ато ваще пиздец бы был*
+И каждый запрос это полный цикл: DNS lookup (если холодный), TCP handshake, TLS handshake. Даже если картинка весит жалкие 200 байт - накладные расходы в десятки раз больше самой картинки.
 
-Может,  даже кто-то делает это автоматически.
+Благо большинство не хотлинкит, а хостит баннеры у себя.
+*а то ваще пиздец бы был*
 
-# Как захотелось мне?
-Т.к. сайт у меня в 1http request 1rtt - нужно чота придумывать.
+Но даже с локальным хостингом 67 запросов - это дохуя. Если у тебя HTTP/2 и keep-alive, часть расходов амортизируется. Но первый setup всё равно есть. И каждый запрос это задержка.
 
-Ясен хуй пихнуть всё картнки при расширении так же в 1rtt мы не сможем, т.ч. тупа inlinить нельзя. Но ведь можо пихать все картинки в CSS в виде base64 и подргружать их одним http запросом!
+А у меня сайт жёстко оптимизирован под 1 RTT. Я не могу просто взять и добавить 67 запросов.
+-# философия не позволяет.
 
-# Делаем.
-Сам же CSS генерится при билде - фетчатся все актуальные баннеры на основе конфига пихаются в CSS в формате base64.
+Тем более помимо скорости тут ещё и бонус в виде обхода расиянских [ТСПУ](https://en.wikipedia.org/wiki/Deep_packet_inspection) - первый пакет не ловится, если влезает в initcwnd.
 
-Типа так:
-```css
-.badge{display:inline-block;width:88px;height:31px;image-rendering:pixelated;image-rendering:crisp-edges}
-.badge-0{background:url(data:image/gif;base64,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) no-repeat 0 0}
-.badge-1{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAAAXNSR0IArs4c6QAAAixJREFUaIHtWVFuwzAIxVMv0vsfKkfZvpgsCrxHjBVt8pOqdTEGggnwUpGDrRgiIt/v9/fTjvxHjOsaInICvAMa069ocf54G+13dM3Th3TP8plsBuTvbnwEWJ0Y1zU0xdlAemusPrtf5X8fs0U89ZS6GTzflHeDc9AYI0jfblT97cSLEfIciwI/rmtUsiWS9YKykoVPBFckCLAGKto0B3HV8SiA6FCrwX4qiz9KhFcnvWZn5eyhRM0FHd4OVOp/N9IaPAeWLRP2utXFBFefEO9gV/BUmThz8Aakc/BBHz6aXJTN3nSAGlQmr+uocXm6vD2zXFQKGB+9e7X27F5Yelh2FrEpNGplehkSg0gNw9YsK0Q2siaN7ntee6xEdEwTKJjRE7TCEKvTSFuAuzs+qz8qIfpZ8QnZZA6JYnLWqDWUGWMeIyabWeLTCVR7GZQzmH0Jk73k8daquFNiOt+ssbbLGRwZ8zLbZjiiwlX9ESJfEHFi9ERNOdV3iMZ9oEnoEI0GZNkbBjibA+336tzKyup6NHZ51xn9jDw7X6NSQ2dwNTAdyJqh1r1oLfKR9bvrPXT4m9z8N5sCor0MGNmsUWZ7ssZTGesqTdFDmMFWIfpfnWEd6WJyiAwwNjPmt+oj/bLHKxHRII7QEVyRmAgg20gPkq8A/ug5G7Hz7cpcy8raRrNCTNR2JRF0zx2bIgWi4ZWI3Y0uIwd3iMudg235FeQQjX5oTF/2wsHBn8IPBK3Yniql8jMAAAAASUVORK5CYII=) no-repeat 0 0}
-/* ну и т.д. */
-```
+---
 
-Кофги вида:
+# Чо делаем
+
+Ясен хуй впихнуть все картинки в тот же 1 RTT не получится - слишком жирно.
+
+Инлайнить в HTML тоже не вариант - каждый баннер в base64 добавит ~33% к весу, и мы(я) вылетим за initcwnd.
+
+Но можно сделать по-другому: собрать все баннеры в один CSS-файл base64 и подгрузить его ОДНИМ запросом.
+
+Второй запрос, да. Но зато баннеров может быть хоть 100 - это всё равно один запрос.
+
+Идея: при билде сайта генератор читает конфиг, фетчит актуальные баннеры (или берёт локальные), конвертит в base64, пихает в CSS как `background-image`.
+
+---
+
+# Как работает
+
+CSS генерится при билде сайта. На входе конфиг:
+
 ```json
 {
     "badges": [
-      { // Фетчить с сайта
+      {
         "url": "https://example.com/assets/example.png",
         "href": "https://example.com",
         "alt": "example.com",
         "file": "1.png"
       },
-      { // Хряпать локально
+      {
         "href": "https://test.com",
         "alt": "test.com",
         "local": "../img/test.com",
         "file": "2.png"
-      },
+      }
     ]
+}
 ```
-Дальше генератор на основе конфига вставляет их как кнопки
 
-Применяяет картинку как стиль
+Два режима:
+- `url` - фетчит баннер с указанного сайта
+- `local` - берёт локальный файл (если баннер уже скачан и лежит в репе)
+
+Генератор обходит конфиг, скачивает/читает файлы, конвертит в base64, генерит CSS:
+
+```css
+.badge{display:inline-block;width:88px;height:31px;image-rendering:pixelated;image-rendering:crisp-edges}
+.badge-0{background:url(data:image/gif;base64,R0lGODdhWAAfAHcAACH...) no-repeat 0 0}
+.badge-1{background:url(data:image/png;base64,iVBORw0KGgoAAAA...) no-repeat 0 0}
+/* и так далее */
+```
+
+Дальше в HTML вместо 67 `<img>` тегов вставляем 67 `<a class="badge badge-N">` ссылок с фоновой картинкой из CSS.
+
+Применяется как стиль:
 ![[base64style.webp]]
 
-# Профит:
-Хапаем сразу все картинки одним запросом.
+---
+
+# Профит
+
+Вместо 67 отдельных запросов на каждый баннер получаем:
+
+**Основной сайт:** 1 HTTP-запрос, 12kb gzip, 1 RTT. Ну это как и было - [[/ru/it/14kb-cap|про это я уже писал]].
+
+**Баннеры:** 1 HTTP-запрос, один CSS-файл со всеми картинками в base64.
+
 ![[imgs_in_css.webp]]
-*строки "data:" не являются запросами, это процесс дешифровки base64 в картинку/гифку, который происходит локально.*
+*строки "data:" не являются http-запросами - это браузер декодит base64 в картинку локально.*
 
-1http req & 1rtt на основной сайт
+Итого: ДВА запроса на весь сайт со всеми баннерами. Вместо 68+.
 
-1http req & 1rtt на баннеры *(если их станет больше 10, то скорее уйдём на 2rtt, но на скорость это сильно не повлияет)*
+Если баннеров станет сильно больше 10 - CSS-файл может не влезть в один initcwnd и уйти на 2 RTT. Но разница между 1 и 2 RTT не драматична, когда это не основной контент. Баннеры в футере - пользователь их всё равно не видит сразу. *к тому же у меня есть fallback с кнопочками без картинки*
 
-Получаем всего два запроса.
+Из минусов: base64 добавляет ~33% к размеру бинарных данных. Для 88x31 баннеров (обычно < 1kb) это копейки. Но если у тебя сотня баннеров по 5kb каждый - уже начнёт быть заметно.
 
-Из минусов - сами картинки весят чуть больше, если у нас их будет условно сотня, то всё это уже безсмысленно.
+Ну и картинки не кешируются отдельно. При обновлении страницы - баннеры грузятся заново вместе с CSS. Но CSS тоже кешируется браузером, т.ч. на практике разница не чувствуется.
+
+В моём случае профит очевиден: сайт остаётся быстрым, баннеры есть, всё выглядит как надо.

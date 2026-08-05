@@ -1,37 +1,104 @@
 ---
 title: "XKB GUI config generator: xkb.sccl.cc"
-description: "A website for generating xkb keyboard layout configs on Linux."
+description: "A visual keyboard layout editor for XKB on Linux. Why editing XKB by hand is pain, how xkb.sccl.cc works, and what Zine has to do with it."
 lang: en
+autoTranslated: "true"
+translationLock: "true"
 tags:
 - "#it"
 - "#shitpost"
 - "#web"
 - "#linux"
 date: 2026-07-26
+
 ---
 
 # Background
-Unfortunately, historically it so happened that I need at least 2 keyboard layouts behind my computer - English and Russian.
-Moreover, I've been using Colemak-type layouts (Vanilla / DH / CAWS) and various custom modifications for Russian like RulemakDH or RulemakCAWS (see [[/en/Peripheral/Keyboards/Rulemak-CAWS.md]]) for a long time.
-And all of this on two different matrices - the usual Staggered ANSI that everyone's used to, and a split Columnar one.
 
-So far I haven't reached any kind of ideal - it's just clear that you need different layouts for ANSI and split keyboards.
-It would be cool to completely get rid of ANSI keyboards, but a couple of times a week I have to use a laptop, and bringing my own split keyboard along every time isn't always convenient.
+Historically, you need at least 2 layouts at a computer - English and Russian.
 
-# XKB GUI Generator
-In the end, I got tired of manually editing keyboard layout configs, so the tool [xkb.sccl.cc](https://xkb.sccl.cc/) was created - a web-based visual editor for xkb layouts on Linux.
+On top of that, I've been using Colemak-type layouts (Vanilla / DH / CAWS) for a while, plus custom Russian modifications like RulemakDH or RulemakCAWS (see [[/en/Peripheral/Keyboards/Rulemak-CAWS.md]])
+
+And all of this across two different matrices - regular Staggered ANSI and a split Columnar one.
+
+Still haven't reached any kind of ideal. It's just clear that ANSI and Split keyboards need different layouts.
+
+It would be great to ditch ANSI keyboards completely. But a couple times a week I have to use a laptop, and lugging the split around every time isn't always convenient.
+
+So I constantly have to tweak layout configs. Change them. Adjust for different keyboards. Different tasks.
+
+---
+
+# XKB: what it is and why it's pain
+
+XKB (X Keyboard Extension) is the standard keyboard layout system on Linux. It's under the hood of both X11 and Wayland. The entire keyboard - from keypress to character on screen - goes through XKB.
+
+You can define multiple layers (Base, Shift, AltGr, AltGr+Shift). Assign any symbols to any keys. Dead keys, compose sequences, modifier remapping. Whatever you want.
+
+XKB configuration means text files. It looks roughly like this:
+
+```
+key <AD01> {
+    type[group1]= "ALPHABETIC",
+    symbols[Group1]= [ q, Q, backslash, division ]
+};
+key <AD02> {
+    type[group1]= "ALPHABETIC",
+    symbols[Group1]= [ w, W, U0312, division ]
+};
+```
+
+One block per key. One symbol per layer. Times 50+ keys.
+
+And you sit there with a keysym table, manually transcribing symbols, constantly double-checking so you don't mess up. Inconvenient, easy to make mistakes, etc etc.
+
+So yeah, that's exactly what drove me to build [xkb.sccl.cc](https://xkb.sccl.cc).
+
+---
+
+# xkb.sccl.cc
+
+A visual XKB layout editor for Linux. In the browser.
 
 ![[xkb_sccl_cc.webp]]
 
-There's nothing special about it - just a QoL thing: click the buttons you need, copy your config, and use it happily.
+Nothing special - just a QoL thing. Click the buttons you need, copy the config, off you go.
 
-All possible standard xkb symbols for binding are already on the site. But xkb supports typing any Unicode characters, so you're not limited to just those.
+Built with [Zine](https://zine-ssg.io) - the same Zig SSG that powers the main [sccl.cc](https://sccl.cc). Pure HTML+CSS+JS, no frameworks, everything client-side.
+
+All standard XKB symbols for binding are already on the site. But XKB can take any Unicode character, so you're not limited to just those.
 
 ![[xkb_sccl_bind.webp]]
 
-Everything is, of course, [open source](https://github.com/scclie/xkb.sccl)
+The idea is simple: you click a key on the on-screen keyboard, a keysym search pops up, you pick the symbol. Repeat for each layer. Done - hit "copy xkb config" or download the `.xkb` file.
+
+---
+
+# How to use
+
+Generated a config - two ways to apply:
+
+**Quick (temporary):**
+```
+xkbcomp my-layout.xkb $DISPLAY
+```
+
+Applies immediately. Until reboot or relogin.
+
+**Persistent:**
+Drop the `.xkb` file in `/etc/X11/xkb/symbols/`, edit `evdev.xml` so the system knows about your layout. Or use your DE's keyboard settings.
+
+On [NixOS with sccl_nix](https:/shiza./sccl.cc/en/it/os/sccl_nix) the layout is already parametrized - you can drop the generated config alongside and hook it up via `sccl.keyboard`.
+
+---
 
 # Contributing
-The site has its own config format, stored in localdata. You can download it at any time (besides the raw xkb config), and if you want, [create a PR](https://github.com/scclie/xkb.sccl/pulls) (dropping the json into `assets/presets/`) to add a layout to the site.
 
--# *Maybe I'll add direct import from xkb config later.*
+The site stores configs in localdata in its own format. You can download it as JSON at any time.
+
+If you've cooked up a decent layout - [create a PR](https://codeberg.org/scclie/xkb.sccl/pulls): drop the JSON into `assets/presets/` and the layout shows up in the presets list on the site.
+-# you can PR on github too, but it's not quite as convenient for me.
+
+-# maybe I'll add direct import from existing xkb configs later. would be nice.
+
+Everything is, of course, [open source](https://codeberg.org/scclie/xkb.sccl).

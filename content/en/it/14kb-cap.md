@@ -6,7 +6,6 @@ autoTranslated: "true"
 translationLock: "true"
 tags:
 - "#it"
-- "#shitpost"
 - "#web"
 date: 2026-07-01
 ---
@@ -28,7 +27,7 @@ How the hell?
 
 This braindump is an attempt to dig into this topic down to the guts. TCP, DNS, TLS, slow start, the 1986 congestion collapse. And along the way, the philosophy of small web: why a tiny site is respect for the user, not a numbers circlejerk.
 
--# and I'll talk about my own sccl.cc optimization, obviously
+-# and I'll talk about my own sccl.cc optimization
 
 ---
 
@@ -59,7 +58,7 @@ Throughput dropped 1,000x. The network became unusable.
 
 They called it **congestion collapse**.
 
-In 1988, Van Jacobson [published a paper](https://en.wikipedia.org/wiki/Van_Jacobson) describing four algorithms that saved the internet: slow-start, congestion avoidance, fast retransmit, fast recovery.
+In 1988, Van Jacobson [published "Congestion Avoidance and Control"](https://ee.lbl.gov/papers/congavoid.pdf) describing four algorithms that saved the internet: slow-start, congestion avoidance, fast retransmit, fast recovery.
 
 These four became mandatory parts of TCP. They essentially prevented the internet from collapsing in the 80s and 90s as traffic grew exponentially.
 

@@ -7,7 +7,7 @@ tags:
   - "#peripheral"
 date: 2025-09-25
 ---
-> [!info] This page on English: [[EN How to make a good mousepad review]]
+> [!info] This page on English: [[/en/Peripheral/Mousepads/How to make a good mousepad review|EN How to make a good mousepad review]]
 # Типсы на грамотное объяснение характеристик коврика для мыши:
 ---
 ## 1. Текстура поверхности

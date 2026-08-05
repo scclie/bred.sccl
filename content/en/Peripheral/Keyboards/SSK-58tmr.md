@@ -12,7 +12,7 @@ date: 2026-05-14
 ---
 
 > [!info] In the process of thinking (development has not started)
-> Currently working on another keyboard: [[Sakuli60lp]]
+> Currently working on another keyboard: [[/en/Peripheral/Keyboards/Sakuli60lp]]
 
 *A.K.A.*
 # Long way to dream

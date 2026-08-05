@@ -1,6 +1,6 @@
 ---
 title: "Shoving 88x31 images into CSS"
-description: "Optimizing image loading on the site. Loading base64 images through CSS."
+description: "How to cram dozens of 88x31 badges into a single HTTP request. The history of the format from Netscape Now! 1996 to Neocities. And yet another step in the endless optimization of sccl.cc."
 lang: en
 autoTranslated: "true"
 translationLock: "true"
@@ -13,75 +13,142 @@ date: 2026-07-23
 
 # Well fuck all this then?
 
-Since I strive for maximum loading speed of [my site](https://sccl.cc/) - I try to keep it within 1rtt (more on that in [[/en/it/14kb-cap.md]])
+My site [sccl.cc](https://sccl.cc) has a whole history of optimizations.
 
-On top of that I get a bonus of bypassing Russian TSPU, since the first packet doesn't get caught by them.
+First there was the migration from Astro to Zine - [[/en/it/Migration-from-Astro-to-Zine|separate shitpost about that]]. Then squeezing everything into 1 RTT - [[/en/it/14kb-cap|already wrote a deep article on that]].
 
-But I wanted to add banner links to other sites - what to do?
+-# tl;dr: the site is compressed to 13kb gzip, loads in a single TCP packet, one round trip for data.
 
-# What do people usually do?
-Most of the time it looks like a shitload of http requests, one per each image
+So the site flies. But I wanted to add 88x31 badges.
+
+You know, those tiny buttons everyone puts in their site footer. Like "Powered by something", links to friends, clubs like 512kb.club and 14kb.club.
+
+It's web classics. How do you even live without them.
+
+But there's a catch: the site is optimized down to one request. And now you have a dozen badges, each 200++ bytes but each a separate HTTP request.
+
+Gotta figure something out.
+
+---
+
+# 88x31: where it even came from
+
+The 88 by 31 pixel format is one of the oldest web traditions.
+
+It all started with Netscape. In 1996 they launched the "[Netscape Now!](https://web.archive.org/web/19961026040131/http://www3.netscape.com/comprod/mirror/netscape_now_program.html)" program - buttons you could put on your site to show you're using their browser.
+
+88x31, gray background, beveled edges, "Netscape Now!" text.
+
+Then others picked it up. Microsoft with Internet Explorer. GeoCities for their users. Then "Best viewed in...", "Powered by..." - off it went.
+
+The browser wars era made these buttons ubiquitous. It was a way to show affiliation: I use this browser, I'm hosted on this platform, I'm in this webring.
+
+Now the format is having a second birth. [Neocities](https://neocities.org), indie web revival, all sorts of clubs (512kb.club, 14kb.club, no-js.club) - each has its own badge. And people are plastering them all over their sites.
+
+[neonaut.neocities.org](https://neonaut.neocities.org/cyber/88x31) has compiled an archive of 13,051 badges from 11,011 Neocitizens. 82 megabytes of pure 88x31. They even have a counter for dead sites ;k
+
+-# btw, this is the same neonaut who wrote the essay on the [history of 88x31](https://neonaut.neocities.org/cyber/88x31) - that's where the facts above come from. recommended.
+
+---
+
+# The problem: 67 requests
+
+Usually badges are inserted as `<img src="...">` and no one gives a shit.
+
+It looks something like this:
 
 ![[88x31_http_requests.webp]]
 
-Which sounds maximally shitty.
+Each badge is a separate HTTP request. Font, styles, script, 67 images.
 
-At least most people don't hotlink, and host these images themselves.
+And each request is a full cycle: DNS lookup (if cold), TCP handshake, TLS handshake. Even if the image weighs a measly 200 bytes - the overhead is dozens of times larger than the image itself.
 
-*otherwise it would be a complete disaster*
+At least most people don't hotlink and host the badges themselves.
+*otherwise it would be a complete fucking disaster*
 
-Maybe some even do it automatically.
+But even with local hosting, 67 requests is a shitton. If you have HTTP/2 and keep-alive, some of the cost gets amortized. But the initial setup still exists. And each request is a delay.
 
-# How did I want it?
-Since my site is 1http request 1rtt - need to come up with something.
+And my site is tightly optimized for 1 RTT. I can't just casually add 67 requests.
+-# the philosophy doesn't allow it.
 
-Obviously shoving all images at the same resolution into 1rtt we won't be able to, so just inlining is not an option.
+Plus, besides speed, there's a bonus of bypassing Russian [TSPU](https://en.wikipedia.org/wiki/Deep_packet_inspection) - the first packet doesn't get caught if it fits in initcwnd.
 
-But we can shove all images into CSS as base64 and load them with one http request!
+---
 
-# Let's do it.
-The CSS itself is generated at build time - all current banners are fetched based on a config and stuffed into CSS in base64 format.
+# What do we do
 
-Something like:
-```css
-.badge{display:inline-block;width:88px;height:31px;image-rendering:pixelated;image-rendering:crisp-edges}
-.badge-0{background:url(data:image/gif;base64,R0lGODdhWAAfAHcAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQEIgAAACwAAAAAWAAfAIMuNEA7QlJARVJaaF1SV2ONpH9/hI6jvoy0jq3l6fAAAAAAAAAAAAAAAAAAAAAAAAAE/xDJSau9OOvNefhgKI5kaZ5oOk5q674wKgUA8Na37eK7bko6HyrYIqqMKSQJ+BE2fUYnDdqsing0qxQbHfFmXK2Xmi2HwuUtWfkEdWcltkketybtoIR+v6/CzW5kbmODZ4R4gG12fIxfCFVSg1SRkJJzZjaUWTqMfCF/kYKIdk6hhaeGi516ZWBXQ68fAgZ6BqcECbYnpSirrCBMmZuWwsWYuAbGxpXKw8w0vgl+j024ewRZtLUCTdq53DbIZta5w97YzwAD68bRm8HIBgYEAjba8uUA97TJNMjFAgjwE8ZPYAJww2wMOFBgQLFowlzRwvYwAYFw9QLooUgvizhl+f+g2bKRq5lChg6zuMsEr9Y8lclwZApZ7F9Cjf1IMhpJo4DPnwUOoJzpK+IjG7POibxZ8ubHTTVo5iJAlV6mhUKzah2g0tc7BDXCAqBaEsDGKWE3hkX7T2zanGYPohW7ru46oQ3TFg0bLKC8iTX2vdTncl7YWVPBCeRnmHAueZlkig2aV++qta7IWVzrranjWjIRbw7QuSxpPnDdLmyIVuNeGsHcup0bWfba2bbF0qYtmzZEHEB0887Ng7jtJ8aFJ497mS/Y27WTTxl+XPLy6cl/1wguGXtx3JFb8/Yuvnf3tePPbwdbHrz3IO6tI4f+fr769rq5G38v3Xr/6Pv5t58mfvtRl5t90hl4nIKyEbjcgxBGKGFyE0xo4YUYGtfBhhx26CGHEQAAIfkEBSIAAAAsAQADAFYAGQCBAAAALjRAO0JSAAAAAv+EBBCR7X3SetQgxaqLWO87UZeQZdpYekZCSirqerAiMi1txYad5vgOxHFMrVtmCOHFOD6iUghKBo9R1pOqK/aQ1mBlZvp2f+LpaxyWMWwNLJm9rLouUB2N7k6f5Ij1A9EHQZMG+BNIuEI0+Jeo4gBnWAGpSDEpWLmS5ShyeddW5nmoZcZSrZ5KtmpQsq66kHpGNYKi/po+8mCu8vb6/sLHCw8fLuJx0s7Srz8kNzpzLyBGlsMWq0ZHbgL3Yxs/aqcmtsdTq6KWYg+jW2uXVrtTgcfiam7mRbCBOvGyr/PIg9VwBgBRrhSYLAWQnvhCjK0NaKKQ4dxCPY51kTCxVwvXCZi7LhRI0eJIevg8DjS4sKKJ0vmeViP4sBiMg/WVHhzlL5R/ngCvNdTUlAKBQAAIfkEBSIAAAAsAQADAFYAGQCBAAAALjRAO0JSAAAAAv+ELWIR559WezQCRqu6Mx+LVcjUZZtAesi4qMCZqnB7fQ1Kg/Yb6yxee206OODEx0sGc8OdEdH89aLJp5BWnWKpJtayqyyJwq4ZKoG2KFubILLWPnJvBzkWXodK0IG0+7Wk0CCmIPhRQwhIhAiheDgIwXeWAPlAt5VxGZgJiEmhubggifZ1yJY3VupyemeKt5XG19nmErrqQKtiW/tx1vebeys83Hi7a+k7SbzM3LyaDOwsPc0MbF1MHCesfRv8/MtwRu3B/TyObG11LCJWtuneLsMRzhCieo6/Eu8wCF7fVgSMQFzyUqXSxI+DL3rBDK349MhVQn0SUTl6aElhvXBewkKo0WVnlUdvlkJK2LgRY8YLJ3ixVAnxZScPJFqeRDkoio8+Mt1E4cmTCQ2g3HYKKvozzlFURnuGrOlUTxCiTJNG7RSU5FCbNEXBXJnVZdhPJkFKrVWWZtpMaw0UAAAh+QQFIgAAACwBAAMAVgAZAIEAAAAuNEA7QlIAAAAC/4R/IhaBnxZoECrmKroza8N5jyRkogWaH0CqX8uscJg4ZcxK3n1PoF5juWgpIY5ovNmGwGIvg+Qxccmpz2mFuj... /* and so on */
-.badge-1{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAAAXNSR0IArs4c6QAAAixJREFUaIHtWVFuwzAIxVMv0vsfKkfZvpgsCrxHjBVt8pOqdTEGggnwUpGDrRgiIt/v9/fTjvxHjOsaInICvAMa069ocf54G+13dM3Th3TP8plsBuTvbnwEWJ0Y1zU0xdlAemusPrtf5X8fs0U89ZS6GTzflHeDc9AYI0jfblT97cSLEfIciwI/rmtUsiWS9YKykoVPBFckCLAGKto0B3HV8SiA6FCrwX4qiz9KhFcnvWZn5eyhRM0FHd4OVOp/N9IaPAeWLRP2utXFBFefEO9gV/BUmThz8Aakc/BBHz6aXJTN3nSAGlQmr+uocXm6vD2zXFQKGB+9e7X27F5Yelh2FrEpNGplehkSg0gNw9YsK0Q2siaN7ntee6xEdEwTKJjRE7TCEKvTSFuAuzs+qz8qIfpZ8QnZZA6JYnLWqDWUGWMeIyabWeLTCVR7GZQzmH0Jk73k8daquFNiOt+ssbbLGRwZ8zLbZjiiwlX9ESJfEHFi9ERNOdV3iMZ9oEnoEI0GZNkbBjibA+336tzKyup6NHZ51xn9jDw7X6NSQ2dwNTAdyJqh1r1oLfKR9bvrPXT4m9z8N5sCor0MGNmsUWZ7ssZTGesqTdFDmMFWIfpfnWEd6WJyiAwwNjPmt+oj/bLHKxHRII7QEVyRmAgg20gPkq8A/ug5G7Hz7cpcy8raRrNCTNR2JRF0zx2bIgWi4ZWI3Y0uIwd3iMudg235FeQQjX5oTF/2wsHBn8IPBK3Yniql8jMAAAAASUVORK5CYII=) no-repeat 0 0}
-/* and so on */
-```
+Obviously cramming all images into the same 1 RTT won't work - too fat.
 
-Configs like:
+Inlining in HTML isn't an option either - each badge in base64 adds ~33% to the weight, and we'd(I'd) fly past initcwnd.
+
+But you can do it differently: collect all badges into a single CSS file as base64 and load it with ONE request.
+
+Second request, yeah. But you can have 100 badges - still one request.
+
+The idea: at site build time, a generator reads a config, fetches current badges (or takes local ones), converts to base64, stuffs into CSS as `background-image`.
+
+---
+
+# How it works
+
+The CSS is generated at site build time. Input is a config:
+
 ```json
 {
     "badges": [
-      { // Fetch from site
+      {
         "url": "https://example.com/assets/example.png",
         "href": "https://example.com",
         "alt": "example.com",
         "file": "1.png"
       },
-      { // Grab locally
+      {
         "href": "https://test.com",
         "alt": "test.com",
         "local": "../img/test.com",
         "file": "2.png"
-      },
+      }
     ]
+}
 ```
-Then the generator based on the config inserts them as buttons
 
-Applies the image as a style
+Two modes:
+- `url` - fetches the badge from the specified site
+- `local` - takes a local file (if the badge is already downloaded and in the repo)
+
+The generator walks the config, downloads/reads files, converts to base64, generates CSS:
+
+```css
+.badge{display:inline-block;width:88px;height:31px;image-rendering:pixelated;image-rendering:crisp-edges}
+.badge-0{background:url(data:image/gif;base64,R0lGODdhWAAfAHcAACH...) no-repeat 0 0}
+.badge-1{background:url(data:image/png;base64,iVBORw0KGgoAAAA...) no-repeat 0 0}
+/* and so on */
+```
+
+Then in the HTML, instead of 67 `<img>` tags, we insert 67 `<a class="badge badge-N">` links with a CSS background image.
+
+Applied as a style:
 ![[base64style.webp]]
 
-# The profit:
-We grab all images at once with one request.
+---
+
+# The profit
+
+Instead of 67 separate requests per badge, we get:
+
+**Main site:** 1 HTTP request, 13kb gzip, 1 RTT. That's how it was - [[/en/it/14kb-cap|already wrote about this]].
+
+**Badges:** 1 HTTP request, one CSS file with all images in base64.
+
 ![[imgs_in_css.webp]]
-*the "data:" lines are not requests, that's the process of decoding base64 into an image/gif locally.*
+*the "data:" lines are not http requests - the browser decodes base64 into images locally.*
 
-1http req & 1rtt for the main site
+Total: TWO requests for the entire site with all badges. Instead of 68+.
 
-1http req & 1rtt for banners *(if there are more than 10 we'll probably go to 2rtt, but it won't affect speed much)*
+If badges grow way past 10 - the CSS file might not fit in one initcwnd and go to 2 RTT. But the difference between 1 and 2 RTT isn't dramatic when it's not the main content. Badges in the footer - the user won't see them right away anyway. *plus I have a fallback with buttons without images*
 
-We get a total of two requests.
+The downside: base64 adds ~33% to binary data size. For 88x31 badges (usually < 1kb) this is pocket change. But if you have a hundred badges at 5kb each - it'll start to show.
 
-The downside is that the images themselves weigh a bit more, and if we have like a hundred of them, it all becomes pointless.
+Also the images don't cache separately. On page refresh - badges reload together with the CSS. But CSS gets cached by the browser too, so in practice you don't feel the difference.
+
+In my case the benefit is clear: the site stays fast, badges are there, everything looks as it should.
