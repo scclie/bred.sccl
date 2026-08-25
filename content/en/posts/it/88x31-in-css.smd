@@ -1,0 +1,149 @@
+---
+.title = "Shoving 88x31 images into CSS",
+.description = "How to cram dozens of 88x31 badges into a single HTTP request. The history of the format from Netscape Now! 1996 to Neocities. And yet another step in the endless optimization of sccl.cc.",
+.date = .date("2026-07-23T00:00:00"),
+.layout = "page.shtml",
+.tags = ["it", "shitpost", "web"],
+---
+
+# Well fuck all this then?
+
+My site [sccl.cc](https://sccl.cc) has a whole history of optimizations.
+
+First there was the migration from Astro to Zine - [[/en/it/Migration-from-Astro-to-Zine|separate shitpost about that]]. Then squeezing everything into 1 RTT - [[/en/it/14kb-cap|already wrote a deep article on that]].
+
+-# tl;dr: the site is compressed to 13kb gzip, loads in a single TCP packet, one round trip for data.
+
+So the site flies. But I wanted to add 88x31 badges.
+
+You know, those tiny buttons everyone puts in their site footer. Like "Powered by something", links to friends, clubs like 512kb.club and 14kb.club.
+
+It's web classics. How do you even live without them.
+
+But there's a catch: the site is optimized down to one request. And now you have a dozen badges, each 200++ bytes but each a separate HTTP request.
+
+Gotta figure something out.
+
+-
+
+# 88x31: where it even came from
+
+The 88 by 31 pixel format is one of the oldest web traditions.
+
+It all started with Netscape. In 1996 they launched the "[Netscape Now!](https://web.archive.org/web/19961026040131/http://www3.netscape.com/comprod/mirror/netscape_now_program.html)" program - buttons you could put on your site to show you're using their browser.
+
+88x31, gray background, beveled edges, "Netscape Now!" text.
+
+Then others picked it up. Microsoft with Internet Explorer. GeoCities for their users. Then "Best viewed in...", "Powered by..." - off it went.
+
+The browser wars era made these buttons ubiquitous. It was a way to show affiliation: I use this browser, I'm hosted on this platform, I'm in this webring.
+
+Now the format is having a second birth. [Neocities](https://neocities.org), indie web revival, all sorts of clubs (512kb.club, 14kb.club, no-js.club) - each has its own badge. And people are plastering them all over their sites.
+
+[neonaut.neocities.org](https://neonaut.neocities.org/cyber/88x31) has compiled an archive of 13,051 badges from 11,011 Neocitizens. 82 megabytes of pure 88x31. They even have a counter for dead sites ;k
+
+-# btw, this is the same neonaut who wrote the essay on the [history of 88x31](https://neonaut.neocities.org/cyber/88x31) - that's where the facts above come from. recommended.
+
+-
+
+# The problem: 67 requests
+
+Usually badges are inserted as `<img src="...">` and no one gives a shit.
+
+It looks something like this:
+
+![](/pictures/it/88x31_http_requests.webp)
+
+Each badge is a separate HTTP request. Font, styles, script, 67 images.
+
+And each request is a full cycle: DNS lookup (if cold), TCP handshake, TLS handshake. Even if the image weighs a measly 200 bytes - the overhead is dozens of times larger than the image itself.
+
+At least most people don't hotlink and host the badges themselves.
+*otherwise it would be a complete fucking disaster*
+
+But even with local hosting, 67 requests is a shitton. If you have HTTP/2 and keep-alive, some of the cost gets amortized. But the initial setup still exists. And each request is a delay.
+
+And my site is tightly optimized for 1 RTT. I can't just casually add 67 requests.
+-# the philosophy doesn't allow it.
+
+Plus, besides speed, there's a bonus of bypassing Russian [TSPU](https://en.wikipedia.org/wiki/Deep_packet_inspection) - the first packet doesn't get caught if it fits in initcwnd.
+
+-
+
+# What do we do
+
+Obviously cramming all images into the same 1 RTT won't work - too fat.
+
+Inlining in HTML isn't an option either - each badge in base64 adds ~33% to the weight, and we'd(I'd) fly past initcwnd.
+
+But you can do it differently: collect all badges into a single CSS file as base64 and load it with ONE request.
+
+Second request, yeah. But you can have 100 badges - still one request.
+
+The idea: at site build time, a generator reads a config, fetches current badges (or takes local ones), converts to base64, stuffs into CSS as `background-image`.
+
+-
+
+# How it works
+
+The CSS is generated at site build time. Input is a config:
+
+```json
+{
+    "badges": [
+      {
+        "url": "https://example.com/assets/example.png",
+        "href": "https://example.com",
+        "alt": "example.com",
+        "file": "1.png"
+      },
+      {
+        "href": "https://test.com",
+        "alt": "test.com",
+        "local": "../img/test.com",
+        "file": "2.png"
+      }
+    ]
+}
+```
+
+Two modes:
+- `url` - fetches the badge from the specified site
+- `local` - takes a local file (if the badge is already downloaded and in the repo)
+
+The generator walks the config, downloads/reads files, converts to base64, generates CSS:
+
+```css
+.badge{display:inline-block;width:88px;height:31px;image-rendering:pixelated;image-rendering:crisp-edges}
+.badge-0{background:url(data:image/gif;base64,R0lGODdhWAAfAHcAACH...) no-repeat 0 0}
+.badge-1{background:url(data:image/png;base64,iVBORw0KGgoAAAA...) no-repeat 0 0}
+/* and so on */
+```
+
+Then in the HTML, instead of 67 `<img>` tags, we insert 67 `<a class="badge badge-N">` links with a CSS background image.
+
+Applied as a style:
+![](/pictures/it/base64style.webp)
+
+-
+
+# The profit
+
+Instead of 67 separate requests per badge, we get:
+
+**Main site:** 1 HTTP request, 13kb gzip, 1 RTT. That's how it was - [[/en/it/14kb-cap|already wrote about this]].
+
+**Badges:** 1 HTTP request, one CSS file with all images in base64.
+
+![](/pictures/it/imgs_in_css.webp)
+*the "data:" lines are not http requests - the browser decodes base64 into images locally.*
+
+Total: TWO requests for the entire site with all badges. Instead of 68+.
+
+If badges grow way past 10 - the CSS file might not fit in one initcwnd and go to 2 RTT. But the difference between 1 and 2 RTT isn't dramatic when it's not the main content. Badges in the footer - the user won't see them right away anyway. *plus I have a fallback with buttons without images*
+
+The downside: base64 adds ~33% to binary data size. For 88x31 badges (usually < 1kb) this is pocket change. But if you have a hundred badges at 5kb each - it'll start to show.
+
+Also the images don't cache separately. On page refresh - badges reload together with the CSS. But CSS gets cached by the browser too, so in practice you don't feel the difference.
+
+In my case the benefit is clear: the site stays fast, badges are there, everything looks as it should.

@@ -1,0 +1,7 @@
+---
+.title = "Keyboards",
+.date = .date("2025-01-01T00:00:00"),
+.layout = "section.shtml",
+.tags = ["posts"],
+.description = "keyboard reviews and mods",
+---

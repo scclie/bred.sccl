@@ -6,7 +6,7 @@
       { "code": "en", "name": "English", "site_title": "notizine", "content_dir_path": "content/en", "output_prefix_override": "" }
     ]
   },
-  "theme": "nord-default",
+  "theme": "sccl",
 
   // ── Features ──  Toggle site features on/off. false = removed from output.
   "features": {
@@ -96,6 +96,11 @@
       "left": [
         [{ "module": "_recents", "id": "_recents_ru", "section": "/ru/posts/", "show": ["date", "meta"] }],
         [{ "module": "_recents", "id": "_recents_notes_ru", "section": "/ru/notes/", "title": "Заметки", "count": 3, "show": ["date", "meta"] }]
+      ]
+    },
+    "/posts/peripheral/keyboards/rulemak-caws/": {
+      "right": [
+        [{ "module": "embed", "url": "https://heatkeys.sccl.cc", "height": "400", "title": "Heatkeys" }]
       ]
     },
     "/search/": { "center": [ [ { "module": "search", "id": "search" } ] ] },

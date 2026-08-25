@@ -1,0 +1,188 @@
+---
+.title = "Discord: a hole in security",
+.description = "Discord and the secret technology of \\\"open file with password\\\". Why Electron safeStorage has existed since 2019, yet tokens still sit in plaintext. How to steal a session with a single grep and what to do about it.",
+.date = .date("2026-06-16T00:00:00"),
+.layout = "page.shtml",
+.tags = ["it", "security", "shitpost"],
+---
+
+# Discord and the secret technology of "open file with password"
+
+It seems surprising how many spammers are on Discord. Their sheer numbers have spawned the `1.jpg, 2.jpg, 3.jpg, 4.jpg @everyone @here` meme
+
+![](/pictures/it/discord_spam.png)
+
+And then you dig into the topic and it turns out that absolutely any unauthorized file read access lets you steal someone's session with a single token grep. No problem at all.
+
+Not "you need to inject into the process". Not "you need to bypass OS-level protection". Just read a file.
+
+-
+
+# What is a token?
+
+Very roughly, in Discord:
+
+```
+login + password + 2fa
+        ↓
+Discord issues a token (hash based on some data)
+        ↓
+the token becomes your session
+```
+
+Then the client sends this token to the server with every request:
+
+> "it's still me"
+
+Server:
+
+> "ok, come in"
+
+Standard scheme. That's how OAuth2, JWT, bearer tokens work. The model itself is fine - a token instead of a password, can be revoked server-side.
+
+The problem isn't the token. The problem is where it sits.
+
+-
+
+# Where the token is stored
+
+Discord is built on [Electron](https://www.electronjs.org/). Electron is a framework for desktop apps using HTML/CSS/JS. Basically a browser without an address bar.
+
+Discord stores the token in `Local Storage`. Technically it's a LevelDB database sitting in the user's home directory:
+
+```
+~/.config/discord/Local Storage/leveldb/
+```
+
+Or on Windows:
+
+```
+%APPDATA%/discord/Local Storage/leveldb/
+```
+
+And the token sits there in plaintext.
+
+Not encrypted. Not in the OS keychain. Just a string in a database. Any program running as your user can read this file.
+
+And now the funniest part: Electron, which Discord is built on, has had a built-in `safeStorage` API since 2019.
+
+It can encrypt data using OS-level mechanisms:
+- **macOS** - Keychain Access. Protection from other users AND from other applications.
+- **Windows** - DPAPI (Data Protection API). Encrypts with a key tied to the user account. Protection from other users.
+- **Linux** - kwallet, gnome-libsecret, or freedesktop Secret Service. Depending on your DE.
+
+So the tool for proper secret storage is right there in Electron, out of the box. No need to install anything separately. No need to write your own crypto. Just call `safeStorage.encryptString(token)`.
+
+Discord doesn't do this.
+
+For 6 years now.
+
+-
+
+# What happens if the token is stolen?
+
+Literally nothing interesting happens:
+
+You take the token.
+
+Feed it to another client.
+
+T H A T ' S  I T . . .
+
+: You're already inside the account.
+
+![](/pictures/it/discord_token_login.webp)
+
+- No login.
+- No password.
+- No 2FA.
+- No SMS.
+- No passkey.
+- No push notifications.
+- No confirmations.
+- No alerts about a new login.
+
+![](/pictures/it/discord_2fa.webp)
+
+The new login isn't even registered as new. The old session simply "moves" to a different machine.
+
+The only thing you might notice is getting logged out of your device. And only if someone's already logged in with that token, without leaving it for a rainy day.
+
+-
+
+# Is it easy to steal?
+
+Yes.
+
+![](/pictures/it/discord_grep_token.webp)
+
+On Windows it works exactly the same. Any .exe you download claiming to be "game cheats" or "free nitro" can read the file and send the token to the attacker's server.
+
+No exploits. No zero-day vulnerabilities. Just `open()` on a file that Discord itself placed in the home directory.
+
+-
+
+# How Discord COULD have done it
+
+There are a fuckton of options. All standard, all industry-wide:
+
+- `safeStorage` in Electron - available since 2019, used by other Electron apps (Signal Desktop, 1Password, Bitwarden)
+- Store secrets through OS keychain directly
+- Access confirmation for secrets (biometrics, master password)
+- Device fingerprint + token binding to hardware
+- A separate key generated on-device at first login
+- Security alerts on sudden environment changes (new IP, new OS, new hardware)
+- Device-based sessions with new device confirmation
+
+Yes, all of this can also be bypassed with full access to the machine.
+
+But between:
+
+> "read a file"
+
+and
+
+> "inject into a process, bypass system dialogs, spoof the environment"
+
+there's a massive gap.
+
+Right now the attacker only needs the most primitive access - read permissions on files in the home directory. Meaning literally any running program.
+
+With `safeStorage`, the attacker would need to either inject into the Discord process, or decrypt DPAPI/Keychain (which requires privilege escalation or stealing the master password).
+
+It doesn't make the attack impossible. But it raises the bar from "script kiddie with grep" to "targeted attack with specific tools".
+
+-
+
+# And right now?
+
+Right now the cost of an attack looks roughly like this:
+
+```
+download suspicious crap
+        ↓
+it reads a file
+        ↓
+your session is stolen: "1.jpg, 2.jpg, 3.jpg, 4.jpg @everyone @here"
+```
+
+And it doesn't matter that you have 2FA. Doesn't matter that your password is complex. The file is open to all programs running as your user.
+
+-
+
+# If Discord can't
+
+An option - log into Discord from a dedicated user account.
+
+So that only that user has read permissions on the session database. Barring internal exploits in the Discord app itself - the chance of anything getting stolen is minimal.
+
+On Linux this is easy out of the box - the permission hierarchy is baked in since the system's birth.
+
+On Windows it's also possible, but security isn't as strong: permissions were bolted on as a hack only with the Vista release, and plenty of software still bypasses them.
+
+But still better than leaving the file open to everyone, which Discord for some unfathomable reason couldn't protect itself.
+
+![](/pictures/it/discord_rights.webp)
+> [!NOTE] This protection layer is implemented in my [NixOs config]/posts/it/os/sccl-nix)
+
+-# you can check your own discord right now: go to `~/.config/discord/Local Storage/leveldb/` and run `grep -r 'mfa\.[a-zA-Z0-9_-]\{20,\}' .` - you'll probably find your token.
