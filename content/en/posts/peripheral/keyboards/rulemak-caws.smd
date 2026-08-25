@@ -88,8 +88,8 @@ It's better to drop the DLL files manually and register them in the registry by 
 But you can run the installer and pray the system doesn't croak.
 
 **Download archive:**
-[[rumkcaws.7z]]
+rumkcaws.7z
 
 # Linux
 -# No version for Linux, I use split and DH there anyway - the layout itself is basically for a laptop.
-U can create an xkb config using [[/en/it/xkb.sccl.md]]
+U can create an xkb config using [xkb-sccl](/posts/it/xkb-sccl)

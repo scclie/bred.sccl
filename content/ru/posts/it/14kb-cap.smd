@@ -236,7 +236,7 @@ NYT - газетный лейаут, текст и картинки - [веси�
 
 У меня есть сайтец [sccl.cc](https://sccl.cc). Запилен на [Zine](https://zine-ssg.io) - SSG на Zig. Три страницы: contacts, projects, peripherals.
 
--# до переезда на Zine был Astro и сайт весил 150+кб, см [[/ru/it/Migration-from-Astro-to-Zine.md]]
+-# до переезда на Zine был Astro и сайт весил 150+кб, см [migration-from-astro-to-zine](/posts/it/migration-from-astro-to-zine)
 
 Что сервер отдавал изначально:
 

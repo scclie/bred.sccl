@@ -238,7 +238,7 @@ By the way, the 512KB Club gives a Green Team badge to sites under 100kb. sccl.c
 
 I have this little site [sccl.cc](https://sccl.cc). Built on [Zine](https://zine-ssg.io) - an SSG in Zig. Three pages: contacts, projects, peripherals.
 
--# before migrating to Zine it was on Astro and weighed 150+kb, see [[/en/it/Migration-from-Astro-to-Zine.md]]
+-# before migrating to Zine it was on Astro and weighed 150+kb, see [migration-from-astro-to-zine](/posts/it/migration-from-astro-to-zine)
 
 What the server was originally sending:
 

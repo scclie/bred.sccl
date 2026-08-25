@@ -10,7 +10,7 @@
 
 My site [sccl.cc](https://sccl.cc) has a whole history of optimizations.
 
-First there was the migration from Astro to Zine - [[/en/it/Migration-from-Astro-to-Zine|separate shitpost about that]]. Then squeezing everything into 1 RTT - [[/en/it/14kb-cap|already wrote a deep article on that]].
+First there was the migration from Astro to Zine - [separate shitpost about that](/posts/it/migration-from-astro-to-zine). Then squeezing everything into 1 RTT - [already wrote a deep article on that](/posts/it/14kb-cap).
 
 -# tl;dr: the site is compressed to 13kb gzip, loads in a single TCP packet, one round trip for data.
 
@@ -131,7 +131,7 @@ Applied as a style:
 
 Instead of 67 separate requests per badge, we get:
 
-**Main site:** 1 HTTP request, 13kb gzip, 1 RTT. That's how it was - [[/en/it/14kb-cap|already wrote about this]].
+**Main site:** 1 HTTP request, 13kb gzip, 1 RTT. That's how it was - [already wrote about this](/posts/it/14kb-cap).
 
 **Badges:** 1 HTTP request, one CSS file with all images in base64.
 
