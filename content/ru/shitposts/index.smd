@@ -2,7 +2,7 @@
 .title = "Заметки",
 .date = .date("2026-02-01T00:00:00"),
 .description = "Короткие заметки и наброски",
-.layout = "section.shtml",
+.layout = "section-flat.shtml",
 ---
 
 Секция для быстрых заметок.

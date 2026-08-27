@@ -10,7 +10,7 @@
 
 Так исторически сложилось, что за компьютером нужно минимум 2 лейаута - Английский и Русский.
 
-К тому же уже давно использую раскладки вида Colemak (Vanilla / DH / CAWS) и свои модификации для русского типа RulemakDH иль RulemakCAWS (см [rulemak-caws](/posts/peripheral/keyboards/rulemak-caws))
+К тому же уже давно использую раскладки вида Colemak (Vanilla / DH / CAWS) и свои модификации для русского типа RulemakDH иль RulemakCAWS (см [rulemak-caws](/posts/peripheral/rulemak-caws))
 
 Да всё это на двух разных матрицах - обычной Staggered ANSI и раздельной Columnar.
 
@@ -81,7 +81,7 @@ xkbcomp my-layout.xkb $DISPLAY
 **Персистентный:**
 Кладёшь `.xkb` файл в `/etc/X11/xkb/symbols/`, правишь `evdev.xml` чтоб система знала про твою раскладку. Или через DE-настройки клавиатуры.
 
-На [NixOS со sccl_nix](/posts/it/os/sccl-nix) раскладка уже параметризована - сгенеренный конфиг можно положить рядом и подключить через `sccl.keyboard`.
+На [NixOS со sccl_nix](/posts/it/sccl-nix) раскладка уже параметризована - сгенеренный конфиг можно положить рядом и подключить через `sccl.keyboard`.
 
 -
 

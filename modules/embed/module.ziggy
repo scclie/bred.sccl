@@ -1,5 +1,5 @@
 .{
     .name = "embed",
-    .type = "dynamic",
-    .description = "Embed external content via iframe",
+    .type = "formatter",
+    .description = "Embed external content via iframe: use ```embed url=\"...\" height=480 in .smd content",
 }

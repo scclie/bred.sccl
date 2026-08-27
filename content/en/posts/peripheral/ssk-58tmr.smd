@@ -7,7 +7,7 @@
 ---
 
 > [!info] In the process of thinking (development has not started)
-> Currently working on another keyboard: [sakuli60lp](/posts/peripheral/keyboards/sakuli60lp)
+> Currently working on another keyboard: [sakuli60lp](/posts/peripheral/sakuli60lp)
 
 *A.K.A.*
 # Long way to dream
@@ -66,18 +66,18 @@ Pachama, I have hope that I can push TMR sensors under HE firewood without teari
 - Can operate in the same voltage range
 > Keyboards usually dance at 3.3v - both technologies can work in this field
 
-- Similar transfer function 
+- Similar transfer function
 > HE: VOUT = VQ + S*B
 > TMR: VOUT = VCC\*(VOFFSET + S\*B)
-> 
-> , where 
+>
+> , where
 > VOUT - output voltage
 > VCC - supply voltage
 > VOFFSET - offset
-> VQ - Voltage at B = 0 
+> VQ - Voltage at B = 0
 > S - sensitivity
 > B - induction (don’t give a fuck, the position of the magnet, the switch is tightly clamped)
-> 
+>
 > In short, it's just bullshit, we just need to take Vcc into account, which may become a problem in the future.
 
 The theme itself will be a columar format, like on a keyboard (it has a little more - 64 buttons, I think this keyboard will still have 58-60 buttons), which few people will be interested in.

@@ -10,15 +10,16 @@
 
 Звуковое сравнение можно посмотреть в видосике
 ```=html
-<iframe 
-  style="width:100%" 
-  height="400" 
-  src="https://www.youtube.com/embed/roa0XXvA1UU" 
-  title="38 Outemu Keyboard Switches Sound Test Comparison" 
-   
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-  allowfullscreen>
-</iframe>
+<div class="embed-container">
+  <iframe
+    src="https://www.youtube.com/embed/roa0XXvA1UU"
+    style="width: 100%; height: 480px"
+    title="38 Outemu Keyboard Switches Sound Test Comparison"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    loading="lazy"
+    allowfullscreen
+  ></iframe>
+</div>
 ```
 
 

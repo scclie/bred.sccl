@@ -2,8 +2,8 @@
   "site": {
     "host_url": "https://example.com",
     "locales": [
-      { "code": "ru", "name": "Русский", "site_title": "notizine", "content_dir_path": "content/ru", "output_prefix_override": null },
-      { "code": "en", "name": "English", "site_title": "notizine", "content_dir_path": "content/en", "output_prefix_override": "" }
+      { "code": "ru", "name": "Русский", "site_title": "scclie://notes", "content_dir_path": "content/ru", "output_prefix_override": null },
+      { "code": "en", "name": "English", "site_title": "scclie://notes", "content_dir_path": "content/en", "output_prefix_override": "" }
     ]
   },
   "theme": "sccl",
@@ -20,7 +20,8 @@
     "og_images": true,          // 1200×630 PNG social preview images
     "rss": false,                // RSS feed + discovery link + footer button
     "inline_mode": true,        // Inline CSS into <style> (zero external CSS requests)
-    "prev_next": true           // Previous/Next post navigation in content
+    "prev_next": false,         // Previous/Next post navigation in content
+    "mermaid": true             // Render mermaid diagrams at build time (requires mermaid-cli)
   },
   "language_primary": "en",     // Primary locale for i18n defaults
 
@@ -53,7 +54,7 @@
   // Empty array [] = zone hidden.
   "slots": {
     "header": [
-      [{ "module": "_header" },{ "module": "_spacer" },{ "module": "_lang_nav" }]
+      [{ "module": "_header", "site_title": "scclie://notes" },{ "module": "_spacer" },{ "module": "_lang_nav" }]
     ],
     "before_main": [
       [{ "module": "divider" }],
@@ -64,11 +65,11 @@
     ],
     // Left sidebar: recent posts + recent notes (two branches)
     "left": [
-      [{ "module": "_recents", "id": "_recents_posts", "show": ["date", "meta"] }],
-      [{ "module": "_recents", "id": "_recents_notes", "section": "/notes/", "title": "Notes", "count": 3, "show": ["date", "meta"] }]
+      [{ "module": "_recents", "id": "_recents_posts", "title": "posts", "count": 5, "show": ["date", "meta"] }],
+      [{ "module": "_recents", "id": "_recents_shitposts", "section": "/shitposts/", "title": "shitposts", "count": 5, "show": ["date", "meta"] }]
     ],
     "right": [
-      [{ "module": "_explorer", "exclude": ["/404/", "/ru/404/"] }]
+      [ ]
     ],
     "after_main": [],
     "footer": [
@@ -96,12 +97,7 @@
     "/ru/": {
       "left": [
         [{ "module": "_recents", "id": "_recents_ru", "section": "/ru/posts/", "show": ["date", "meta"] }],
-        [{ "module": "_recents", "id": "_recents_notes_ru", "section": "/ru/notes/", "title": "Заметки", "count": 3, "show": ["date", "meta"] }]
-      ]
-    },
-    "/posts/peripheral/keyboards/rulemak-caws/": {
-      "right": [
-        [{ "module": "embed", "url": "https://heatkeys.sccl.cc", "height": "400", "title": "Heatkeys" }]
+        [{ "module": "_recents", "id": "_recents_shitposts_ru", "section": "/ru/shitposts/", "title": "shitposts", "count": 3, "show": ["date", "meta"] }]
       ]
     },
     "/search/": { "center": [ [ { "module": "search", "id": "search" } ] ] },
@@ -127,7 +123,7 @@
 
   // ── OG Image generation ──  Generate 1200×630 PNG for social previews.
   "og": {
-    "site_name": "scclie://notes",    // Displayed at top-left of OG image
+    "site_name": "scclie://\n    notes",    // Displayed at top-left of OG image. Use \n for multi-line.
     "font_family": "system-ui, sans-serif",  // Font family for OG image text
     // Colors - Nord palette defaults
     "bg_top": "#2e3440",        // Gradient top
@@ -138,7 +134,7 @@
     // Font sizes (px)
     "title_size": 52,           // Page title
     "desc_size": 26,            // Page description
-    "site_size": 22,            // Site name
+    "site_size": 64,            // Site name
     "date_size": 24,            // Publication date
     // Toggles
     "show_date": true,          // Show publication date

@@ -8,13 +8,13 @@
         .{
             .code = "ru",
             .name = "Русский",
-            .site_title = "notizine",
+            .site_title = "scclie://notes",
             .content_dir_path = "content/ru",
         },
         .{
             .code = "en",
             .name = "English",
-            .site_title = "notizine",
+            .site_title = "scclie://notes",
             .content_dir_path = "content/en",
             .output_prefix_override = "",
         },

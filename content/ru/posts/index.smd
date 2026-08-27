@@ -1,7 +1,7 @@
 ---
-.title = "Записи",
+.title = "posts",
 .date = .date("2026-01-01T00:00:00"),
-.layout = "section.shtml",
+.layout = "section-flat.shtml",
 .description = "Пример секции с записями",
 .alternatives = [
     .{

@@ -1,6 +1,6 @@
 /**
- * embed module - generates iframe for external content
- * Usage in slots: { "module": "embed", "url": "https://...", "height": "770", "title": "..." }
+ * embed module - legacy slot-based iframe generator.
+ * Prefer the formatter: ```embed url="..." height=480 in .smd content.
  */
 export default async ({ params }) => {
   const url = params.url || '';
@@ -14,9 +14,10 @@ export default async ({ params }) => {
 <div class="embed-container">
   <iframe
     src="${url}"
-    style="width: ${width}; height: ${height}px; border: 1px solid var(--secondary, #ccc); border-radius: 8px;"
-    loading="lazy"
+    style="width: ${width}; height: ${height}px"
     title="${title}"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    loading="lazy"
     allowfullscreen
   ></iframe>
 </div>`;

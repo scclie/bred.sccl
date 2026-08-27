@@ -1,7 +1,7 @@
 {
     "translation_notice": "This page was automatically translated and may contain inaccuracies.",
     "read_original": "Read original",
-    "recents_title": "Recent Notes",
+    "recents_title": "posts",
     "explorer_title": "Site Explorer",
     "search_title": "Search",
     "tags_title": "Tags",
@@ -16,10 +16,10 @@
     "theme_toggle": "Toggle theme",
     "search_placeholder": "Search...",
     "home": "Home",
-    "see_more": "See more",
-    "prev_short": "<- prev",
-    "next_short": "next ->",
-    "random_note": "random note",
+    "see_more": "[ see more ]",
+    "prev_short": "[ <- prev ]",
+    "next_short": "[ next -> ]",
+    "random_note": "[ random note ]",
     "min_short": "min",
     "words_short": "words"
 
