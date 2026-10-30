@@ -1,0 +1,10 @@
+.{
+    .name = "site_footer",
+    .type = "dynamic",
+    .description = "Site generator attribution",
+    .delivery = "critical",
+    .assets = [
+        .{ .source = "style.css", .delivery = "critical" },
+    ],
+    .params = .{},
+}

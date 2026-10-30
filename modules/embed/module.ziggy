@@ -1,5 +1,15 @@
 .{
     .name = "embed",
-    .type = "formatter",
-    .description = "Embed external content via iframe: use ```embed url=\"...\" height=480 in .smd content",
+    .type = "dynamic",
+    .description = "Embed external content via iframe",
+    .delivery = "critical",
+    .assets = [
+        .{ .source = "style.css", .delivery = "critical" },
+    ],
+    .params = .{
+        .url = .{ .type = "url", .required = true },
+        .height = .{ .type = "number" },
+        .width = .{ .type = "number" },
+        .title = .{ .type = "string" },
+    },
 }

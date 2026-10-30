@@ -7,6 +7,10 @@
     ]
   },
   "theme": "sccl",
+  "performance": {
+    "critical_html_gzip_budget": "14kb",
+    "on_budget_exceeded": "warn"
+  },
 
   // ── Features ──  Toggle site features on/off. false = removed from output.
   "features": {
@@ -38,7 +42,7 @@
   },
 
   // ── Slots (module system) ──
-  // Seven zones: header, before_main, center, left, right, after_main, footer.
+  // Nine grid cells; page content is implicit in middle_center.
   // Each zone is an ordered list of ROWS. Each row is an array of module entries.
   // Modules in the same row appear next to each other in a flex row.
   //
@@ -48,34 +52,31 @@
   //   "section": section name for _recents / _explorer (e.g. "posts")
   //
   // Built-in modules: _header, _theme_toggle, _lang_nav, _spacer,
-  //   _breadcrumbs, _recents, _explorer, _footer_text, _back_to_top, _content
+  //   _breadcrumbs, _recents, _explorer, _footer_text, _back_to_top
   //
   // Example: [{ "module": "_recents", "section": "posts", "show": ["date", "meta"] }]
   // Empty array [] = zone hidden.
   "slots": {
-    "header": [
-      [{ "module": "_header", "site_title": "scclie://notes" },{ "module": "_spacer" },{ "module": "_lang_nav" }]
-    ],
-    "before_main": [
+    "top_left": [],
+    "top_center": [
+      [{ "module": "_header", "site_title": "scclie://notes" },{ "module": "_spacer" },{ "module": "_lang_nav" }],
       [{ "module": "divider" }],
       [{ "module": "_breadcrumbs" }]
     ],
-    "center": [
-      [{ "module": "_content" }]
-    ],
+    "top_right": [],
+    "middle_center": [],
     // Left sidebar: recent posts + recent notes (two branches)
-    "left": [
+    "middle_left": [
       [{ "module": "_recents", "id": "_recents_posts", "title": "posts", "count": 5, "show": ["date", "meta"] }],
       [{ "module": "_recents", "id": "_recents_shitposts", "section": "/shitposts/", "title": "shitposts", "count": 5, "show": ["date", "meta"] }]
     ],
-    "right": [
-      [ ]
-    ],
-    "after_main": [],
-    "footer": [
+    "middle_right": [],
+    "bottom_left": [],
+    "bottom_right": [],
+    "bottom_center": [
       [{ "module": "divider" }],
       [{ "module": "badges", "align": "center" }],
-      [{ "module": "_footer_text", "align": "center" }],
+      [{ "module": "site_footer", "align": "center" }],
       [{ "module": "_rss_link", "align": "center" }],
       [{ "module": "_back_to_top", "align": "center" }]
     ]
@@ -83,25 +84,51 @@
 
   // ── Layout ──
   "layout": {
-    // Three-column CSS Grid.
-    // Column 1 = left sidebar, 2 = center (main content), 3 = right sidebar.
-    // "auto" = show, "hide" = hidden, "200px" = fixed width.
-    "columns": ["auto", "min(70vw, 55rem)", "auto"],  // left sidebar, main content, right sidebar
+    "columns": ["minmax(0, 1fr)", "minmax(0, 3fr)", "minmax(0, 1fr)"],
+    "rows": ["auto", "1fr", "auto"],
     "gap": "1.5rem",             // Gap between grid columns
-    "width": "min(70vw, 55rem)",
+    "width": "55rem",
     "spacing": 1
   },
 
   "slots_overrides": {
     // /ru/ pages resolve sections against the ru prefix
     "/ru/": {
-      "left": [
+      "top_left": [],
+      "top_center": [[{ "module": "_header", "site_title": "scclie://notes" }, { "module": "_spacer" }, { "module": "_lang_nav" }], [{ "module": "divider" }], [{ "module": "_breadcrumbs" }]],
+      "top_right": [],
+      "middle_left": [
         [{ "module": "_recents", "id": "_recents_ru", "section": "/ru/posts/", "show": ["date", "meta"] }],
         [{ "module": "_recents", "id": "_recents_shitposts_ru", "section": "/ru/shitposts/", "title": "shitposts", "count": 3, "show": ["date", "meta"] }]
-      ]
+      ],
+      "middle_center": [],
+      "middle_right": [],
+      "bottom_left": [],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_right": []
     },
-    "/search/": { "center": [ [ { "module": "search", "id": "search" } ] ] },
-    "/ru/search/": { "center": [ [ { "module": "search", "id": "search" } ] ] }
+    "/search/": {
+      "top_left": [],
+      "top_center": [[{ "module": "_header", "site_title": "scclie://notes" }, { "module": "_spacer" }, { "module": "_lang_nav" }], [{ "module": "divider" }], [{ "module": "_breadcrumbs" }]],
+      "top_right": [],
+      "middle_left": [[{ "module": "_recents", "id": "_recents_posts", "title": "posts", "count": 5, "show": ["date", "meta"] }], [{ "module": "_recents", "id": "_recents_shitposts", "section": "/shitposts/", "title": "shitposts", "count": 5, "show": ["date", "meta"] }]],
+      "middle_center": [[{ "module": "search", "id": "search" }]],
+      "middle_right": [],
+      "bottom_left": [],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_right": []
+    },
+    "/ru/search/": {
+      "top_left": [],
+      "top_center": [[{ "module": "_header", "site_title": "scclie://notes" }, { "module": "_spacer" }, { "module": "_lang_nav" }], [{ "module": "divider" }], [{ "module": "_breadcrumbs" }]],
+      "top_right": [],
+      "middle_left": [[{ "module": "_recents", "id": "_recents_ru", "section": "/ru/posts/", "show": ["date", "meta"] }], [{ "module": "_recents", "id": "_recents_shitposts_ru", "section": "/ru/shitposts/", "title": "shitposts", "count": 3, "show": ["date", "meta"] }]],
+      "middle_center": [[{ "module": "search", "id": "search" }]],
+      "middle_right": [],
+      "bottom_left": [],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_right": []
+    }
   },
 
   // ── Custom CSS ──

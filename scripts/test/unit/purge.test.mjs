@@ -1,8 +1,22 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import purge from '../../purge.mjs';
+
+test('purge leaves svg-owned Mermaid styles byte-identical while pruning document styles', async () => {
+  const root = mkdtempSync('/tmp/opencode/bred-purge-svg-');
+  const svg = '<svg id="my-svg"><style>#my-svg .node&gt;*{stroke:red;}#my-svg .label{fill:blue;}</style><g class="node"></g></svg>';
+  try {
+    const path = join(root, 'index.html');
+    writeFileSync(path, `<html><body>${svg}<style>.kept{color:red}.unused{color:blue}</style><p class="kept">x</p></body></html>`);
+    await purge(root);
+    const html = readFileSync(path, 'utf8');
+    assert.ok(html.includes(svg));
+    assert.ok(html.includes('<style>.kept{color:red}</style>'));
+    assert.ok(!html.includes('.unused'));
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
 
 test('purge prunes generated.css globally when html has no style block', async () => {
   const root = join('/tmp/opencode', 'notizine-purge-linked');
@@ -21,3 +35,80 @@ test('purge prunes generated.css globally when html has no style block', async (
   assert.match(css, /\.kept/);
   assert.doesNotMatch(css, /\.dropped/);
 });
+
+test('purge transforms every inline style block without changing style attributes', async () => {
+  const root = join('/tmp/opencode', 'notizine-purge-inline');
+  rmSync(root, { recursive: true, force: true });
+  mkdirSync(root, { recursive: true });
+  const htmlPath = join(root, 'index.html');
+  writeFileSync(htmlPath,
+    '<html><head><style data-first="yes">.first{color:red}.drop-first{color:blue}</style>' +
+    '<style media="print">.second{color:green}.drop-second{color:black}</style></head>' +
+    '<body><p class="first second">x</p></body></html>'
+  );
+
+  await purge(root);
+
+  const html = readFileSync(htmlPath, 'utf-8');
+  assert.match(html, /<style data-first="yes">\.first\{color:red\}<\/style>/);
+  assert.match(html, /<style media="print">\.second\{color:green\}<\/style>/);
+  assert.doesNotMatch(html, /drop-(first|second)/);
+});
+
+test('purge uses all pages when pruning shared generated CSS', async () => {
+  const root = join('/tmp/opencode', 'notizine-purge-shared');
+  rmSync(root, { recursive: true, force: true });
+  mkdirSync(join(root, 'with-inline'), { recursive: true });
+  mkdirSync(join(root, 'linked-only'), { recursive: true });
+  writeFileSync(
+    join(root, 'with-inline', 'index.html'),
+    '<html><head><style>.inline{color:red}</style></head><body><p class="inline">inline</p></body></html>'
+  );
+  writeFileSync(
+    join(root, 'linked-only', 'index.html'),
+    '<html><body><p class="linked">linked</p></body></html>'
+  );
+  const cssPath = join(root, 'assets', 'css', 'generated.css');
+  mkdirSync(join(root, 'assets', 'css'), { recursive: true });
+  writeFileSync(cssPath, '.inline{color:red}.linked{color:green}.dropped{color:black}');
+
+  await purge(root);
+
+  const css = readFileSync(cssPath, 'utf-8');
+  assert.match(css, /\.inline\{color:red\}/);
+  assert.match(css, /\.linked\{color:green\}/);
+  assert.doesNotMatch(css, /\.dropped/);
+});
+
+for (const delivery of ['inline', 'linked']) {
+  test(`purge preserves descendant pseudo-selectors in ${delivery} CSS output`, async () => {
+    const root = mkdtempSync('/tmp/opencode/notizine-purge-');
+    const htmlPath = join(root, 'index.html');
+    const cssPath = join(root, 'assets', 'css', 'generated.css');
+    const css = `
+      .breadcrumbs :is(a, span:not(.crumb-sep)) { min-width: 0; overflow-wrap: anywhere; }
+      .breadcrumbs :not(.crumb-sep) { max-width: 100%; }
+      .breadcrumbs ::before { content: "label"; }
+      .breadcrumbs:hover { color: red; }
+    `;
+    const body = '<nav class="breadcrumbs"><a href="/">LongLabel</a><span class="crumb-sep">›</span><span>Current</span></nav>';
+
+    try {
+      mkdirSync(join(root, 'assets', 'css'), { recursive: true });
+      writeFileSync(htmlPath, delivery === 'inline' ? `<style>${css}</style>${body}` : body);
+      if (delivery === 'linked') writeFileSync(cssPath, css);
+
+      await purge(root);
+
+      const output = delivery === 'inline'
+        ? readFileSync(htmlPath, 'utf-8').match(/<style>([\s\S]*?)<\/style>/)[1]
+        : readFileSync(cssPath, 'utf-8');
+      assert.match(output, /\.breadcrumbs :is\(a,span:not\(\.crumb-sep\)\)\{min-width:0;overflow-wrap:anywhere\}/);
+      assert.match(output, /\.breadcrumbs :not\(\.crumb-sep\)\{max-width:100%\}/);
+      assert.match(output, /\.breadcrumbs ::before\{content:"label"\}/);
+      assert.match(output, /\.breadcrumbs:hover\{color:red\}/);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+}

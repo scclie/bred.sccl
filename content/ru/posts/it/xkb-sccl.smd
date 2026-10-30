@@ -1,6 +1,6 @@
 ---
-.title = "XKB GUI config generator: xkb.sccl.cc",
-.description = "Визуальный редактор раскладок клавиатуры для XKB в Linux. Почему редактировать XKB ручками это боль, как работает xkb.sccl.cc и при чём тут Zine.",
+.title = "xkb gui config generator",
+.description = "визуальный редактор раскладок клавиатуры для xkb в linux",
 .date = .date("2026-07-26T00:00:00"),
 .layout = "page.shtml",
 .tags = ["it", "shitpost", "web", "linux"],

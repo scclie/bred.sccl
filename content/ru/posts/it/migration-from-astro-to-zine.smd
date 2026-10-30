@@ -1,5 +1,5 @@
 ---
-.title = "sccl.cc: astro zig zag zine",
+.title = "sccl astro zig zag zine",
 .description = "преспичило перенести свой сайт с astro на zine.?",
 .date = .date("2026-06-24T00:00:00"),
 .layout = "page.shtml",

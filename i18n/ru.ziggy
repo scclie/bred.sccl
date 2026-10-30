@@ -15,6 +15,8 @@
     "next_page": "Next",
     "theme_toggle": "Toggle theme",
     "search_placeholder": "Search...",
+    "search_empty": "Ничего не найдено",
+    "search_unavailable": "Поиск недоступен. Попробуйте обновить страницу.",
     "home": "Home",
     "see_more": "See more",
     "prev_short": "<- prev",

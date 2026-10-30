@@ -1,85 +1,61 @@
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import assert from 'node:assert/strict';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { runInNewContext } from 'node:vm';
+import { loadConfig } from './lib/config.mjs';
+import { buildModel, prefixOf } from './lib/model.mjs';
+import { discoverModules, resolveSlots, applyOverrides } from './lib/modules.mjs';
 
-const PUBLIC = join(process.cwd(), 'public');
-let passed = 0;
-let failed = 0;
-
-function assert(condition, msg) {
-  if (condition) { passed++; console.log(`  PASS ${msg}`); }
-  else { failed++; console.error(`  FAIL ${msg}`); }
-}
-
-function findAllHTML(dir) {
-  const results = [];
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    if (statSync(full).isDirectory()) {
-      results.push(...findAllHTML(full));
-    } else if (extname(entry) === '.html') {
-      results.push(full);
-    }
+const root = process.cwd();
+const publicDir = join(root, 'public');
+const config = loadConfig(root);
+const model = buildModel(config, root);
+const modules = discoverModules(root);
+const { zones } = resolveSlots(config, modules);
+const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(entry =>
+  entry.isDirectory() ? walk(join(dir, entry.name)) : [join(dir, entry.name)]);
+const htmlFiles = walk(publicDir).filter(file => file.endsWith('.html'));
+const expected = model.pages.map(page => page.link === '/' ? 'index.html' : `${page.link.slice(1)}index.html`);
+if (expected.includes('404/index.html')) expected.push('404.html');
+assert.deepEqual(htmlFiles.map(file => relative(publicDir, file)).sort(), expected.sort(), 'all canonical pages and only the 404 alias are published');
+const sandbox = { window: {} };
+runInNewContext(readFileSync(join(publicDir, '.cache/search.js'), 'utf8'), sandbox);
+const indexed = Object.values(sandbox.window.SEARCH_INDEX).flat();
+assert.deepEqual(indexed.map(page => page.u).sort(), model.pages.map(page => page.link).sort(), 'search indexes every canonical page');
+let embeds = 0;
+let diagrams = 0;
+for (const page of model.pages) {
+  const html = readFileSync(join(publicDir, page.link.slice(1), 'index.html'), 'utf8');
+  assert.ok(!html.includes('<style></style>'), `${page.link}: no empty styles`);
+  assert.ok(html.includes('notizine-performance:critical-shell:start'), `${page.link}: marked shell`);
+  for (const cell of ['top-left', 'top-center', 'top-right', 'middle-left', 'middle-center', 'middle-right', 'bottom-left', 'bottom-center', 'bottom-right']) {
+    assert.ok(html.includes(`grid-cell-${cell}`), `${page.link}: ${cell}`);
   }
-  return results;
+  const resolved = applyOverrides(zones, config.slots_overrides, page.link, modules);
+  const hasSearch = Object.values(resolved).flat(2).some(entry => entry.module === 'search');
+  assert.equal(html.includes('class="search-widget"'), hasSearch, `${page.link}: resolved search widget`);
+  assert.equal(html.includes('src="/.cache/search.js"'), hasSearch, `${page.link}: local search index`);
+  assert.equal(html.includes('src="/assets/modules/search.js"'), hasSearch, `${page.link}: local search client`);
+  if (hasSearch) assert.ok(html.indexOf('src="/.cache/search.js"') < html.indexOf('src="/assets/modules/search.js"'));
+  assert.ok(html.includes('https://notizine.sccl.cc'), `${page.link}: site attribution`);
+  for (const badge of ['badge-notizine', 'badge-zine', 'badge-sccl']) assert.ok(html.includes(badge), `${page.link}: ${badge}`);
+  assert.equal((html.match(/href="\/badges\/badges\.css"/g) ?? []).length, 1, `${page.link}: badge stylesheet registered once`);
+  for (const match of html.matchAll(/<(?:script|link)\b[^>]*(?:src|href)="(\/[^"?#]+)"/g)) {
+    assert.ok(existsSync(join(publicDir, match[1])), `${page.link}: asset ${match[1]} exists`);
+  }
+  const source = readFileSync(page.filePath, 'utf8');
+  if (/```embed|class="embed-container"/.test(source)) {
+    embeds++;
+    assert.ok(html.includes('<iframe') && html.includes('web-share'), `${page.link}: custom embed permissions`);
+  }
+  if (/```mermaid|x_mermaid_block_/.test(source)) {
+    diagrams++;
+    assert.ok(html.includes('<svg'), `${page.link}: rendered diagram`);
+    assert.ok(!html.includes('x_mermaid_block_'), `${page.link}: no diagram placeholder`);
+  }
+  const locale = config.site.locales.find(locale => locale.code === page.locale);
+  assert.ok(page.link.startsWith('/' + prefixOf(locale)), `${page.link}: locale prefix`);
+  assert.ok(!page.link.includes('//'), `${page.link}: safe canonical route`);
 }
-
-console.log('[test] Checking...');
-
-const htmlFiles = findAllHTML(PUBLIC);
-console.log(`[test] Found ${htmlFiles.length} HTML files`);
-
-for (const file of htmlFiles) {
-  const content = readFileSync(file, 'utf-8');
-  const rel = file.replace(PUBLIC, '');
-
-  const emptyStyle = content.match(/<style><\/style>/g) || [];
-  assert(emptyStyle.length === 0, `No empty <style> in ${rel}`);
-
-  const emDash = content.match(/[\u2014\u2013]/g) || [];
-  assert(emDash.length === 0, `No em-dash in ${rel}`);
-}
-
-// Test: center slot renders content
-const indexHtml = readFileSync(join(PUBLIC, 'index.html'), 'utf-8');
-assert(indexHtml.includes('<p>Welcome'), 'Center slot renders content in index.html');
-
-const assetsJsonPath = join(process.cwd(), 'assets', '.cache', 'per-page-assets.json');
-assert(existsSync(assetsJsonPath), 'per-page-assets.json exists after build');
-
-// Test: page without companion files has no unwanted artifacts
-const postsHtml = readFileSync(join(PUBLIC, 'posts', 'hello-world', 'index.html'), 'utf-8');
-const injectedCount = (postsHtml.match(/per-page-assets/g) || []).length;
-assert(injectedCount === 0, 'Pages without companion files have no per-page-assets references');
-// 1. Content not duplicated (task-2: body text should appear exactly once)
-const helloHtml = readFileSync(join(PUBLIC, 'posts', 'hello-world', 'index.html'), 'utf-8');
-const bodyCount = (helloHtml.match(/Hello! This is an example post/g) || []).length;
-assert(bodyCount === 1, 'Content body not duplicated in post page');
-
-// 2. .recent-meta used instead of <time> for recents display
-const recentsHtml = readFileSync(join(PUBLIC, 'recents', 'index.html'), 'utf-8');
-const recentMetaCount = (recentsHtml.match(/class="recent-meta"/g) || []).length;
-assert(recentMetaCount > 0, '.recent-meta present in output');
-
-// 3. per-page-assets.json has wordcount/readtime for a known page
-const assetsJson = JSON.parse(readFileSync(join(process.cwd(), 'assets', '.cache', 'per-page-assets.json'), 'utf-8'));
-const helloKey = '/posts/hello-world/';
-assert(typeof assetsJson[helloKey].wordcount === 'number', 'Page has wordcount');
-assert(typeof assetsJson[helloKey].readtime === 'number', 'Page has readtime');
-
-// section.shtml renders subpages
-const postsSectionHtml = readFileSync(join(PUBLIC, 'posts', 'index.html'), 'utf-8');
-assert(postsSectionHtml.includes('Hello, World!'), 'Posts section lists subpages');
-
-// _recents uses section-based filtering (no URL filter); scope to widget items
-// (explorer in the sidebar may legitimately link /tags/ and /search/)
-const recentItemLinks = [...recentsHtml.matchAll(/<div class="recent-item"><a href="([^"]*)"/g)].map(m => m[1]);
-assert(recentItemLinks.length > 0, 'recents items have links');
-assert(!recentItemLinks.some(l => l.includes('/tags/') || l.includes('/search/')), 'No tags/search link in recents items');
-
-// No _recents URL filter remnants in base.shtml (explorer filters are separate)
-const baseHtml = readFileSync(join(process.cwd(), 'layouts', 'templates', 'base.shtml'), 'utf-8');
-const oldRecentsFilter = (baseHtml.match(/endsWith\('posts\/'\)/g) || []).length;
-assert(oldRecentsFilter === 0, 'No _recents URL filter remnants in base.shtml');
-
-console.log(`[test] ${passed} passed, ${failed} failed`);
-process.exit(failed > 0 ? 1 : 0);
+assert.ok(embeds > 0 && diagrams > 0, 'live embed and diagram coverage');
+console.log(`[test] ${model.pages.length} canonical pages, ${htmlFiles.length} html outputs, ${indexed.length} search entries, ${embeds} embed pages, ${diagrams} mermaid pages passed`);

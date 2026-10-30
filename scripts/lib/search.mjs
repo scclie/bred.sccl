@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'path';
 
 function extractText(raw) {
@@ -11,17 +11,35 @@ function extractText(raw) {
     .trim();
 }
 
+export function searchIndexPath(root) {
+  return join(root, 'assets', '.cache', 'search.js');
+}
+
+export function removeSearchIndex(root) {
+  rmSync(searchIndexPath(root), { force: true });
+}
+
+export function attachSearchIndex(assets, instances) {
+  if (!instances.some(instance => instance.module === 'search')) return assets;
+  return {
+    ...assets,
+    deferredScripts: '<script defer src="/.cache/search.js"></script>' + assets.deferredScripts,
+    localAssets: [...new Set(['.cache/search.js', ...assets.localAssets])],
+  };
+}
+
 export function buildSearchIndex(model, root) {
   const byLocale = {};
+  const seen = new Set();
   for (const p of model.pages) {
-    if (p.isSection || !p.filePath) continue;
-    if (p.link.endsWith('/404/')) continue;
+    if (!p.filePath || seen.has(p.link)) continue;
+    seen.add(p.link);
     const raw = readFileSync(p.filePath, 'utf-8');
     (byLocale[p.locale] ??= []).push({
       t: p.title,
       u: p.link,
       d: p.description || '',
-      x: extractText(raw).slice(0, 4000),
+      x: extractText(raw),
     });
   }
   for (const loc of Object.keys(byLocale)) {
@@ -29,5 +47,5 @@ export function buildSearchIndex(model, root) {
   }
   const js = 'window.SEARCH_INDEX=' + JSON.stringify(byLocale).replace(/</g, '\\u003c') + ';\n';
   mkdirSync(join(root, 'assets', '.cache'), { recursive: true });
-  writeFileSync(join(root, 'assets', '.cache', 'search.js'), js);
+  writeFileSync(searchIndexPath(root), js);
 }
