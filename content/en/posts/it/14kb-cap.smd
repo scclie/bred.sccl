@@ -25,7 +25,7 @@ This braindump is an attempt to dig into this topic down to the guts. TCP, DNS, 
 
 -# and I'll talk about my own sccl.cc optimization
 
--
+---
 
 # Whatamhow TCP
 
@@ -93,7 +93,7 @@ A 30kb file - lands right where slow start is just beginning to ramp. Instead of
 
 And if there's a dozen such files, each on a new connection - each goes through this dance from scratch.
 
--
+---
 
 # Who burns what
 
@@ -137,7 +137,7 @@ For a dice website.
 
 You see it now, right?
 
--
+---
 
 # The magic of 14,600
 
@@ -183,9 +183,9 @@ Plus, the HTTPS handshake and HTTP/2 preface eat part of the initial window. [Ba
 
 But the mechanics are the same. Understanding them beats obsessing over the number.
 
--
+---
 
-# Small web is not about kilobytes
+# Small web not about kilobytes
 
 The small site thing - it's not just about speed. It's about philosophy.
 
@@ -232,7 +232,7 @@ It's not about "make your site gray and dull". It's about "don't drag a fuckload
 
 By the way, the 512KB Club gives a Green Team badge to sites under 100kb. sccl.cc at 27kb raw would qualify. But I wanted more.
 
--
+---
 
 # Optimizing sccl.cc
 
@@ -294,7 +294,7 @@ Fits in initcwnd. One TCP data packet after the handshakes - and the site is rea
 
 ![](/pictures/it/12kb_scclcc.webp)
 
--
+---
 
 # The inline dilemma
 
@@ -330,7 +330,7 @@ It makes sense when the difference between "fit in one RTT" and "didn't fit" is 
 
 For sccl.cc the difference was dramatic: 4 requests vs 1, 50kb vs 12kb. Worth it.
 
--
+---
 
 # Bottom line
 
