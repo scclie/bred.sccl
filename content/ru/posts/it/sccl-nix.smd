@@ -1,5 +1,5 @@
 ---
-.custom = .{ .shitpost_rate = 8 },
+.custom = .{ .shitpost_rate = 4 },
 .title = "nixдекларативный рай",
 .description = "кто такой этот ваш nix",
 .date = .date("2026-02-13T00:00:00"),

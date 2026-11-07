@@ -1,7 +1,7 @@
 ---
-.custom = .{ .shitpost_rate = 4 },
-.title = "Sakuli60lp",
-.description = "Создание самодельной беспроводной сплит-клавиатуры на 60 клавиш с низкопрофильными переключателями Kailh Choc, поддержкой hotswap и открытым исходным кодом.",
+.custom = .{ .shitpost_rate = 8 },
+.title = "sakuli60lp",
+.description = "создание самодельной беспроводной сплит-клавиатуры на 60 клавиш с low-profile kailh choc, поддержкой hotswap и open-source.",
 .date = .date("2026-06-21T00:00:00"),
 .layout = "page.shtml",
 .tags = [],

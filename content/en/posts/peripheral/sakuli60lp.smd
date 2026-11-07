@@ -1,0 +1,32 @@
+---
+.custom = .{ .shitpost_rate = 8, .auto_translated = true },
+.title = "sakuli60lp",
+.description = "building a DIY wireless 60-key split keyboard with low-profile Kailh Choc switches, hotswap support and open source code.",
+.date = .date("2026-06-21T00:00:00"),
+.layout = "page.shtml",
+.tags = [],
+---
+
+> [!info] In development...
+> Stage: Design.
+
+
+# Guts and their cost
+- 1х Nordic Nrf52840 dongle with an Oled screen :bongocat: - 1500 rubles
+- 2x Controllers, chinese knockoffs shaped like nice!nano v2, also on nrf52840 - 1300 rubles
+- 58х Kailh 1350 hotswap sockets - ~500 rubles
+- 58х Kailh Deep sea silent low profile switches - 2000 rubles
+- 58х 1N4148 diodes - 100 rubles
+- 2х 503450 1000mah batteries - 200 rubles (bulk)
+- 2x toggle switches - 10 rubles (bulk)
+- screws-threaded inserts-wires - pennies, since they're only bought by the hundreds or thousands
+- battery connectors - 2 rubles (bulk)
+- a couple hundred grams of PETG plastic - 200 rubles?
+== ~<6000 rubles
++ lots of person-hours for development and assembly, various tools and equipment
+
+A contraption with no PCB - hardcore handwired
+In general i don't see any point in making a PCB for mechanical boards at all, that's only done for mass production because it's just faster and cheaper that way, doesn't mean better or higher quality. Without a PCB you can also slap together whatever fucking keyboard shape you want, change key heights and angles and so on
+
+The software here is ZMK
+The charge should supposedly last up to several months of daily work-gaming at 15h a day. (the calculator guesses nearly 10 months, but let's be realistic)

@@ -9,6 +9,13 @@
     const empty = root.querySelector('.rated-empty');
     const random = root.querySelector('.rated-random');
     let matching = entries;
+    let stored = null;
+    try { stored = JSON.parse(localStorage.getItem('shitpost-o-meter')); } catch {}
+    if (Array.isArray(stored) && stored.length === 2 && stored.every(Number.isInteger)
+      && stored[0] >= 0 && stored[1] <= 9 && stored[0] <= stored[1]) {
+      min.value = stored[0];
+      max.value = stored[1];
+    }
     const dateFormat = new Intl.DateTimeFormat(root.dataset.locale, {
       year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC',
     });
@@ -23,6 +30,7 @@
       max.setAttribute('aria-valuemin', low);
       interval.value = `${low}–${high}`;
       matching = entries.filter(p => p[5] >= low && p[5] <= high);
+      try { localStorage.setItem('shitpost-o-meter', JSON.stringify([low, high])); } catch {}
       const fragment = document.createDocumentFragment();
       for (const p of matching.slice(0, +root.dataset.count)) {
         const item = document.createElement('div');

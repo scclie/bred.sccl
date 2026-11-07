@@ -1,5 +1,5 @@
 ---
-.custom = .{ .shitpost_rate = 2 },
+.custom = .{ .shitpost_rate = 4 },
 .title = "outemu switches",
 .description = "захотелось скупить и пожмякать все outemu: тест 38 свитчей - звук, тирлист",
 .date = .date("2026-06-17T00:00:00"),

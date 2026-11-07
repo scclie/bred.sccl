@@ -1,5 +1,5 @@
 ---
-.custom = .{ .shitpost_rate = 3 },
+.custom = .{ .shitpost_rate = 8 },
 .title = "scan code & virtual key issue",
 .description = "пачаму ввод с клавиатуры до сих пор работает через жопу ВЕЗДЕ",
 .date = .date("2026-06-21T00:00:00"),

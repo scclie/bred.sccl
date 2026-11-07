@@ -199,10 +199,14 @@ li {
 }
 
 blockquote {
-  margin: var(--sp-4, 1rem) 0;
-  padding: var(--sp-2, 0.5rem) var(--sp-4, 1rem);
+  margin: var(--sp-2, 0.5rem) 0;
+  padding: var(--sp-1, 0.25rem) var(--sp-3, 0.75rem);
   border-left: 3px solid var(--accent2);
   background: var(--bg-alt);
+}
+
+blockquote p {
+  margin: 0;
 }
 
 pre {
@@ -227,8 +231,17 @@ pre code {
 }
 
 img {
+  display: block;
   max-width: 100%;
   height: auto;
+  margin: var(--sp-3, 0.8rem) auto;
+}
+
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: var(--sp-3, 0.8rem) auto;
 }
 
 hr {

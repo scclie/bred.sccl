@@ -1,0 +1,14 @@
+---
+.title = "posts",
+.date = .date("2026-01-01T00:00:00"),
+.layout = "section-flat.shtml",
+.description = "sample section with posts",
+.alternatives = [
+    .{
+        .name = "rss",
+        .layout = "rss.xml",
+        .output = "index.xml",
+        .type = "application/rss+xml",
+    },
+],
+---

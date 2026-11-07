@@ -15,7 +15,7 @@
               <ctx :if="$loop.it.leaves().len.gt(0)">
                 <ul>
                   <ctx :loop="$loop.it.leaves()">
-                    <li><a href="$loop.it.link()" :text="$loop.it.title"></a></li>
+                    <li><a href="$loop.it.link()" :text="$loop.it.title"></a><time class="recent-meta" :text="$loop.it.date.format('2006-01-02')"></time></li>
                   </ctx>
                 </ul>
               </ctx>

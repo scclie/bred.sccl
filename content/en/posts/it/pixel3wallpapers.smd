@@ -1,0 +1,49 @@
+---
+.custom = .{ .shitpost_rate = 6, .auto_translated = true },
+.title = "pixel 3 wallpapers",
+.description = "a port of the coolest pixel 3 wallpapers to android 13+",
+.date = .date("2026-11-04T00:00:00"),
+.layout = "page.shtml",
+.tags = ["it", "shitpost"],
+---
+
+randomly remembered the wallpapers from the google pixel 3 - dead simple, no particular idea or anything - just a dynamic gradient that reacts to some things you do without eating much battery - i really fucking liked them, but for some reason google decided not to include them in newer firmware.
+a bit of research showed they're apparently some sort of google pixel 3 exclusive - i'm specifically talking about `groove after dark`
+
+![](/pictures/it/groove_wallpapers.jpg)
+
+and... turns out i'm not the only one who thinks so - someone on the official [pixel help forum](https://support.google.com/pixelphone/thread/271790529/pixel-3-s-groove-after-dark-wallpaper-on-pixel-8?hl=en) was looking for these wallpapers too
+
+![](/pictures/it/groove_forum.jpg)
+
+there was also a link to [xda-developers.com](https://www.xda-developers.com/download-google-pixel-3-live-wallpapers-port/) with a backport of these wallpapers, but it's not quite what i need, and i can't seem to find the source - how this port works and stuff, so i don't even really wanna test it just hoping graphene's sandbox does its job.
+
+these wallpapers aren't in the google wallpapers app either (not that i particularly wanted to install it)
+
+but they are in the old pixel wallpapers app on [apkmirror](https://www.apkmirror.com/apk/google-inc/pixel-wallpapers-2018-google/pixel-wallpapers-18-2-9-release/pixel-wallpapers-18-9-2-android-apk-download/) and it even worked perfectly on android 17 (grapheneos)
+
+but google signature or not - it's a random proprietary apk and i don't particularly wanna use it, but thank fuck it's a java app, so picking it apart, decompiling, deobfuscating and stuff is pretty easy.
+
+as expected - just regular glsl(frag, vert) shaders.
+lying right there in the assets, even the original comments are still there - you can poke around (nothing smart in there, just debug ;k).
+
+![](/pictures/it/groove_shaders.jpg)
+
+the only catch - gotta find where they're used in the code...
+
+luckily it's not obfuscated to hell, and claudie joined in at this point and slоpped together a similar stripped-down service in 370k tokens, cuz that's easier than reconstructing the original, and i don't know shit about android development specifically and stuff (look at me making excuses... i'm just slopping and that's it.)...
+
+and here it is (after 5 hours of slopping): https://github.com/scclie/pxl3wallpapers
+
+looks like the original, doesn't quite work like the original, visually similar behavior, only the groove variants are available cuz they're the coolest and i doubt anyone needs the others.
+
+battery-wise - same as the original: 30fps usually, 60fps on touch, in battery saver android itself pauses it to a completely static image.
+
+![](/pictures/it/groove_port.jpg)
+
+? why, when you could've used the original app?
+
+: the original has more code and it's closed. with an open-sauce version it's nicer to at least vaguely understand how it works, considering how little code there ended up being. and now you can patch it if you want, tweak it for yourself a bit, at least change some values and stuff, maybe sensibly throw in some build-time defines for customization...
+
+
+if there are vulnerabilities and backdoors in this code - you're welcome 🤪

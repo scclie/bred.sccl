@@ -1,0 +1,75 @@
+---
+.custom = .{ .shitpost_rate = 9, .auto_translated = true },
+.title = "aim muscle memory?",
+.description = "hand-eye coordination > muscle memory",
+.date = .date("2025-09-22T00:00:00"),
+.layout = "page.shtml",
+.tags = [],
+---
+
+in the average competitive player's head lives the myth of muscle memory as the holy grail of aim, like, you just need to rack up thousands of hours on one sens
+so your hand makes perfect movements all by itself, without involving your brain. Memorize every centimeter of the pad, every tiny mouse movement, like a virtuoso violinist memorizing scales.
+
+this idea is fucking dangerous cope, just like believing that "aim decides everything" (see [casualization of aim](/posts/games/casualization-of-aim)).
+
+![](/pictures/aim/muscle_memory.png)
+
+# # adaptation
+
+the main misconception is thinking of muscle memory as a fixed recording in your neurons: In reality it's developing the ability to adapt effectively to different conditions and analyze them.
+
+with aim, the brain and nervous system aren't learning to memorize mouse positions but to solve motor tasks: "the target is moving like this, need to apply this much force for this long".
+
+# # sens schizophrenia
+
+the cult's followers believe that finding their *perfect* sens (say, 52 cm/360) will let them reach the greatest heights and stuff, but the world isn't stable, what happens if:
+- you switch your pad/skates to slightly slower/faster ones
+- a speck of dust gets on your skates
+- the weather procs higher humidity - the pad gets a little slower
+- you've worn a slow spot into your pad, movement in the center is slower than around the edges
+
+![](/pictures/aim/change_skates_gg.png)
+
+any of these micro-changes completely invalidates the idea of memorized movements, with that *perfect* 52 cm/360 sens you actually need to apply
+different amounts of force to make the same movements expecting the same result, and if you rely on pure muscle memory you'll miss
+(even if you perfectly apply the force for a 10cm turn to the left - the mouse might only travel 9.5cm or a whole 10.5cm) -  the brain expected one level of resistance and got another.
+
+# # the dumb basketball analogy that's been going around the community forever
+
+a basketball player shooting at the hoop doesn't calculate millimeters, they judge distance, defenders' movement, their own acceleration and adapt the shot on the fly.
+
+they can score from different positions, with different run-ups, with one or two hands, with wind or with a ball of a different weight and bounce - because they've developed overall coordination.
+
+same way a cracked aimer doesn't remember how many centimeters to move the mouse for a headshot and stuff - they see the target, their brain instantly judges the distance from the crosshair to the target and how fast the target is moving,
+and their arm, wrist and fingers cooperate to solve that task, the makeup of this "cooperation" changes depending on sens.
+
+![](/pictures/aim/plecho.png)
+
+- on low sens (50 cm/360)** the forearm and upper arm do most of the work for big turns, while the wrist and fingers make micro-corrections.
+- on high sens (20 cm/360)** the wrist and fingers get actively involved, upper arm and forearm movement decreases.
+
+the perfect aimer is someone who's developed the neuromotor control that lets them use any sens effectively to solve the task.
+
+depending on the task - sens can vary - a fast sens will be more comfortable for arena shooters, a slow one for tactical shooters.
+
+![](/pictures/aim/sens_chart.png)
+
+# # the visuomotor loop
+
+hours of jerking off in aim trainers train the speed and efficiency of the feedback loop:
+1. the eye sees the target and its movement.
+2. the brain processes the visual information and calculates the required motor command.
+3. the hand executes the command.
+4. repeat the cycle, analyze the previous results
+
+the point of training is to shorten the time it takes to go through this loop (reduce analysis time) and improve calculation accuracy in step 2.
+
+this isn't about muscle memory - it's a calibration skill, not a reproduction skill.
+
+# # conclusion
+
+obsessing over muscle memory and finding "the one" sens is a dead end that creates a fragile system that collapses at the slightest change in conditions.
+
+the tru aim skill is hand-eye coordination.
+
+with regular aim training - changing sens stops being noticeable - you can freely jump between 24-34-38-44-55-66-77-88 *(etc. etc.)* cm/360 without really feeling much difference - adapting to the new conditions will take mere seconds.

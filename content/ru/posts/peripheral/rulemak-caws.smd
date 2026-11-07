@@ -1,5 +1,5 @@
 ---
-.custom = .{ .shitpost_rate = 7 },
+.custom = .{ .shitpost_rate = 5 },
 .title = "rulemak caws",
 .description = "фонетически эквивалентный вариант раскладки colemak caws",
 .date = .date("2025-04-13T00:00:00"),
@@ -99,7 +99,7 @@ colemak caws создан вокруг colemak с целью объеденeни
 но можно тыкнуть установщик и молиться, что система не помрёт. (bad way)
 
 *архив:*
-/rumkcaws.7z
+<a href="/files/rumkcaws.7z" download>rumkcaws.7z</a>
 
 ## ## linux
 

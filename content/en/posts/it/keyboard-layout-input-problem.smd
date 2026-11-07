@@ -1,0 +1,148 @@
+---
+.custom = .{ .shitpost_rate = 8, .auto_translated = true },
+.title = "scan code & virtual key issue",
+.description = "why keyboard input still works like ass EVERYWHERE",
+.date = .date("2026-06-21T00:00:00"),
+.layout = "page.shtml",
+.tags = ["os", "it", "shitpost"],
+---
+
+? how did they manage to shit all over something as basic as keyboard input?
+
+hoomans interact with their computer through a keyboard every day - for hours - for years... and the input system still hinges on the assumption that everyone's on anti-ergonomic QWERTY.
+
+when you try to improve your life by switching, for example, to the same mainstream colemak - life often only gets harder, even though your typing ergonomics improve: hotkeys in games and apps break, and break inconsistently.
+
+and if you're not a lucky latin-based-language speaker - you also gotta cobble together your own tribal layout, like rulemak for cyrillic: the behavior changes yet again on that.
+
+this is all a 40-year-old anglocentric feature that they still haven't reached a consensus on.
+
+# # how it's supposed to work
+
+there's a piece of hardware, it has buttons, each button has a physical position: a scan code is just the number of that position - doesn't matter what letter's drawn there, what language and so on - it's just *"button number 67"*.
+
+sometime in the late 80s the industry decided that working with symbols and virtual codes was more convenient. because "well everyone's on QWERTY anyway, whatever".
+
+and ever since, every abstraction layer added on top of scan codes has created problems for everyone not on QWERTY.
+
+*PS/2 keyboards support three scan code sets, by the way. XT (set 1), AT (set 2), and 3270 (set 3). modern keyboards send set 2, the motherboard controller translates it into set 1. live with that information.*
+
+the right way: the program (game, desktop app, whatever) listens to scan codes: some hotkey like ctrl+z is bound not to the character `z`, not to the virtual code `VK_Z`, but to the scan code of the z key's physical position,
+then the hotkey works the same on any layout - a bad example is Aseprite, thankfully there are way more good examples.
+
+
+# # the shitindows layout sandwich
+
+keyboard input in windows goes through three levels:
+
+```
+scan_code -> virtual_key -> Symbol
+```
+: the problem is that there are two abstraction layers between the scan code and the application, and every application picks its own, whichever the dev's more familiar with and so on.
+
+## ## scan_code
+the only sane thing here: assigned by the keyboard driver, doesn't change with the layout, modern drivers let you remap the matrix and so on..
+
+## ## virtual_key (VK_*)
+useless shit that appeared, if the little neural net is to be believed, back in windows 3.1:
+
+the problem then was: say some french user on AZERTY has broken hotkeys, because the program itself hardcoded them for QWERTY.
+
+microsoft decided to create a layer that maps a physical key to its "QWERTY equivalent" - like *"what letter would be on this key if the layout were QWERTY"*.
+
+seems like, partly, a sensible idea... but vk should've died along with Win16 applications... yet somehow it didn't: it's still used in WinAPI:
+    `GetKeyState(VK_CONTROL)`, `WM_KEYDOWN` with VK codes:
+        all native Windows software runs on VK.
+
+## ## symbol
+these are the actual characters according to the layout - all good here - press a key with Shift/AltGr accounted for, get a letter.
+
+# # in games everyone jerks off their own way
+
+## ## DirectInput
+
+fucking ancient DirectInput from the 90s maps through VK.
+
+microsoft themselves [declared it legacy](https://learn.microsoft.com/en-us/windows/win32/directinput/directinput-portal) back in 2005.
+
+but some games still use it, and everything on directinput is shit for non-QWERTY layouts.
+
+## ## unity
+
+shitty unity came up with its own Input Manager with `Input.getKey`, which is anally tied to Symbol, where a hotkey is bound not to the key, but to the letter that key enters in the CURRENT layout.
+
+they updated the input system to "New Input System" - now you can grab keys through scan codes like `Keyboard.current.wKey`. but shit still happens with custom layouts in some situations
+(honestly i couldn't be arsed to dig any deeper, but it affected me).
+
+i.e. they kinda fixed it, but either not all the way, or the devs haven't learned their new chisel yet.
+
+## ## unreal engine
+
+In UE if the dev doesn't fucking tick "use scan code" - input goes through VK.
+
+and since VK is the default, every Unreal game is potentially broken - depending on whether the dev bothered.
+
+## ## source engine
+
+but uncle Gabe uses scan codes for movement input in source (i can't be arsed to check the source, but maybe this was inherited from the quake(doom) engine, someone who can be arsed please check and let me know).
+
+most importantly, it just works on any layout without reconfiguring anything.
+
+# # good examples
+
+besides source there are decent folks:
+
+in minecraft somewhere before 1.9-1.12 (don't remember exactly there was different input code - everything was bound to VK - won't list the downsides of that solution again here - had to rebind on every new pack.
+
+then around 1.12+ they rewrote it to scan codes and everything started working fucking great - because the physical W key is always the physical W key, no matter what letter your layout has there and so on.
+
+*in minecraft bedrock go fuck yourselves, we've got DirectInput yo ahahahahahhahahaha*
+
+good examples are slowly becoming more common over the years, but when something isn't getting in the way of your life - you don't notice it, so i won't list other games here.
+
+# # assorted software
+
+and fucking Aseprite goddamn runs on Symbol - just switching layouts, even qwerty/йцукен - sends hotkeys who the fuck knows where.
+
+this shit actually happens in lots of apps, but Aseprite is the worst.
+
+otherwise all software goes through WinAPI - hence VK, and VK maps to the "QWERTY equivalent", on some non-QWERTY layouts (french AZERTY, german QWERTZ) this equivalent differs from QWERTY and the hotkeys go to hell.
+
+decent folks use scan codes - not many of them yet.
+
+
+# linux has its own rakes to step on
+
+they shat all over linux too, maybe even worse...
+
+: there are three abstraction layers before the character:
+
+## ## hardware scan code
+the keyboard (PS/2 or USB HID) sends a raw scan code, which the kernel gobbles up
+
+## ## linux_keycode
+the kernel digests the scan code into something like `KEY_Q`, `KEY_W`, `KEY_E`, which is no longer a physical number but a "QWERTY position" - i.e. the pure scan code is already fucked away at this level.
+
+i.e. the linux kernel immediately makes a qwertycentric assumption.
+
+## ## XKB
+X Keyboard Extension takes what the kernel shat out (`KEY_Q`, `KEY_W`...) and shits out its own positions: `<AD01>`, `<AD02>` ... `<AB01>`, `<AB02>` - and XKB maps these coordinates directly to characters (Keysyms),
+like `<AD01>` = `q`, and in the russian layout = `Cyrillic_shorti` (й).
+
+the linux problem is that if a program listens to linux_keycode directly (and plenty do, especially old X11 apps and some games through SDL), you get the same problems as with VK in Windows,
+but if a program listens to XKB Keysyms - it gets the final characters, and if it binds hotkeys to characters rather than scan codes - hotkeys break again when switching keyboard layouts.
+
+
+# ? what do
+
+!! programmers - always bind input to scan codes!: the physical position of a key doesn't change with the layout.
+
+!! game devs - check the Source(Quake(Doom)) code!: it was all figured out for you 30+ years ago and it all works there.
+
+!! non-QWERTY layout users - SUFFER!: or write bug reports like "keyboard layout", and make your own tools to work around this shit (hooray, more layers of abstract shit, so your basic shit doesn't fucking work at all)
+
+---
+
+*maybe someday operating systems will start supporting languages other than english,*
+
+*but apparently it's too early...*

@@ -63,8 +63,8 @@ try {
   assert.ok(await evaluate(`(() => { const links = Array.from(document.querySelectorAll('.recent-footer a'), el => getComputedStyle(el)); return ['fontSize', 'color', 'padding', 'textDecoration'].every(key => links[0][key] === links[1][key]); })()`), 'footer actions share the original link styling');
   assert.equal(await evaluate(`getComputedStyle(document.querySelector('.rated-empty')).display`), 'none', 'empty-state message is not rendered when there are matching posts');
   assert.ok(await evaluate(`(() => { const labels = getComputedStyle(document.querySelector('.rated-endpoints')); const meta = getComputedStyle(document.querySelector('.rated-meta')); return ['fontSize', 'color', 'opacity'].every(key => labels[key] === meta[key]); })()`), 'endpoint labels reuse article metadata typography and contrast');
-  assert.equal(await evaluate(`JSON.parse(document.querySelector('.rated-data').textContent).length`), 16);
-  assert.ok(await evaluate(`document.querySelector('.rated-meta').textContent.startsWith('Jul 26, 2026')`), 'client preserves publication date instead of shifting it by timezone');
+  assert.equal(await evaluate(`JSON.parse(document.querySelector('.rated-data').textContent).length`), 17);
+  assert.ok(await evaluate(`document.querySelector('.rated-meta').textContent.startsWith('Nov 4, 2026')`), 'client preserves publication date instead of shifting it by timezone');
   const dragThumb = async (selector, fraction) => {
     const box = await evaluate(`(() => { const r = document.querySelector('${selector}').getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, value: +document.querySelector('${selector}').value }; })()`);
     const from = box.x + 8 + (box.width - 16) * box.value / 9;
@@ -79,6 +79,9 @@ try {
   assert.equal(await evaluate(`document.querySelector('.rated-min').value`), '2', 'lower thumb can be dragged');
   await dragThumb('.rated-max', 7 / 9);
   assert.equal(await evaluate(`document.querySelector('.rated-max').value`), '7', 'upper thumb can be dragged');
+  await navigate('/about/');
+  assert.deepEqual(await evaluate(`[document.querySelector('.rated-min').value, document.querySelector('.rated-max').value]`), ['2', '7'], 'selected range persists across page navigation');
+  await navigate('/');
   await evaluate(`document.querySelector('.rated-min').value = '0'; document.querySelector('.rated-max').value = '9'; document.querySelector('.rated-min').dispatchEvent(new Event('input'))`);
   const requestsBeforeFiltering = await evaluate(`performance.getEntriesByType('resource').length`);
   await evaluate(`document.querySelector('.rated-min').focus()`);
@@ -88,7 +91,7 @@ try {
   assert.equal(await evaluate(`getComputedStyle(document.querySelector('.rated-min')).outlineStyle`), 'none', 'slider field has no focus outline');
   await evaluate(`document.querySelector('.rated-min').value = '9'; document.querySelector('.rated-min').dispatchEvent(new Event('input'))`);
   assert.equal(await evaluate(`document.querySelector('.rated-interval').value`), '9–9');
-  assert.equal(await evaluate(`document.querySelectorAll('.rated-item').length`), 2, 'equal bounds include both older 9-rated posts');
+  assert.equal(await evaluate(`document.querySelectorAll('.rated-item').length`), 4, 'equal bounds include all older 9-rated posts');
   assert.ok(await evaluate(`Array.from(document.querySelectorAll('.rated-meta')).every(el => !/\\d\\/9/.test(el.textContent) && el.textContent.split(' | ').length === 3)`), 'filtered rows show only date, reading time and words');
   await evaluate(`document.querySelector('.rated-max').value = '0'; document.querySelector('.rated-max').dispatchEvent(new Event('input'))`);
   assert.equal(await evaluate(`document.querySelector('.rated-max').value`), '9', 'thumbs do not cross');
@@ -96,7 +99,7 @@ try {
   const randomNavigation = once(events, 'Page.frameNavigated', { signal: AbortSignal.timeout(15000) });
   await evaluate(`document.querySelector('.rated-random').click()`);
   await randomNavigation;
-  assert.match(await evaluate('location.pathname'), /^\/posts\/(games\/shaking|peripheral\/how-to-make-a-good-mousepad-review)\/$/, 'random action respects matching posts');
+  assert.match(await evaluate('location.pathname'), /^\/posts\/games\/(shaking|muscle-memory|casualization-of-aim|coaching-problem)\/$/, 'random action respects matching posts');
   await navigate('/');
   await evaluate(`(() => {
     const original = document.querySelector('.rated-recents');
@@ -106,12 +109,12 @@ try {
     original.replaceWith(copy);
   })()`);
   await evaluate(readFileSync('modules/rated_recents/client.js', 'utf8'));
-  await evaluate(`document.querySelector('.rated-max').value = '0'; document.querySelector('.rated-max').dispatchEvent(new Event('input'))`);
+  await evaluate(`document.querySelector('.rated-min').value = '0'; document.querySelector('.rated-max').value = '0'; document.querySelector('.rated-min').dispatchEvent(new Event('input'))`);
   assert.equal(await evaluate(`document.querySelectorAll('.rated-item').length`), 0);
   assert.equal(await evaluate(`document.querySelector('.rated-empty').hidden`), false);
   assert.equal(await evaluate(`document.querySelector('.rated-random').hidden`), true);
   await navigate('/');
-  await evaluate(`document.querySelector('.rated-min').value = '9'; document.querySelector('.rated-min').dispatchEvent(new Event('input'))`);
+  await evaluate(`document.querySelector('.rated-max').value = '9'; document.querySelector('.rated-min').value = '9'; document.querySelector('.rated-min').dispatchEvent(new Event('input'))`);
   await command('Emulation.setTouchEmulationEnabled', { enabled: true });
   const touchBox = await evaluate(`(() => { const r = document.querySelector('.rated-slider').getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; })()`);
   await command('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: touchBox.x + touchBox.width - 8, y: touchBox.y + touchBox.height / 2 }] });

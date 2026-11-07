@@ -1,0 +1,91 @@
+---
+.custom = .{ .shitpost_rate = 7, .auto_translated = true },
+.title = "how to make a good mousepad review",
+.description = "most mousepad reviews are useless. here's a lil guide on describing gaming mousepads properly: surface texture, static and dynamic friction, stopping power, speed, X/Y balance, durability, base softness and proper comparisons with other models.",
+.date = .date("2025-09-25T00:00:00"),
+.layout = "page.shtml",
+.tags = [],
+---
+
+tips on properly explaining mousepad characteristics:
+
+# # surface texture
+- abrasive / moderately abrasive / smooth - here we're describing the actual weave used. like the most popular abrasive ones are jacquard and amundsen (though sometimes you could call them moderately abrasive too)
+- skin and sleeve friendliness - how stuff glides, whether it catches on your sleeve and so on
+- adhesion - your arm can practically stick to some fast smooth pads - stop in style and stuff
+![dis is hien, dis is jacquard ^](/pictures/Peripheral/k83_texture.png)
+
+# # friction forces
+## ## dynamic friction (glide)
+- resistance when the mouse is already moving
+- the lower it is, the easier it keeps flying after you get it going
+
+![](/pictures/Peripheral/cisapadv2.png)
+GOTTA FIX THE VIDEO LINK RIGHT HERE!!!!!!!!!!! remind me pls
+
+## ## static friction (stopping)
+- resistance when you start moving the mouse
+- the higher it is, the easier it is to stop the mouse, but harder to get moving
+![](/pictures/Peripheral/mousepad_friciton_test.png)
+
+# # glide character
+- muddy feel: high static + low dynamic friction == the mouse gets bogged down at the start, but glides pretty well afterwards
+- consistent glide: minimal difference between static and dynamic friction
+![](/pictures/Peripheral/old_mousepad.png)
+
+# # speed rating (roughly)
+- control: high static and dynamic resistance, often muddy, but not always, static clicking meta
+- **mid**: moderate static and dynamic resistance, works for everything
+- **speed**: low resistance, tracking heavy
+
+*you can play anything on any pad if you want to and have enough skill, it's about general comfort and preference*
+
+# # Balance across x/y axes
+- whether there's a difference between moving left-right and up-down
+- ideally measure the x/y ratio (even cm/sec down a slope will do)
+
+*rare weaves like artisan k83 can have a nearly identical x/y ratio, but diagonal movements can differ*
+
+# # durability
+**moisture resistance:**
+- a moisture absorption test usually reflects how quickly the pad will get dirty from sweat and grime in general, so it's worth doing.
+
+![](/pictures/Peripheral/mat_water_resist.png)
+
+# # what to wash it with
+- some pads are picky about cleaning products
+
+![](/pictures/Peripheral/ins.gif)
+
+# # backing (base)
+**firmness:**
+- **xsoft**: squishes a lot, you can push it almost down to the desk
+- **soft**: springy give you can feel
+- **mid**: firm support, barely gives at all
+
+![](/pictures/Peripheral/xsoft.png)
+
+# # surface makeup
+- weave type (tight, jacquard, hybrid, cordura, textured)
+- material and edge stitching quality
+- base material and how well it grips the desk
+
+![](/pictures/Peripheral/raiden.png)
+
+# # comparative analysis
+- comparison with other popular models (artisan, lgg, mgg, x-raypad)
+- similarities in:
+  - speed and glide character
+  - how the texture feels
+  - overall experience using it
+- like: "similar to artisan raiden, but a little slower" or "feels like g-sr-se, but not as muddy"
+
+# # extra tips:
+- test with different mouse skates for the full picture, it can turn out that
+  - skates A are faster on pad X and slower on pad Y
+  - skates B are faster on pad Y and slower on pad X
+- glide character over time: for example some pads *smooth out* after a week and feel different
+- what it suits best (arena shooters or angle-holding ones. Better for tracking, switching, clicking or an all-rounder)
+
+# # a good example
+[9Sanya's spreadsheet](https://docs.google.com/spreadsheets/d/159aQ_JsUOg-KDLwOGdM8WyOEgfaDkmsb6Vlxnkw23-c/htmlview#gid=907849023) ![](/pictures/Peripheral/cisa_ss.png)

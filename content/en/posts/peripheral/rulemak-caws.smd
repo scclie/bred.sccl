@@ -1,0 +1,108 @@
+---
+.custom = .{ .shitpost_rate = 5, .auto_translated = true },
+.title = "rulemak caws",
+.description = "a phonetically equivalent version of the colemak caws layout",
+.date = .date("2025-04-13T00:00:00"),
+.layout = "page.shtml",
+.tags = [],
+---
+
+colemak caws is built around colemak to combine the most popular mods: [curl](https://colemakmods.github.io/ergonomic-mods/curl.html), [angle](https://colemakmods.github.io/ergonomic-mods/angle.html), [wide](https://colemakmods.github.io/ergonomic-mods/wide.html), [symbols](https://colemakmods.github.io/ergonomic-mods/symbols.html), (recommend clicking through those links - lots of pretty pictures and well-written explanations of *what all this is for*)
+
+most of the work on it was done by [DreymaR](https://dreymar.colemak.org/)
+this version is a phonetically equivalent cyrillic adaptation
+
+# # main idea
+
+the russian layout is built as a phonetic counterpart to the english one:
+
+- A == А
+- R == Р
+- S == С
+- T == Т
+- G == Г
+
+and so on, as far as possible
+
+this approach lets you skip learning a new layout for cyrillic and type pretty confidently right away, knowing just the main layout.
+
+# ? why this works for russian
+
+letter and sound frequencies in russian and english are pretty similar in many ways, so phonetically mapping the english layout onto russian gives a decent distribution of load without deep optimization for russian texts.
+
+([some wikipedia stuff about russian](https://ru.wikipedia.org/wiki/%D0%A7%D0%B0%D1%81%D1%82%D0%BE%D1%82%D0%BD%D0%BE%D1%81%D1%82%D1%8C), [some wikipedia stuff about english](https://en.wikipedia.org/wiki/Letter_frequency) )
+
+
+# # heatmap
+here's the top 1000 words for russian and english visualized:
+![](/pictures/Peripheral/rulemak_caws_thermal.png)
+![](/pictures/Peripheral/colemak_caws_thermal.png)
+
+you can check and compare on my visualizer:
+
+[heatkeys.sccl.cc](https://heatkeys.sccl.cc) **(you can mess with it right here!)**
+
+```=html
+<iframe
+  src="https://heatkeys.sccl.cc"
+  style="width: 100%; height: 770px; border: 1px solid var(-secondary);"
+  loading="lazy"
+></iframe>
+```
+
+# ? so what's here
+
+basically the same colemak caws, but adapted for cyrillic.
+
+for example the main feature - wide mode, where we get these symbols in the middle:
+`- [ \ / ]`, which brings the board closer to a split *(like ansi emulated slipt idk)*, giving your hands extra space with some rarely used symbols under the index fingers - is partly retained, but these russian letters fit in there nicely:
+
+`Щ`, `Ш`, `Э`.
+
+they aren't used that often, but they're way easier to press than in traditional layouts, where letters like these usually get dumped onto the right pinky, really throwing your hand off the home row and stuff.
+
+
+ofc not all phonetic matches are obvious, for example these letters:
+- `V == В`
+- `W == Ж`
+
+looks... probably... not quite right?
+
+: actually it's historically accurate, afaik they often did something like this back in the pre-computer days.
+
+*no fact checking, some person calling themselves a linguist in the colemak discord told me this*
+
+![](/pictures/Peripheral/discord_linguist.webp)
+
+the rest of the letters had to be shoved wherever they'd fit:
+
+- `Ъ` under the pinky, much as i'd want otherwise(the idea of colemak is that you NEVER move your pinky - it hangs out on the most frequent letters - А and О), since it's used extremely rarely.
+- `Ю` took the place of `\`. the letter isn't too frequent, so this turned out to be the least painful place to put it, and relatively comfortable.
+- `Ё` some idiot put it in the middle of buttfuck nowhere in the russian layout - in this version it's on `Е`, but on the *AltGr* layer, i.e. accessed through layers. could've put it over there too of course... but it's awkward for me.
+
+the layout isn't trying to be perfect for russian - the goal was to slap together a russian part as similar to english as possible, so you don't have to keep two different layouts in your head, while keeping colemak's ergonomics and comfort.
+
+
+# # compatibility
+
+the layout was made for ANSI keyboards.
+
+on ISO it might work a little differently.
+
+on a split i use regular phonetic dh, since it's actually as close to caws as it gets, because caws itself kinda tries to emulate the split experience through the wide and angle mods.
+
+## ## shindows
+the layout is built with [microsoft keyboard layout creator](https://www.microsoft.com/en-us/download/details.aspx?id=102134) (the `.kdl` file for editing and building it yourself is in the archive)
+
+keep in mind it's windows and it works like windows typically does - i strongly RECOMMEND dropping in the dlls MANUALLY and adding them to the registry MANUALLY too.
+
+but you can click the installer and pray the system doesn't die. (bad way)
+
+*archive:*
+<a href="/files/rumkcaws.7z" download>rumkcaws.7z</a>
+
+## ## linux
+
+*i haven't made a config for linux, i use a split and dh, the layout itself is for ansi keyboards, i don't use those anymore.*
+
+you can throw together an xkb config using [xkb-sccl](/posts/it/xkb-sccl)

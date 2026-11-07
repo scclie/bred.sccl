@@ -75,6 +75,10 @@ export function renderZineConfig(config) {
     .i18n_dir_path = "i18n",
     .layouts_dir_path = "layouts",
     .assets_dir_path = "assets",
+    .static_assets = [
+        "pictures/blobby-blobby-dancer.mp4",
+        "files",
+    ],
     .locales = [
 ${locales.join('\n')}
     ],

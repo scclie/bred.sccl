@@ -1,0 +1,67 @@
+---
+.custom = .{ .shitpost_rate = 8, .auto_translated = true },
+.title = "xkb gui config generator",
+.description = "visual keyboard layout editor for xkb in linux",
+.date = .date("2026-07-26T00:00:00"),
+.layout = "page.shtml",
+.tags = ["it", "shitpost", "web", "linux"],
+---
+
+# # backstory
+
+historically it's worked out that i need at least 2 layouts at the computer - english and russian,
+plus i've long been using colemak-type layouts (vanilla / dh / caws) and my own modifications for russian like rulemak_dh or rulemak_caws (see [rulemak-caws](/posts/peripheral/rulemak-caws))
+
+and all that on two different matrices - regular staggered ansi and split columnar (desktop use at home and mobile use on a laptop).
+
+haven't managed to reach some ideal yet - all that's clear is that ansi and split keyboards need different layouts~
+
+of course it'd be cool to ditch ansi keyboards entirely. but a couple times a week i have to use a laptop, and lugging a split around every time isn't always convenient -
+so i constantly need to edit layout configs, adjust them for different keyboards, different tasks.
+
+# # xkb pain
+
+xkb (x keyboard extension) is the standard keyboard layout system in linux. it's under the hood of both x11 and wayland, among other things.
+
+it can do a lot, most importantly it's big text config files that look roughly like this:
+
+```c
+key <AD01> {
+    type[group1]= "ALPHABETIC",
+    symbols[Group1]= [ q, Q, backslash, division ]
+};
+key <AD02> {
+    type[group1]= "ALPHABETIC",
+    symbols[Group1]= [ w, W, U0312, division ]
+};
+```
+
+that's only 2 little keys, and a keyboard has fifty-odd symbols, then multiply by the number of languages - you get a huge awkward file,
+to edit it you gotta sit there with a keysym table, manually rewrite symbols, constantly checking so you don't screw up.
+
+all of this is inconvenient, easy to mess up and so on and so forth..
+
+basically, this pissed me off enough that i vibe-coded [xkb.sccl.cc](https://xkb.sccl.cc).
+
+# # xkb.sccl.cc
+
+![](/pictures/it/xkb_sccl_cc.webp)
+
+nothing special - just a QoL thingy.
+
+[Zine](https://zine-ssg.io) - HTML+CSS+JS, static, everything client-side.
+
+all the standard xkb symbols for binding are already on the site, but xkb can input any unicode characters, so you don't have to limit yourself to those.
+
+![](/pictures/it/xkb_sccl_bind.webp)
+
+
+# # contributing
+
+the site stores its config in localdata in its own format, you can download it as json at any time.
+
+to add new layouts you can [create a PR](https://codeberg.org/scclie/xkb.sccl/pulls): where you gotta drop that json into `assets/presets/`
+
+*a pr on github is fine too, but it's not quite as convenient for me*
+
+*maybe later i'll add direct import from an existing xkb config. would be handy.*

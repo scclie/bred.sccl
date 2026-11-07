@@ -1,0 +1,273 @@
+---
+.custom = .{ .shitpost_rate = 4, .auto_translated = true },
+.title = "nixdeclarative heaven",
+.description = "who's this nix of yours",
+.date = .date("2026-02-13T00:00:00"),
+.layout = "page.shtml",
+.tags = ["os", "linux", "project", "shitpost"],
+---
+
+here it's detailed, kinda abstract; on git it's short, concrete: [github/scclie/sccl_nix/README.md](https://github.com/scclie/sccl_nix)
+
+# ? ~~the f*&k for~~ why
+
+back then, after 6 years of using only arch - i didn't get it either...
+
+for a long time i had this old-fart opinion lodged in me about stuff like this: they've spawned another mainstream distro, like fedora, manjaro and other cachys.
+
+and then i wanted to install it... during and after, my world flipped upside down:
+
+a bunch of problems that came up on normal distros - got solved in no time. i hadn't even thought of them as problems before - over years of using standard distros you reach a consensus, just get used to how you gotta work in them
+to make everything fucking great, but that fucking great and this fucking great are two completely different fucking greats.
+
+on normal linux distros you can't reproduce a particular system state, since all the spaghetti connections and stuff are just impossible to reproduce after years of using one system.
+you can only rely on backups and snapshots like zfs and so on, but that's not storing the system state, just a crutch for rolling back, not a way to reproduce the same state on, say, another machine.
+
+in nix you just describe all the packages, configs, users, services and so on - you get a complete inventory of the environment's state, with which you don't fucking need a system backup anymore to save its state - you only need to back up data (user files and stuff).
+
+later you can replicate it onto a second machine with the same config too.
+
+nix stores a generation as symlinks - so basically everything lives in a single `/nix/store`, in one huge pile of ~~shit~~ - so there are no dependency conflicts, you can roll back to any state (generation) and clone it wherever.
+
+one neat feature - `nix shell` - you can throw in some apps, use them, drop/forget them - and they'll get deleted at the next garbage collector (cleaning useless junk out of `/nix/store`).
+
+
+# # where nix came from
+
+in 2006 a cool dude named Eelco Dolstra defended his PhD "[The Purely Functional Software Deployment Model](https://edolstra.github.io/pubs/phd-thesis.pdf)" at Utrecht University.
+
+> what if a package is a pure function?
+>
+> input: source code + dependencies + compiler flags.
+>
+> output: a binary.
+>
+> same input = same output (on any machine)
+
+: that's the core idea, not an unconditional guarantee, in reality not all software builds bit-for-bit identically: randomness can affect some things, a timeshatmp somewhere, etc.
+
+in nix like every package lives in its own directory, and the path includes a hash of all inputs:
+
+```
+/nix/store/5mq2jcn36ldd97xrcnf3jg8irnfp5xqr-fish-4.0.1/
+```
+
+the hash depends on the sources, dependencies, compiler flags, compiler version - EVERYTHING.
+
+any change - a different hash - a different path: that's why there are no dependency conflicts.
+
+it's a completely different paradigm compared to other package managers.
+
+the nixpkgs ecosystem is now [the world's largest package repository](https://repology.org/repositories/graphs). and all of it gets built by one hydra farm and cached in a binary cache.
+
+actually the numbers are a bit misleading (well, more like they're literally bullshitting you with them (trying to sell it)) - loads of packages are split into a bunch of little ones. if you look at actual software - nixpkgs is smaller than even aur.
+
+# # imperative vs declarative
+
+as someone dumped out in some very old thought back when nix was first being dreamed up - package managers can be compared to programming languages.
+
+there's [the article "Functional Package Management with Guix"](https://en.wikisource.org/wiki/Functional_Package_Management_with_Guix) that explores this thought well, but the idea had been around before.
+
+*too lazy to find where else, but it was!*
+
+procedural package managers - the standard apt, yum,pacman and so on (i.e. like all imperative package managers, where you install everything by hand, or write sequential scripts for it)
+
+declarative package managers - that's nix, and there's guix too (that's more like a functional approach, where you're mostly describing the result)
+
+what's next? some higher-level approach, more abstract? (or a mega abstract llm-based chat interface??????? - ai problem resolver :D )
+
+wait... [omarchy linux](https://omarchy.org/).
+
+# # ecosystem
+
+nixos itself only solves package manager problems, and there's a whole bunch more stuff you want to make declarative.
+
+## ## flakes
+
+experimental features since 2021... actually almost everyone uses it, you could've called it stable ages ago.
+
+it gives you two *conveniences*:
+- dependency versioning through `flake.lock`
+- a common input output format
+
+you could pin nixpkgs versions and get by before flakes too. flakes just put it into a more standardized structure.
+
+in my config the flake auto-discovers hosts from folders - drop in `hosts/<hostname>/`, and it picks it up in `nixosConfigurations.<hostname>` by itself.
+
+## ## home-manager
+
+[github.com/nix-community/home-manager](https://github.com/nix-community/home-manager) - lets you manage the user environment declaratively.
+
+dotfiles used to be handled with gnu stow or a bare git repo, and home-manager lets you do the same thing, but nix-way: with options, dependencies and immutability.
+
+integrates with a nixos module. One `nixos-rebuild switch` rebuilds both the system and the user environment.
+
+## ## disko
+
+[github.com/nix-community/disko](https://github.com/nix-community/disko) - in nix it's described as code, except disk partitioning - that's done by hand during installation. disko fixes this sad omission.
+
+just write the disk partitioning config once, instead of wanking around with `gparted` every time
+if hosts have identical disks - you can replicate that too no problem, maybe with some small tweaks.
+
+## ## sops-nix
+
+[github.com/mic92/sops-nix](https://github.com/mic92/sops-nix) - lets you store secrets (ssh keys, passwords, gpg) right in the repo, even in plain sight. they get decrypted at build time and mounted in the right places.
+
+there's [a little article](https://lgug2z.com/articles/handling-secrets-in-nixos-an-overview/) about *smart* secret management - i try to follow it.
+
+# # the scaling problem
+
+nix is a cool tool, but when building an architecture with it you can turn everything into a dump full of exceptions and stuff just like anywhere else.
+
+there are approaches to avoid that:
+
+- [flake-parts](https://github.com/hercules-ci/flake-parts) - a module system for flakes, lets you split the config into reusable modules. good for big projects, but adds its own abstraction layer.
+- [snowfall-lib](https://github.com/snowfallorg/lib) - a library for organizing nix configs with auto-discovery. similar to what i do, but with its own philosophy.
+- you can just wing it - with one or two systems it doesn't hurt much.
+
+# # sccl_nix architecture
+*(well, what i'm doing, fuck knows how right it is)*
+
+
+my dotfiles are split into three entities.
+
+- hosts - hardware and system stuff: disko, gpu drivers, network, system packages - everything you can't sync between different machines. auto-discovered by the flake from `hosts/`.
+- profiles - a user with their zoo of apps, shell and user-level junk. one host can have as many profiles as you want. imported into the host config.
+- shared - a base for everyone. various core apps and services imported for everyone.
+
+currently two three hosts: sacculos(desktop, AMD) and aero15laptop(laptop, NVIDIA), laerandr(server)
+
+two profiles: **paper** (main, with the whole zoo) and **bootstrap** (minimal, just vim, nmtui and ssh for installation from a usb stick).
+
+
+as an example of actual use.
+
+Diagram:
+
+```
+x_mermaid_block_0
+flowchart TD
+    F["flake.nix<br/>auto-discovery: hosts + shells"]
+
+    NM["nixos/modules/core.nix<br/>sccl.* options: conditional config"]
+
+    H1["hosts/sacculos<br/>desktop + amd gpu"]
+    H2["hosts/aero15laptop<br/>laptop + nvidia gpu"]
+
+    P1["profiles/paper<br/>main: steam, blender..."]
+    PS["profiles/shared<br/>base: fish, niri, waybar..."]
+
+    PB["profiles/bootstrap<br/>minimal: nmtui, vim, ssh"]
+
+    S["secrets/ sops-nix encrypted"]
+    SH["shells/ auto-discovered devShells"]
+
+    F --> H1
+    F --> H2
+    F --> SH
+
+    H1 --> NM
+    H2 --> NM
+
+    H1 --> P1
+    H2 --> P1
+
+    H1 --> PB
+    H2 --> PB
+
+    P1 --> PS
+
+    classDef flakeStyle stroke:#517599,stroke-width:2px,color:currentColor
+    classDef hostStyle stroke:#5e81ac,stroke-width:2px,color:currentColor
+    classDef profileStyle stroke:#8fbcbb,stroke-width:2px,color:currentColor
+    classDef sharedStyle stroke:#d08770,stroke-width:2px,color:currentColor
+    classDef moduleStyle stroke:#bf616a,stroke-width:2px,color:currentColor
+    classDef secretStyle stroke:#bf616a,stroke-width:2px,color:currentColor
+    classDef shellStyle stroke:#d08770,stroke-width:2px,color:currentColor
+
+    class F flakeStyle
+    class H1,H2 hostStyle
+    class P1,PB profileStyle
+    class PS sharedStyle
+    class NM moduleStyle
+    class S secretStyle
+    class SH shellStyle
+
+x_mermaid_block_0
+```
+
+-
+
+## ## sccl.*
+
+The main feature that keeps the config from sliding into a dump of conditionals.
+
+ALL options are defined in `core.nix`, and they're all `false` by default. Each module gates itself with `lib.mkIf config.sccl.<feature>.enable`.
+
+```nix
+{ config, lib, ... }:
+{
+  config = lib.mkIf config.sccl.zapret.enable {
+    services.zapret = { ... };
+  };
+}
+```
+
+full list of options *(at the time of writing, dunno if i'll update it)*:
+
+```
+sccl.ui.enable           # Nord theme + greetd
+sccl.audio.enable        # pipewire
+sccl.bluetooth.enable    # bluetooth + blueman
+sccl.net.enable          # networkmanager + proxy + firewall
+sccl.automount.enable    # udisks2 auto-mounting usb drives
+sccl.secrets.enable      # sops-nix encrypted secrets
+sccl.zapret.enable       # DPI bypass
+sccl.flclashx.enable     # FlClashX GUI for proxies
+sccl.playground.enable   # Docker + dev tools
+sccl.chaotic.enable      # chaotic-nyx repo
+sccl.nix-ld.enable       # nix-ld for non-nixpkgs binaries
+sccl.bootstrap           # bool: minimal installation mode
+```
+
+The host config literally looks like this:
+
+```nix
+sccl = {
+  ui.enable = true;
+  audio.enable = true;
+  net.enable = true;
+  automount.enable = true;    # desktop only
+  zapret.enable = true;       # desktop only
+  playground.enable = true;   # desktop only
+  nix-ld.enable = true;
+};
+```
+
+*there are also server options, enabled the same way, even more of them, not gonna list them*
+
+to add a new host you just copy the whole folder, edit `configuration.nix`, generate `hardware-configuration.nix`, and edit `disko.nix`- and the flake picks it up by itself.
+
+the bootstrap profile solves the problem of installation on weak hardware (it's a crutch, but it's more convenient for me)
+
+i mostly use [nixos-anywhere](https://github.com/nix-community/nixos-anywhere)
+
+## ## Layout
+
+The layout is parameterized through flake arguments (`specialArgs`).
+
+On sacculos there's an ergo split with vial firmware - `us,rulemak_vial`. On aero15laptop - `colemak_dh,rulemak`. one `mkHost` in `flake.nix`, and every layer (system keyboard, xkb, wm) gets the right layout.
+
+at the wm (niri) level the layout is passed as a parameter too: colemak-caws on the desktop, colemak-dh-wide on the laptop. handy for different keyboards with different firmware and different layouts on different machines.
+
+# # the catch?
+
+- you literally gotta learn a new language - nix
+- there are docs, the docs are cool, you learn a lot by poking around and reading other people's configs. literally [How to Learn Nix](https://ianthehenry.com/posts/how-to-learn-nix/) - holy shit that's a lotta letters they typed :skull:
+- dicking around with nix-ld/patchelf when bringing in your own software, if it tries looking for dependencies at specific paths.
+- build time: everything takes ages to build, not as long as gentoo, some stuff comes from cache, flakes can also slow the build down a lot. minor changes go through fairly quickly.
+- nix doesn't solve data versioning.
+- overkill for simple things
+- with enough skill you can shit all over this too.
+
+i don't know why i use it, i enjoy it.

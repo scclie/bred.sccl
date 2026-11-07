@@ -1,0 +1,312 @@
+---
+.custom = .{ .shitpost_rate = 0, .auto_translated = true },
+.title = "the 14kb ceiling: tcp invented the small web branch",
+.description = "why 14kb and 15kb are worlds apart in speed. tcp slow start, congestion collapse 1986, dns, tls. small web philosophy and optimizing sccl.cc down to 12kb gzip.",
+.date = .date("2026-07-01T00:00:00"),
+.layout = "page.shtml",
+.tags = ["it", "web"],
+---
+
+# # why 14 KB?
+
+here are some real requests as an example.
+
+**here's a site that fits in 14kb:**
+
+![](/pictures/it/site_download.webp)
+
+**and here's one that doesn't:**
+
+![](/pictures/it/big_site_download.webp)
+
+download - that's the site's content: 1 ms versus 63 ms, i.e. a 63-fold speed difference, with only a 7-fold size difference.
+
+this scribbling skims the guts of tcp, dns, tls, slow start, the congestion collapse of 1986, and small web philososhit while we're at it: why a small site means respecting the user, not jerking off to numbers.
+
+this article is partly pop larping, since people have already written about this... but i kinda wanna lay it out in my own words, with the info i managed to dig up, and maybe some of my own thoughts, experience and attempts.
+
+# # what's up with tcp
+
+before the server sends even a byte of html, a fuckton of stuff happens
+
+## ## three-way handshake
+
+every tcp connection starts with three handshakes:
+
+1. the client sends `SYN`
+2. the server replies with `SYN-ACK`
+3. the client finishes it off with `ACK`
+
+three messages back and forth just to say hello, and only then can you send data (+1rtt)
+
+there's tcp fast open (TFO) - lets you stuff data into the SYN packet, but only works for repeat connections and needs support on both ends.
+
+## ## congestion collapse 1986
+
+in early 1986 the internet tried to die: the node count passed 5000, bandwidth was uneven,
+tcp without congestion control just flooded the channel with packets, so routers dropped them, hosts retransmitted, even more got dropped - a snowball effect where throughput fell by a factor of 1000.
+
+that's what they called congestion collapse.
+
+In 1988 Van Jacobson [published the paper "Congestion Avoidance and Control"](https://ee.lbl.gov/papers/congavoid.pdf) describing four algorithms
+that saved the internet: slow-start, congestion avoidance, fast retransmit, fast recovery. - these 4 things became a mandatory part of tcp, basically preventing the internet from collapsing while traffic grew exponentially.
+
+## ## slow start
+
+the idea is that the server doesn't know the bandwidth of the channel to the client - blast 100 packets right away and you could clog the network and get that very congestion collapse, so we start small and ramp up.
+
+the server keeps a variable cwnd(congestion window) - how many packets it can send without waiting for an ACK.
+
+initcwnd - the initial window size:
+- originally: 1 segment
+- RFC 3390: 4 segments
+- RFC 6928 (2013): 10 segments
+
+// google in 2013 [pushed through the increase to 10](https://datatracker.ietf.org/doc/html/rfc6928) with experiments showing it didn't make things worse,
+some cdns (cloudflare, fastly) [set it to 30 or more](https://www.cdnplanet.com/blog/initcwnd-settings-major-cdn-providers/).
+
+then comes exponential growth:
+- the server sends 10 packets - waits for ACK
+- ACK arrives - the window doubles to 20
+- sends 20 - waits
+- window goes to 40, then 80...
+
+: each cycle like this is one rtt.
+
+and if the response fits in initcwnd - it flies out in one packet without waiting - that's one round trip.
+
+with big files (pictures, vids) this isn't a problem - tcp has time to ramp up over a few rtts, but most files on websites are under 100kib - here comes the pain...
+
+for example: a 100mib file spends the first couple of rtts ramping up, then pours out at full speed - those first rtts are a drop in the ocean, since there's a shitload of them in total.
+
+but a 30kb file lands right in the zone where slow start has only just begun ramping up, but hasn't made it yet, i.e. if 1rtt took 50ms, two will take 100ms and so on,
+if there are umpteen files like that and each uses a new connection - each goes through it all over again.
+
+# # what eats how much
+
+a whole ritual kicks off before the server gets around to sending html, where each stage is an rtt:
+
+dns : +1rtt : domain resolution is usually cached, so 0ms in most cases, but a cold lookup is an honest rtt.
+
+tcp handshake : +1 rtt : SYN, SYN-ACK, ACK, no way around it.
+
+tls : +2 rtt (or +1 with tls 1.3) : with zero-rtt resumption it can even be 0, but that's for repeat connections.
+
+Btw, the certificate alone can weigh several kilobytes and not fit in initcwnd - [Simon Hørup Eskildsen looked into](https://sirupsen.com/napkin/problem-15) the Danish newspaper information.dk -
+a 6908-byte certificate, initcwnd was 3 (old linux): the cert didn't fit in the window, and the tls handshake took 3 rtts instead of 2, simply because the server waited for an ACK halfway through sending the certificate.
+
+Total: at least 3-4 rtts before the first byte of html, before content starts being sent, and then slow start kicks in.
+
+# # satellite
+
+[a cool example from Nathaniel](https://endtimes.dev/why-your-website-should-be-under-14kb-in-size/) : *most sources on this topic nicked their info from his article - me included :D*
+
+oil rig: some dudes forgot their d&d dice and want to visit missingdice.com over satellite internet.
+
+the packet's path:
+```
+phone -> wifi-router -> dish -> satellite (35786 km) -> ground station -> server
+```
+
+1rtt:
+```
+1ms (router) + 120ms (ground-satellite) + 120ms (satellite-ground) + 60ms (ground-server)
+````
+: about 300ms one way, and a full round trip is 612ms (just for 1rtt)
+
+with 4 rtts (dns + tcp + 2x tls) it's 2.5 seconds to the first byte, with slow start over several rounds - a full 4-5 seconds. - all that for a simple dice site whose js would've fit in 14kb if the dev had thought about optimization and stuff.
+
+# # 14 600
+
+- ethernet mtu: 1500 bytes
+- ip header: 20 bytes
+- tcp header: 20 bytes
+- payload: 1500 - 40 = 1460b per packet
+- initcwnd = 10 packets
+- 10 x 1460 = 14600 bytes ~= 14.25 KB
+
+with a vpn connection and so on mtu can be lower due to extra overhead - like 1320-1350b, or thereabouts (in my experience these values usually get through)
+
+this is a very common problem in complex closed networks, like corporate ones - packets can just get dropped.
+
+you can quickly check what size packets reach the server with this command:
+```bash
+// on linux
+ping -f -s 1472 -c 10 google.com
+
+// on windows
+ping -f -l 1472 google.com
+```
+
+# # step function
+
+- 14kb - 1 rtt.
+- 15kb - 2 rtt.
+- 29kb - 2 rtt.
+- 30kb - 3 rtt.
+
+a whole rtt gets added every time you jump past the window boundary, i.e. the difference between 14kb and 15kb can be bigger than between 15kb and 40kb.
+
+another fun bit is that html gets compressed with gzip, where 27kb raw easily turns into 12kb gzip, which still fits in initcwnd, i.e. 1rtt (example: [sccl.cc](https://sccl.cc) *dunno how current this is, it's current right now*)
+
+[14KB Club](https://14kbclub.com) counts uncompressed - i.e. club rules say you have to fit in 14kb of raw html (though i think that club's dead already, not a damn thing gets updated)
+
+but in reality a 20-30kb raw site with gzip is almost as fast as a "pure" 14kb site - the difference is nanoseconds of decompression.
+
+*though counting compressed would kinda make more sense, oh well.*
+
+# # http/2, http/3?
+
+some say multiplexing kills the 14kb rule.
+
+http/2 lets you send multiple requests over one tcp connection, but tcp slow start doesn't go anywhere - it's a property of tcp, not http - the first request still goes through slow start.
+
+http/3 (quic) runs over udp, but [the quic specification recommends the same initcwnd of 10 packets](https://datatracker.ietf.org/doc/id/draft-ietf-quic-recovery-26.html).
+
+\+ the httpS handshake and http/2 preface eat up part of the initial window -
+[Barry Pollard broke down](https://www.tunetheweb.com/blog/critical-resources-and-the-first-14kb/) how by the time html is sent the window might already be bigger than 10 -
+ACKs were being sent during tls negotiation, so "exactly 14kb" is a simplification.
+
+same mechanics - understanding them is more useful than jerking off to numbers.
+
+# # small web
+
+the small web has bloated unoptimized sites just like everywhere else, and geekier, dead simple ones like plain .md text - but they're all more about the philosophy of simplicity than numbers.
+
+## ## clubs
+
+[1mb club](https://1mb.club), [512kb club](https://512kb.club), [250kb club](https://250kb.club), [14kb club](https://14kbclub.com), and stuff like [no-js.club](https://no-js.club/), [nocss.club](https://nocss.club/).
+
+512kb club says it outright on the homepage:
+
+> The internet has become a bloated mess. Huge JavaScript libraries, countless client-side queries and overly complex frontend frameworks are par for the course these days.
+
+and it's true, there's a great NYT example right there - a newspaper layout, text and pictures - [weighs 9 megabytes across 891 requests](https://512kb.club/assets/images/nytimes-report.pdf), half of them js, which is completely fucked,
+a site that by its nature can't be heavy somehow weighs as much as a simple game.
+
+## ## motherfucking website
+
+against this backdrop [motherfuckingwebsite.com](https://motherfuckingwebsite.com) was born - just html: no css or js, 5kb
+
+then came [bestmotherfucking.website](https://bestmotherfucking.website) - minimal css, 78 bytes inline.
+
+then [thebestmotherfucking.website](https://thebestmotherfucking.website) - now with a dark theme, but 132kb.
+
+there's also [justfuckingusehtml.com](https://justfuckingusehtml.com) - 29kb just html.
+
+you could call this whole lineup a manifesto about how the internet is full of shit.
+
+## ## respect
+
+there was that satellite example above - 612ms per rtt - someone on an oil rig wants to visit a site and it takes 5 seconds to load - not because the content is heavy - just because the dev didn't give a fuck.
+
+a small site means respecting the user: their time, traffic, battery(if it's a wearable device), the fact that not everyone has fiber and 5G.
+
+a quote from [Ilya Grigorik in HPBN](https://hpbn.co/building-blocks-of-tcp/):
+
+> No bit is faster than one that is not sent.
+
+the point is you don't fucking need to send the user stuff they really don't need.
+a nice layout is something the user needs to an extent, but 50kb of scripts for button animations - probably not.
+
+# # optimizing my site
+
+i have a little site [sccl.cc](https://sccl.cc), built with [zine](https://zine-ssg.io).
+
+*before moving to Zine it was Astro and the site weighed 150+kb, see [migration-from-astro-to-zine](/posts/it/migration-from-astro-to-zine)*
+
+what we had at the start:
+- html (~15kb)
+- space mono + martian mono woff2 (~40kb)
+- png avatar (~2mb)
+- png favicon (~1mb)
+
+![](/pictures/it/50kb_scclcc.webp)
+*already a bit optimizified in the screenshot, it used to be worse :skull:*
+
+4 requests for a page with content that actually weighs fuck all, and that's with keep-alive and http/2 - setup once, but every new connection, every tab - all over again.
+
+my plan: everything in one html, base64 inline everything, 0 external requests, keep js: fit into initcwnd with gzip compression.
+
+## ## font
+
+fonts are the fattest bit - i had 2 fonts + bold versions = 40kb.
+
+really, custom fonts aren't fucking needed, but aesthetics won - decided to keep one, ripping everything except ASCII out of the file.
+
+tool: `pyftsubset` from [fonttools](https://github.com/fonttools/fonttools) - strips non-latin ranges, characters that aren't on the site, etc.
+
+result: 4.2kb, in base64 - 5.7kb of text in html.
+
+upd: later it became 2kb per font, can't give exact numbers, just had to cut out more characters.
+
+## ## avatar
+
+pixel art rendered at 400%: png with an alpha channel - actually bloated and useless.
+
+managed to crunch it down to 3 colors with a shitifier, png - 1.9kb. Conversion to webp - 702 bytes.
+
+base64: 940 bytes.
+
+## ## favicon
+
+same tricks: 199 bytes in PNG (for tiny images it's better than webp).
+
+base64: 268 bytes.
+
+## ## js
+
+Animated buttons, animated background, an easter egg with animation. All for looks. Actually useful stuff - next to nothing.
+
+But i wanted to keep the functionality. Everything went inline. ~4kb of scripts the site would work just as well without. But pretty.
+
+## ## result
+
+before: 4 requests - ~50kb
+
+after: 1 request - 12kb gzip / 27kb raw
+
+fits in initcwnd - one tcp data packet after the handshakes.
+
+![](/pictures/it/12kb_scclcc.webp)
+
+-
+
+# # the inline dilemma
+
+inlining everything is a compromise with its own price
+
+## ## caching
+
+a base64 font inside html doesn't get cached - so when you go to another page the browser downloads it again, because it's part of the html.
+with a separate file the font would be cached after the first time and, say, the second page would load without it.
+
+## ## when to choose what
+
+everything in one html (base64 fonts)
+- 2 pages at 14kb each
+- each is 1 rtt
+- but you eat the full 14kb every time, even if the font repeats
+
+html + separate font
+- 2 pages at 8kb + a separate 4kb font
+- first visit: 2 requests
+- navigation: only 8kb, the font is cached
+
+on the actual internet you won't feel the difference between 14kb and 8kb - both fit in one initcwnd, but the delay between requests - you sure as hell feel that.
+
+if the html is really big, or there's lots of navigation between pages - it's worth caching the font.
+
+## ## overhead
+
+inline weighs slightly more than an external dependency - base64 adds ~33% to binary data: if you're already within initcwnd with external resources - you don't fucking need inline.
+
+it makes sense when the difference between fitting and not fitting in 1rtt is critical, in sccl.cc's case it was worth it.
+
+# ? so what's the deal
+
+14kb isn't a magic number, it's a consequence of tcp's architecture, which was designed for reliability.
+
+understanding the transport layer gives you more than blindly following the 14kb rule: sometimes you need inline, sometimes separate cached files, sometimes 30kb raw with gzip is almost the same as 14kb uncompressed.
+
+but the philososhit stays: smaller means faster, and the less shit you drag onto a site, the more respect you show the user.

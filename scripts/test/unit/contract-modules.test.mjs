@@ -106,7 +106,7 @@ test('footer_text renders optional configured text without attribution links', a
   const html = await gen({ params: { text: 'Personal <site> & friends' } });
   assert.equal(html, '<p class="footer-text">Personal &lt;site&gt; &amp; friends</p>');
   assert.ok(!html.includes('zine-ssg.io'));
-  assert.ok(!html.includes('notizine.sccl.cc'));
+  assert.ok(!html.includes('git.sccl.cc/scclie/notizine'));
 });
 
 test('badges defaults to the legacy markup and honors params.items', async () => {

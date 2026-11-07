@@ -1,0 +1,11 @@
+---
+.title = "about notizine",
+.description = "about notizine",
+.date = .date("2026-01-01T00:00:00"),
+.layout = "page.shtml",
+.custom = .{ .auto_translated = true },
+---
+
+**notizine** - an open-source starter template,
+built on [Zine](https://zine-ssg.io), a fast
+static site generator.

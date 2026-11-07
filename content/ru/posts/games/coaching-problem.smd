@@ -1,5 +1,5 @@
 ---
-.custom = .{ .shitpost_rate = 4 },
+.custom = .{ .shitpost_rate = 9 },
 .title = "проблема гайдов по аиму",
 .description = "почему сложно коучить и быть закоученным",
 .date = .date("2025-01-10T00:00:00"),

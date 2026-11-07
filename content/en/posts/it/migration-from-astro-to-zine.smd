@@ -1,0 +1,59 @@
+---
+.custom = .{ .shitpost_rate = 8, .auto_translated = true },
+.title = "sccl astro zig zag zine",
+.description = "got the urge to move my site from astro to zine.?",
+.date = .date("2026-06-24T00:00:00"),
+.layout = "page.shtml",
+.tags = ["it", "shitpost", "web"],
+---
+
+my site [sccl.cc](https://sccl.cc) was originally on [astro](https://astro.build) (actually ORIGINALLY, it was just on nodejs, back in the distant covid days)
+
+astro is a cool thing - not bad for quickly knocking together something pretty, but over time i kinda stopped liking it, feels heavy and stuff.
+
+i came across [zine](https://zine-ssg.io) - an ssg in zig. - you can build a site with just one binary without any dependencies.
+
+templates are in superhtml - that's valid html with templating added through attributes like `:text`, `:if`, `:loop`.
+
+Content is in supermd - like .md, but supposedly cooler.
+
+# # the moving process
+overall moving is pretty simple - gotta rewrite layouts from astro to superhtml, move over the existing scripts. the most tedious part is that astro uses its own fucking `.astro` files with their weird mix of js and html - had to change the approach a bit.
+
+*upd: the approach changed a few more times later, with the arrival of my own crutches :sob:*
+
+# # deploy
+zine is compiled into a statically linked standalone binary.
+
+you can build through npm in ci, as the wiki recommends - using `kristoff-it/setup-zine@v1`:
+
+like this:
+```yaml
+- uses: kristoff-it/setup-zine@v1
+  with:
+    version: v0.11.3
+- run: zine release
+```
+
+my site used to be on cf - pushed with wrangler like this:
+```yaml
+- uses: cloudflare/wrangler-action@v3
+  with:
+    apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    command: pages deploy public/ -project-name sccl-cc
+```
+*now fully self-hosted it's a bit simpler*
+
+# ? goodies
+
+the coolest thing about zine is that its build is mega-fast, it generally doesn't accumulate a hundred dependencies like js frameworks do, with a giant `node_modules` and so on..
+
+quite a lot of control, which some frameworks piss away with their abstraction levels - for my page weight minimalism that's a critical plus.
+
+# ? downsides
+
+zine is beta :partying_face: (v0.11.0 at the time of writing)
+
+honestly i don't see any real downsides yet - just caveats from the fact that it's not some framework or whatever, but a static site generator meant for making microblogs and such,
+though i'm trying to bolt on js and apis too - and i seem to like it all, everything works, but in places i have to hack together some custom stuff, cuz it's not zine-native, and i need it.

@@ -1,0 +1,68 @@
+---
+.custom = .{ .shitpost_rate = 9, .auto_translated = true },
+.title = "shaking, the visuomotor loop",
+.description = "smooth beer, or lsd shaking",
+.date = .date("2025-11-04T00:00:00"),
+.layout = "page.shtml",
+.tags = [],
+---
+
+# # the micro-flick-flick-flick problem
+
+most tracking beginners have shaky aim - when aiming they move in jerks: each mouse flick is a separate action followed by analyzing the result and another flick,
+the crosshair moves all wonky - there's overreacting and loads of unnecessary movements, making further analysis even harder.
+
+# # the visuomotor loop
+
+this whole thing can be described with one term - the visuomotor loop (visuomotor feedback loop (yes, a new term was invented here, hooray)).
+
+basically, it's an information-processing cycle that the nervous system runs as fast as it possibly can:
+
+stages of the loop:
+
+1. visual analysis - the eye registers the target's current position and trajectory: assessing distance, movement vector, movement speed.
+2. information processing - the brain processes the visual data and calculates the required motor command: micro-calculating distance, predicting the route, calculating the turn angle and so on.
+3. command execution. the muscles receive a signal and make a movement: the mouse moves to the required position.
+4. repeat. the loop closes and starts again.
+
+
+reactive tracking basically runs on this loop - it's a sequence of micro-corrections happening so fast they look like one smooth action.
+
+even pro players make the same micro-corrections, it's just that their interpolation (smoothing between cycles) reaches a level where the movement looks completely smooth,
+each micro-correction gets added to the initial vector rather than being a new movement vector, plus an experienced system builds in a little trajectory prediction, anticipating the target's next position.
+
+# # lil noob vs pro
+
+beginner:
+
+- sees the target -> takes ages to process the information -> calculates the movement (often incorrectly, with artifacts, unnecessary movements) -> the hand performs the action -> analyzes the result -> waits -> next flick
+
+noticeable gaps appear between loop cycles: each flick feels like a separate, discrete operation rather than part of a continuous flow.
+
+pro:
+
+- sees the target -> fast, accurate information processing -> micro-correction, even if the initial movement was inaccurate -> instant analysis of the result -> next correction
+
+a pro's loop runs *faster* than a beginner's, an experienced player can correct their previous movements well - for example, having been moving in a straight line -
+they can add an accurate correction within the same movement vector without it looking like a flick or shaking. These micro-adjustments overlap, creating the appearance of smooth, continuous tracking.
+
+# # how the skill develops
+
+hours of practice in aim trainers let you optimize the speed and efficiency of the visuomotor loop,
+
+the system learns to:
+- analyze the visual stream faster
+- analyze it well - form more accurate motor commands without unnecessary movements
+
+: result: micro-corrections that used to be visible as distinct jerks start merging into one smooth movement.
+
+# # bottom line
+
+shaking and jerking (flickshot with noticeable intervals) are signs of insufficient information-processing speed and accuracy,
+the system just can't keep up with the required number of micro-corrections, so it has to make macro-movements.
+
+smooth tracking is the result of a fast and efficient loop, micro-corrections happen so frequently they become practically invisible.
+
+developing tracking skill means speeding up the visuomotor loop and optimizing its efficiency.
+
+over time there's better prediction, better interpolation, better synchronization, better analysis quality, artifacts disappear and so on.

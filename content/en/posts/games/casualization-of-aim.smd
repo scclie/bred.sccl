@@ -1,0 +1,92 @@
+---
+.custom = .{ .shitpost_rate = 9, .auto_translated = true },
+.title = "casualization of aim",
+.description = "why don't aim trainers work, f*&k? why \"pure\" aiming skill doesn't decide competitive games",
+.date = .date("2025-09-19T00:00:00"),
+.layout = "page.shtml",
+.tags = [],
+---
+
+![](/pictures/aim/ground_tracking.png)
+
+in the world of esports sweats, cyber-sardines and hardcore gaming, the cult of aiming has been taken to the absolute.
+
+people just endlessly jerk off on training maps, duel, play aim trainers, chase the perfect mouse, pad, skates, posture, resolution, fov *and shit*, etc. etc. - all the fucking rituals of a competitive gamer.
+
+but its potenshul is seriously limited by systems designed to even the odds between players of different skill levels.
+
+
+# # the equalizer: randomness, movement and uncontrollable factors
+
+the main enemy of raw aiming skill is randomness and restrictions - devs figured out ages ago that a game where victory belongs exclusively to whoever
+has faster reactions and better mouse control is doomed to a niche audience *(the quake series as an example)* -
+new players will leave butthurt, and matchmaking won't cope with the gigantic skill gap between the top and bottom.
+
+so out come the crutch systems:
+random bullet spread (rng spread): the most obvious example, even in the most popular tactical shooter - conder strok, considered the benchmark for esports *(well, at least it's the most popular)*,
+bullets from any gun while standing still don't land in exactly the same spot, but within some spread circle following a gaussian distribution.
+In valo this spread is even more pronounced - there's no way to reliably control every bullet - you can only increase your chances of hitting.
+
+any attempt to hit an enemy is a whole rain dance around random deviation *(plsregister)*.
+
+![](/pictures/aim/rng_spread.png)
+
+
+controlling movement speed is a key aspect: in many games (cs2, valorant etc.) characters' base movement speed is relatively low and predictable, which is a damn powerful equalizing tool.
+
+against a slow target, a beginner and a pro will aim almost equally effectively - the difference in their skill will be minimal.
+
+a tracking genius won't be able to unleash their potenshul simply because the target doesn't challenge them - the whole "range" between bad and good aim gets compressed, the difference shows up when there's a fast,
+unpredictable target - a noob will just get lost and won't hit it, while a cracked player, even doing worse than against a slow target, will still manage to track it.
+
+so slow movement is a hidden mechanism that keeps a strong aimer from unleashing their full potenshul against a weak opponent.
+
+![](/pictures/aim/apex_glide.png)
+
+Shooting on the move - a mechanic almost entirely removed from tactical shooters, in cs you basically can't hit shit while moving unless it's an smg or a glock - this is a deliberate decision
+that shifts the focus from shooting to positioning and tactics.
+
+![](/pictures/aim/strafe_rng.png)
+
+the miss system (bloom), damage falloff over distance, complex ballistics - these are all layers of randomness that add luck to the equation - sometimes a shitty shot hits and a perfectly aimed one doesn't.
+
+![](/pictures/aim/ballistics.png)
+
+the point is to lower aim's skill ceiling (cancel out aim-advantage) - the difference between a good aimer and a godlike one is neutralized by the fact that even a god can't guarantee a hit because of rng,
+and against a slow target their advantage won't be as obvious. A beginner always has a chance at a random hit or a "lucky" headshot.
+
+# # high ttk vs low ttk
+
+(time to kill)
+
+low ttk: typical of tactical shooters, kills happen in 1-2 hits - you'd think you need cracked aim here to click heads nonstop.
+But in practice the deciding factor is often positioning (you can flank the enemy, surprise them with your position, kill them before the duel even starts),
+knowing angles (prefires, off-angles etc.), luck (even a noob can randomly one-shot anyone while running)
+
+![](/pictures/aim/valorant_headshot.png)
+
+high ttk: an arena shooter classic - here you need to track them continuously and hit them many times in a row - accidentally tracking someone for a dozen seconds just isn't gonna happen.
+
+![](/pictures/aim/quake_lg.png)
+
+# # running away from aim
+
+since pure aim is a difficult and veeery boring skill that takes thousands of hours to hone, developers shift the focus to other mechanics:
+
+tactics and communication - you can be really bad at moving your mouse but keep surprising the opponent, taking unexpected positions, making calls for teamwork, using abilities.
+
+![](/pictures/aim/dust_tactics.png)
+
+movement - in tac shooters it acts as a limiter (slow and predictable), in arena shooters as a separator (fast and complex), letting a strong player dodge and show off superior tracking.
+
+![](/pictures/aim/Thumbnail_Best_Movement_Guide.png)
+
+abilities - an extremely powerful tool for devaluing aim - why aim perfectly when you can spam the opponent with grenades, turrets, smokes, all kinds of slow zones and flashes. These mechanics don't need precision, they need good decision-making and timing.
+
+![](/pictures/aim/overwatch_zarub.png)
+
+# # conclusion
+aim remains an important skill, but most competitive games are designed to casualize it,
+make it one of many factors in winning, but not the only one and definitely not the main (decisive) one.
+
+slow movement, rng spread and loads of abilities - this is a design philosofart aimed at keeping the game accessible to most people.

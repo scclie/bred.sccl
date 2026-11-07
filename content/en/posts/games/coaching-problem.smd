@@ -1,0 +1,52 @@
+---
+.custom = .{ .shitpost_rate = 9, .auto_translated = true },
+.title = "the problem with aim guides",
+.description = "why it's hard to coach and be coached",
+.date = .date("2025-01-10T00:00:00"),
+.layout = "page.shtml",
+.tags = [],
+---
+
+# # coaching
+
+a beginner asking "coach me pls pls" leaves an experienced player stumped - even though they've got the skill down to automatic reflex and feel - the first problem they run into is being unable to pass that feeling on, the answer "just hit your shots" is true but absolutely useless to someone who doesn't feel or understand that "just" yet.
+
+to help, the experienced player does what makes sense to them and deconstructs their knowledge - they break the complete skill down into individual components.
+
+each of these components is a high-level abstraction created to make a complex skill easier to communicate, which in theory should help the beginner go from not understanding to their first bit of experience.
+
+# # overanalysis
+
+on one hand the beginner might pick up somethin useful, but they might also go from a complete feeling of "follow the target with your crosshair" to painfully thinking about a dozen isolated parameters,
+like: "now i need to track right along the trajectory, controlling speed, and now the target suddenly changed its movement vector - need a flick, but no overflick, to jump onto the target smoothly but quickly" and so on..
+
+![](/pictures/aim/Pastedimage20251001163625.png)
+
+a simple action gets weighed down by having to control all these concepts created *to simplify things* at the same time.
+
+# # incomplete abstractions
+
+over time it becomes clear that any model you create is incomplete, it doesn't convey the pure feeling, that actual kinesthetics of aim, merging what you see and your hand moving the mouse into a single action,
+the model itself starts needing simplification.
+
+and then a new level of explanations appears, an even higher-level abstraction like:
+- "just play more"
+- "just follow the target and hit it"
+- "don't shake, but tense your arms as much as you want"
+- "follow the target with your eyes and your hand will follow on its own"
+
+![](/pictures/aim/Pastedimage20251001170344.png)
+
+but actually this is all the absolute truth - that's exactly what all experienced players do - they can play at a fairly high level on autopilot,
+but to a beginner still struggling with the basic concepts, this advice sounds like trolling.
+
+# # the ultimate solution
+
+in the end it comes full circle - all the complex explanations and multilayered abstractions lead to the only solution that works,
+the one that's always existed: "watch how others do it and try to copy them until you get it".
+
+![](/pictures/aim/Pastedimage20251001170718.png)
+
+it's admitting that some skills can't be passed on through words and diagrams - you can only pick them up by watching and develop them through thousands of repetitions,
+practice eventually dissolves all the abstractions, taking the player back to where the question started - to that same intuitive
+"follow the target smoothly with your crosshair and try to hit more shots", except now that "just" is backed by real experience, not theoretical experience.

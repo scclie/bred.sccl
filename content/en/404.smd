@@ -1,0 +1,11 @@
+---
+.title = "404 not found",
+.date = .date("2026-01-01T00:00:00"),
+.description = "this page doesn't exist",
+.layout = "page.shtml",
+.custom = .{ .auto_translated = true },
+---
+
+THERE IS NOTHING :SOB:
+
+go back [home](/) or try [search](/search/).

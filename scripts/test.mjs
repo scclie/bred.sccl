@@ -37,7 +37,7 @@ for (const page of model.pages) {
   assert.equal(html.includes('src="/.cache/search.js"'), hasSearch, `${page.link}: local search index`);
   assert.equal(html.includes('src="/assets/modules/search.js"'), hasSearch, `${page.link}: local search client`);
   if (hasSearch) assert.ok(html.indexOf('src="/.cache/search.js"') < html.indexOf('src="/assets/modules/search.js"'));
-  assert.ok(html.includes('https://notizine.sccl.cc'), `${page.link}: site attribution`);
+  assert.ok(html.includes('https://git.sccl.cc/scclie/notizine'), `${page.link}: site attribution`);
   for (const badge of ['badge-notizine', 'badge-zine', 'badge-sccl']) assert.ok(html.includes(badge), `${page.link}: ${badge}`);
   assert.equal((html.match(/href="\/badges\/badges\.css"/g) ?? []).length, 1, `${page.link}: badge stylesheet registered once`);
   for (const match of html.matchAll(/<(?:script|link)\b[^>]*(?:src|href)="(\/[^"?#]+)"/g)) {

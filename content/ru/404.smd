@@ -1,10 +1,10 @@
 ---
-.title = "Страница не найдена",
+.title = "404 not found",
 .date = .date("2026-01-01T00:00:00"),
-.description = "Такой страницы не существует",
+.description = "this page doesn't exist",
 .layout = "page.shtml",
 ---
 
-Вы попали в тупик. Запрошенной страницы нет (или она переехала).
+THERE IS NOTHING :SOB:
 
-Вернитесь на [главную](/) или попробуйте [поиск](/search/).
+go back [home](/) or try [search](/search/).
