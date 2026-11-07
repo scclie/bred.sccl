@@ -59,7 +59,7 @@ test('typed badge assets and inherited ru search composition resolve together', 
   const ru = applyOverrides(zones, config.slots_overrides, '/ru/search/', modules);
   assert.ok(ru.top_center.flat().some(entry => entry.module === '_lang_nav'));
   assert.ok(ru.middle_center.flat().some(entry => entry.module === 'search'));
-  assert.deepEqual(ru.middle_left.flat().map(entry => entry.params.section), ['/ru/posts/', '/ru/shitposts/']);
+  assert.deepEqual(ru.middle_left.flat().map(entry => [entry.module, entry.params.section]), [['rated_recents', '/ru/posts/']]);
   assert.ok(ru.bottom_center.flat().some(entry => entry.module === 'site_footer'));
 });
 

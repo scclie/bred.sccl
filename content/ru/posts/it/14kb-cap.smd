@@ -1,4 +1,5 @@
 ---
+.custom = .{ .shitpost_rate = 0 },
 .title = "потолок 14kb: tcp придумал ветку small web",
 .description = "почему 14kb и 15kb это пропасть в скорости. tcp slow start, congestion collapse 1986, dns, tls. философия small web и оптимизация sccl.cc до 12kb gzip.",
 .date = .date("2026-07-01T00:00:00"),

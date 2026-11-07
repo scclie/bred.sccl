@@ -1,8 +1,0 @@
----
-.title = "Notes",
-.date = .date("2026-02-01T00:00:00"),
-.description = "Short notes and sketches",
-.layout = "section-flat.shtml",
----
-
-A scratchpad section for quick thoughts.

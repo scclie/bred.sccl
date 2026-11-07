@@ -20,7 +20,7 @@
       <ctx :if="$site.asset('notizine.ziggy').ziggy().get('features').get('tags')">
         <ctx :if="$page.tags.len.gt(0)">
           <ctx :loop="$page.tags">
-            <a class="tag" href="$site.page('tags').link().suffix('?tag=').suffix($loop.it)" :text="$loop.it"></a>
+            <a class="tag" href="$site.page('tags').link().suffix('?tag=').suffix($loop.it)" :text="$loop.it.prefix('#')"></a>
           </ctx>
         </ctx>
       </ctx>

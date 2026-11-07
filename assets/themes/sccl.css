@@ -97,7 +97,6 @@ html {
 }
 
 #header {
-    border-bottom: 1px solid var(--accent);
     padding-bottom: var(--sp-1, 0.25rem);
     margin-bottom: var(--sp-1, 0.25rem);
 }
@@ -144,7 +143,6 @@ html {
 #header nav.lang-nav a {
     color: var(--fg);
     font-weight: 700;
-    border-radius: 0;
 }
 
 #header nav.lang-nav a:hover {
@@ -157,7 +155,10 @@ html {
     border-bottom: 1px solid var(--border);
 }
 
-.page-content a:hover {
+.page-content a:hover,
+.page-content .explorer-tree a:hover,
+.page-content .explorer-tree summary:hover,
+.page-content .explorer-tree summary:hover a {
     background: var(--accent);
     color: var(--on-accent);
     text-decoration: none;
@@ -195,27 +196,30 @@ html {
     color: inherit;
 }
 
+#content > .module-recents .recent-item {
+    margin: 1rem 0;
+}
+
+#content > .module-recents .recent-item > a {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+#content > .module-recents .recent-item time {
+    color: var(--text);
+}
+
 blockquote {
     border-left-color: var(--accent);
     background: var(--code-bg);
-    border-radius: 0;
 }
 
 pre {
-    border-radius: 0;
     border: 1px solid var(--border);
-}
-
-code {
-    border-radius: 0;
 }
 
 img {
     image-rendering: pixelated;
-}
-
-.page-content img {
-    border-radius: 0;
 }
 
 summary {
@@ -227,12 +231,6 @@ summary:hover {
     color: var(--on-accent);
 }
 
-a.tag:hover,
-.tag:hover {
-    background: var(--fg);
-    color: var(--bg);
-}
-
 .grid-cell-bottom-center {
     border-top: 1px solid var(--accent);
 }
@@ -240,10 +238,6 @@ a.tag:hover,
 .grid-cell-bottom-center a:hover {
     background: var(--accent);
     color: var(--on-accent);
-}
-
-.search-widget .search-input {
-    border-radius: 0;
 }
 
 .search-widget .search-results > * {
@@ -265,10 +259,6 @@ a.tag:hover,
 
 .search-widget .search-results > :hover * {
     color: var(--on-accent);
-}
-
-#header nav select {
-    border-radius: 0;
 }
 
 .breadcrumbs a:hover {
@@ -295,11 +285,6 @@ a.tag:hover,
 
 .recent-footer-top a {
     padding: 0.125rem 0.25rem;
-}
-
-.recent-footer-top a:hover {
-    background: var(--accent);
-    color: var(--on-accent);
 }
 
 .recent-nav-prev,

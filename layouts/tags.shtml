@@ -11,14 +11,14 @@
           <a class="recent-row-title" href="$loop.it.link()" :text="$loop.it.title"></a>
           <div>
             <ctx :loop="$loop.it.tags">
-              <a class="tag" href="$site.page('tags').link().suffix('?tag=').suffix($loop.it)" :text="$loop.it"></a>
+              <a class="tag" data-tag="$loop.it" href="$site.page('tags').link().suffix('?tag=').suffix($loop.it)" :text="$loop.it.prefix('#')"></a>
             </ctx>
           </div>
         </article>
       </ctx>
     </ctx>
     <script>
-      (function(){var t=new URLSearchParams(location.search).get("tag");if(t){document.querySelectorAll("article").forEach(function(a){var m=Array.from(a.querySelectorAll(".tag")).some(function(e){return e.textContent===t});a.style.display=m?"":"none"})}})()
+      (function(){var t=new URLSearchParams(location.search).get("tag");if(t){document.querySelectorAll("article").forEach(function(a){var m=Array.from(a.querySelectorAll(".tag")).some(function(e){return e.dataset.tag===t});a.style.display=m?"":"none"})}})()
     </script>
   </div>
 </main>

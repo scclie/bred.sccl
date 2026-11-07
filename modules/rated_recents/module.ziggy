@@ -1,0 +1,16 @@
+.{
+    .name = "rated_recents",
+    .type = "dynamic",
+    .description = "recent posts with shitpost range filter",
+    .delivery = "critical",
+    .assets = [
+        .{ .source = "recents.css", .delivery = "critical" },
+        .{ .source = "style.css", .delivery = "critical" },
+        .{ .source = "client.js", .delivery = "deferred", .output = "/assets/modules/rated-recents.js" },
+    ],
+    .params = .{
+        .section = .{ .type = "string", .default = "/posts/" },
+        .count = .{ .type = "integer", .default = 5, .minimum = 1 },
+        .title = .{ .type = "string" },
+    },
+}

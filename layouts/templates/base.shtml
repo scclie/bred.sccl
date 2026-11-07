@@ -4,8 +4,8 @@
 <head id="head">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
-  <title :text="$page.title.suffix(' · ').suffix($site.title)"></title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>;/</text></svg>">
+  <title :text="$page.title.suffix(' : ').suffix($site.title)"></title>
   <meta name="description" content="$page.description">
   <ctx :if="$site.asset('notizine.ziggy').ziggy().get('features').get('inline_mode')">
     <style :html="$site.asset('.cache/all.css').bytes()"></style>
@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="$site.asset('notizine.ziggy').ziggy().get('google_fonts').prefix('https://fonts.googleapis.com/css2?family=').suffix('&display=swap')">
   </ctx>
   <ctx :if="$site.asset('notizine.ziggy').ziggy().get('features').get('rss')">
-    <link rel="alternate" type="application/rss+xml" :title="$site.page('posts').title.suffix(' · RSS')" :href="$site.page('posts').link().suffix('index.xml')">
+    <link rel="alternate" type="application/rss+xml" :title="$site.page('posts').title.suffix(' | RSS')" :href="$site.page('posts').link().suffix('index.xml')">
   </ctx>
   <ctx :if="$site.asset('notizine.ziggy').ziggy().get('features').get('og_images')">
     <meta property="og:title" content="$page.title">

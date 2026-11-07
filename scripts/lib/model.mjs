@@ -51,7 +51,7 @@ function parseSMDFrontmatter(filePath, locale, baseDir, parentLink) {
     locale: locale.code,
     link,
     filePath,
-    title: extractZiggyValue(fm, 'title'),
+    title: frontmatter.title ?? '',
     description: extractZiggyValue(fm, 'description') || '',
     date: extractZiggyDate(fm, 'date') || '',
     moddate: extractZiggyDate(fm, 'moddate') || '',

@@ -17,7 +17,7 @@
         <ctx :if="$loop.it.tags.len.gt(0)">
           <div class="recent-row-tags">
             <ctx :loop="$loop.it.tags">
-              <a class="tag" href="$site.page('tags').link().suffix('?tag=').suffix($loop.it)" :text="$loop.it"></a>
+              <a class="tag" href="$site.page('tags').link().suffix('?tag=').suffix($loop.it)" :text="$loop.it.prefix('#')"></a>
             </ctx>
           </div>
         </ctx>

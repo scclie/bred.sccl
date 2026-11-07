@@ -1,4 +1,5 @@
 ---
+.custom = .{ .shitpost_rate = 7 },
 .title = "rulemak caws",
 .description = "фонетически эквивалентный вариант раскладки colemak caws",
 .date = .date("2025-04-13T00:00:00"),
@@ -44,7 +45,7 @@ colemak caws создан вокруг colemak с целью объеденeни
 ```=html
 <iframe
   src="https://heatkeys.sccl.cc"
-  style="width: 100%; height: 770px; border: 1px solid var(-secondary); border-radius: 8px;"
+  style="width: 100%; height: 770px; border: 1px solid var(-secondary);"
   loading="lazy"
 ></iframe>
 ```

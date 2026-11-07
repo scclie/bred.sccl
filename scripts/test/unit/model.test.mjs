@@ -79,3 +79,13 @@ Content.`);
     flags: ['loud', 'unserious'],
   });
 });
+
+test('article metadata preserves escaped quotes in titles used by the sidebar index', () => {
+  const root = '/tmp/opencode/bred-model-quoted-title';
+  const content = join(root, 'content', 'en');
+  mkdirSync(content, { recursive: true });
+  writeFileSync(join(content, 'post.smd'), '---\n.title = "The \\"quoted\\" title",\n.custom = .{ .shitpost_rate = 3 },\n---\nText.');
+  const page = buildModel(cfg, root).pages[0];
+  assert.equal(page.title, 'The "quoted" title');
+  assert.equal(page.meta.custom.shitpost_rate, 3);
+});

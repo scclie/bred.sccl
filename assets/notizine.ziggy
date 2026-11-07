@@ -65,10 +65,9 @@
     ],
     "top_right": [],
     "middle_center": [],
-    // Left sidebar: recent posts + recent notes (two branches)
+    // Blog-only sidebar: recent posts filtered by shit-post rate.
     "middle_left": [
-      [{ "module": "_recents", "id": "_recents_posts", "title": "posts", "count": 5, "show": ["date", "meta"] }],
-      [{ "module": "_recents", "id": "_recents_shitposts", "section": "/shitposts/", "title": "shitposts", "count": 5, "show": ["date", "meta"] }]
+      [{ "module": "rated_recents", "section": "/posts/", "title": "posts", "count": 5 }]
     ],
     "middle_right": [],
     "bottom_left": [],
@@ -98,8 +97,7 @@
       "top_center": [[{ "module": "_header", "site_title": "scclie://notes" }, { "module": "_spacer" }, { "module": "_lang_nav" }], [{ "module": "divider" }], [{ "module": "_breadcrumbs" }]],
       "top_right": [],
       "middle_left": [
-        [{ "module": "_recents", "id": "_recents_ru", "section": "/ru/posts/", "show": ["date", "meta"] }],
-        [{ "module": "_recents", "id": "_recents_shitposts_ru", "section": "/ru/shitposts/", "title": "shitposts", "count": 3, "show": ["date", "meta"] }]
+        [{ "module": "rated_recents", "section": "/ru/posts/", "title": "posts", "count": 5 }]
       ],
       "middle_center": [],
       "middle_right": [],
@@ -111,7 +109,7 @@
       "top_left": [],
       "top_center": [[{ "module": "_header", "site_title": "scclie://notes" }, { "module": "_spacer" }, { "module": "_lang_nav" }], [{ "module": "divider" }], [{ "module": "_breadcrumbs" }]],
       "top_right": [],
-      "middle_left": [[{ "module": "_recents", "id": "_recents_posts", "title": "posts", "count": 5, "show": ["date", "meta"] }], [{ "module": "_recents", "id": "_recents_shitposts", "section": "/shitposts/", "title": "shitposts", "count": 5, "show": ["date", "meta"] }]],
+      "middle_left": [[{ "module": "rated_recents", "section": "/posts/", "title": "posts", "count": 5 }]],
       "middle_center": [[{ "module": "search", "id": "search" }]],
       "middle_right": [],
       "bottom_left": [],
@@ -122,7 +120,7 @@
       "top_left": [],
       "top_center": [[{ "module": "_header", "site_title": "scclie://notes" }, { "module": "_spacer" }, { "module": "_lang_nav" }], [{ "module": "divider" }], [{ "module": "_breadcrumbs" }]],
       "top_right": [],
-      "middle_left": [[{ "module": "_recents", "id": "_recents_ru", "section": "/ru/posts/", "show": ["date", "meta"] }], [{ "module": "_recents", "id": "_recents_shitposts_ru", "section": "/ru/shitposts/", "title": "shitposts", "count": 3, "show": ["date", "meta"] }]],
+      "middle_left": [[{ "module": "rated_recents", "section": "/ru/posts/", "title": "posts", "count": 5 }]],
       "middle_center": [[{ "module": "search", "id": "search" }]],
       "middle_right": [],
       "bottom_left": [],

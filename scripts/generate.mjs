@@ -389,6 +389,10 @@ async function newGenerate() {
     /```embed\b|class=["'][^"']*\bembed-container\b/.test(readFileSync(page.filePath, 'utf8')))) {
     installed.add('embed');
   }
+  if (featureEnabled(config, 'explorer') && modules._explorer &&
+    model.pages.some(page => page.meta?.layout === 'explorer.shtml')) {
+    installed.add('_explorer');
+  }
   bundleCSS(config, installed, ROOT);
   console.log('[generate] Done.');
 }

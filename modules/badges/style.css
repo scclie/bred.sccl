@@ -16,6 +16,5 @@
   width: 88px;
   height: 31px;
   border: 1px solid var(--border);
-  border-radius: 2px;
   image-rendering: pixelated;
 }

@@ -13,18 +13,16 @@
     <ctx :if="$page.content().len().gt(0)">
       <div :html="$page.content()"></div>
     </ctx>
+  </div>
+  <div class="module-recents">
     <ctx :if="$page.leaves().len.gt(0)">
       <ctx :loop="$page.leaves()">
-        <article>
-          <a class="recent-row recent-row-block" href="$loop.it.link()">
-            <div class="recent-row-head">
-              <h2 :text="$loop.it.title"></h2>
-              <time :text="$loop.it.date.format('2006-01-02')"></time>
-            </div>
-            <ctx :if="$loop.it.description.len().gt(0)">
-              <p :text="$loop.it.description"></p>
-            </ctx>
-          </a>
+        <article class="recent-item">
+          <a href="$loop.it.link()" :text="$loop.it.title"></a>
+          <time class="recent-meta" :text="$loop.it.date.format('2006-01-02')"></time>
+          <ctx :if="$loop.it.description.len().gt(0)">
+            <p :text="$loop.it.description"></p>
+          </ctx>
         </article>
       </ctx>
     </ctx>

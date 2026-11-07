@@ -1,8 +1,21 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { bundleCSS } from '../../lib/css.mjs';
+
+test('all owned source styles keep square corners including inline overrides', () => {
+  const root = new URL('../../../', import.meta.url).pathname;
+  const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(entry => entry.isDirectory()
+    ? walk(join(dir, entry.name)) : entry.name.endsWith('.css') ? [join(dir, entry.name)] : []);
+  for (const file of ['assets/css', 'assets/themes', 'modules'].flatMap(dir => walk(join(root, dir)))) {
+    for (const declaration of readFileSync(file, 'utf8').matchAll(/border(?:-[a-z]+)*-radius\s*:\s*([^;}]+)/gi)) {
+      assert.match(declaration[1].trim(), /^0(?:\s*!important)?$/, `${file} contains rounded corners`);
+    }
+  }
+  const base = readFileSync(join(root, 'assets/css/base.css'), 'utf8');
+  assert.match(base, /\*,\s*\*::before,\s*\*::after\s*\{[^}]*border-radius:\s*0\s*!important;/);
+});
 
 function freshRoot(name) {
   const root = join('/tmp/opencode', name);

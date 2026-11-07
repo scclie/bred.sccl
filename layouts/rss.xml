@@ -1,9 +1,9 @@
 <rss version="2.0">
   <channel>
-    <title :text="$page.title.suffix(' · ').suffix($site.title)"></title>
+      <title :text="$page.title.suffix(' | ').suffix($site.title)"></title>
     <link :text="$site.host_url.addPath($page.link())"></link>
     <description :text="$page.description"></description>
-    <generator>Zine (notizine)</generator>
+    <generator>zine (notizine)</generator>
     <language :text="$site.localeCode()"></language>
     <lastBuildDate :text="$build.generated.formatHTTP()"></lastBuildDate>
     <ctx :loop="$page.subpages()">
