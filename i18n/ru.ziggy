@@ -26,6 +26,17 @@
     "shitpost_meter_title": "shitpost-o-meter",
     "shitpost_meter_empty": "no posts in this range.",
     "shitpost_meter_serious": "serious",
-    "shitpost_meter_shitpost": "shit"
+    "shitpost_meter_shitpost": "shit",
+    "comments_title": "comments",
+    "comments_empty": "no comments yet. be the first!",
+    "comments_nickname": "nickname",
+    "comments_site": "site (https://...)",
+    "comments_placeholder": "ur comment (markdown supprtd)",
+    "comments_random": "[ random ]",
+    "comments_submit": "[ post comment ]",
+    "comments_posting": "posting...",
+    "comments_pending": "comment posted! it will appear after moderation.",
+    "comments_load_failed": "failed to load comments",
+    "comments_post_failed": "failed to post comment"
 
 }

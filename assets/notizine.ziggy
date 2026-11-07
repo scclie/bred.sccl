@@ -106,6 +106,28 @@
       "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
       "bottom_right": []
     },
+    "/posts/": {
+      "top_left": [],
+      "top_center": [[{ "module": "_header", "site_title": "scclie://notes" }, { "module": "_spacer" }, { "module": "_lang_nav" }], [{ "module": "divider" }], [{ "module": "_breadcrumbs" }]],
+      "top_right": [],
+      "middle_left": [[{ "module": "rated_recents", "section": "/posts/", "title": "posts", "count": 9 }]],
+      "middle_center": [[{ "module": "comments" }]],
+      "middle_right": [],
+      "bottom_left": [],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_right": []
+    },
+    "/ru/posts/": {
+      "top_left": [],
+      "top_center": [[{ "module": "_header", "site_title": "scclie://notes" }, { "module": "_spacer" }, { "module": "_lang_nav" }], [{ "module": "divider" }], [{ "module": "_breadcrumbs" }]],
+      "top_right": [],
+      "middle_left": [[{ "module": "rated_recents", "section": "/ru/posts/", "title": "posts", "count": 9 }]],
+      "middle_center": [[{ "module": "comments" }]],
+      "middle_right": [],
+      "bottom_left": [],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_right": []
+    },
     "/search/": {
       "top_left": [],
       "top_center": [[{ "module": "_header", "site_title": "scclie://notes" }, { "module": "_spacer" }, { "module": "_lang_nav" }], [{ "module": "divider" }], [{ "module": "_breadcrumbs" }]],

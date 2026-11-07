@@ -1,0 +1,10 @@
+.{
+    .name = "comments",
+    .type = "dynamic",
+    .description = "moderated comments below blog posts",
+    .delivery = "critical",
+    .assets = [
+        .{ .source = "style.css", .delivery = "critical" },
+        .{ .source = "client.js", .delivery = "deferred", .output = "/assets/modules/comments.js" },
+    ],
+}
