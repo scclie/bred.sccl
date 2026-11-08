@@ -28,7 +28,7 @@ export default async function ({ page, site, params, i18n }) {
       <input class="rated-min" type="range" min="0" max="9" step="1" value="0" disabled>
       <input class="rated-max" type="range" min="0" max="9" step="1" value="9" disabled>
     </div>
-    <div class="recent-meta recent-footer-top rated-endpoints"><span>0 | ${esc(i18n('shitpost_meter_serious'))}</span><span>9 | ${esc(i18n('shitpost_meter_shitpost'))}</span></div>
+    <div class="recent-meta recent-footer-top rated-endpoints"><span>0 | ${esc(i18n('shitpost_meter_serious'))}</span><span>${esc(i18n('shitpost_meter_shitpost'))} | 9</span></div>
   </div>
   <hr>
   <div class="rated-items">${items}</div>

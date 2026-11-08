@@ -10,11 +10,9 @@ export default async function generateOG({ config, model }) {
   }
 
   const colors = {
-    bg_top: og.bg_top || '#2e3440',
-    bg_bottom: og.bg_bottom || '#3b4252',
-    accent: og.accent || '#5e81ac',
+    background: og.background || '#3b4252',
     text: og.text || '#eceff4',
-    muted: og.muted || '#b48ead',
+    muted: og.muted || '#ebcb8b',
   };
   const sizes = {
     title: og.title_size || 52,
@@ -22,7 +20,7 @@ export default async function generateOG({ config, model }) {
     site: og.site_size || 22,
     date: og.date_size || 24,
   };
-  const font = og.font_family || 'system-ui, sans-serif';
+  const font = og.font_family || 'Cascadia Code';
   const showDate = og.show_date !== false;
   const showDesc = og.show_desc !== false;
   const bgImage = og.background_image || '';
@@ -42,16 +40,26 @@ export default async function generateOG({ config, model }) {
   } catch {}
 
   for (const page of pages) {
-    const title = escapeXML(truncate(page.title, 50));
-    const desc = escapeXML(truncate(page.description, 80));
+    // Measure glyphs with the same font and weight used by the SVG renderer.
+    // Leave a little extra room for glyph bearings at either edge.
+    const titleLines = await wrapText(page.title, {
+      font, size: sizes.title, bold: true, maxWidth: W - 132, maxLines: 3,
+    });
+    const titleLineHeight = Math.ceil(sizes.title * 1.2);
+    const descY = Math.max(360, 280 + (titleLines.length - 1) * titleLineHeight + 80);
+    const descLineHeight = Math.ceil(sizes.desc * 1.2);
+    const descLines = showDesc ? await wrapText(page.description, {
+      font, size: sizes.desc, maxWidth: W - 132,
+      maxLines: Math.max(0, Math.min(2, Math.floor((530 - descY) / descLineHeight) + 1)),
+    }) : [];
     const date = page.date ? page.date.slice(0, 10) : '';
 
     const bgRect = bgImage
       ? `<image href="${bgImage}" width="${W}" height="${H}" preserveAspectRatio="xMidYMid slice"/>`
-      : `<rect width="${W}" height="${H}" fill="url(#bg)"/>`;
+      : `<rect width="${W}" height="${H}" fill="${colors.background}"/>`;
 
-    const descBlock = (showDesc && desc)
-      ? `<text x="60" y="360" font-family="${font}" font-size="${sizes.desc}px" fill="${colors.text}" opacity="0.85">${desc}</text>`
+    const descBlock = descLines.length
+      ? `<text font-family="${font}" font-size="${sizes.desc}px" fill="${colors.text}" opacity="0.85">${textSpans(descLines, descY, descLineHeight)}</text>`
       : '';
     const dateBlock = (showDate && date)
       ? `<text x="60" y="580" font-family="${font}" font-size="${sizes.date}px" fill="${colors.muted}">${date}</text>`
@@ -63,16 +71,9 @@ export default async function generateOG({ config, model }) {
     }).join('');
 
     const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:${colors.bg_top}"/>
-      <stop offset="100%" style="stop-color:${colors.bg_bottom}"/>
-    </linearGradient>
-  </defs>
   ${bgRect}
-  <rect x="0" y="0" width="8" height="${H}" fill="${colors.accent}"/>
-  <text x="60" y="80" font-family="${font}" font-size="${sizes.site}px" fill="${colors.muted}">${siteLines}</text>
-  <text x="60" y="280" font-family="${font}" font-size="${sizes.title}px" fill="${colors.text}" font-weight="bold">${title}</text>
+  <text x="60" y="80" font-family="${font}" font-size="${sizes.site}px" font-weight="700" fill="${colors.muted}" stroke="${colors.muted}" stroke-width="1" paint-order="stroke fill">${siteLines}</text>
+  <text font-family="${font}" font-size="${sizes.title}px" fill="${colors.text}" font-weight="700">${textSpans(titleLines, 280, titleLineHeight)}</text>
   ${descBlock}
   ${dateBlock}
 </svg>`;
@@ -90,8 +91,52 @@ function escapeXML(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function truncate(s, max) {
-  if (!s) return '';
-  if (s.length <= max) return s;
-  return s.slice(0, max - 3) + '...';
+function textSpans(lines, y, lineHeight) {
+  return lines.map((line, i) => `<tspan x="60" y="${y + i * lineHeight}">${escapeXML(line)}</tspan>`).join('');
+}
+
+async function wrapText(text, { font, size, bold = false, maxWidth, maxLines }) {
+  if (!text || maxLines < 1) return [];
+  const widths = new Map();
+  const measure = async value => {
+    if (!value) return 0;
+    if (!widths.has(value)) {
+      // Use the actual SVG renderer, not Pango's separate point-based layout:
+      // their metrics differ for some Cyrillic text and fallback glyphs.
+      const sample = `<svg width="${Math.ceil(value.length * size * 2 + 32)}" height="${Math.ceil(size * 3)}" xmlns="http://www.w3.org/2000/svg"><text x="16" y="${size * 2}" font-family="${escapeXML(font)}" font-size="${size}px" font-weight="${bold ? 700 : 400}" fill="white">${escapeXML(value)}</text></svg>`;
+      const { info } = await sharp(Buffer.from(sample)).trim().raw().toBuffer({ resolveWithObject: true });
+      widths.set(value, info.width);
+    }
+    return widths.get(value);
+  };
+  const graphemes = value => [...new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+    .segment(value)].map(part => part.segment);
+  const lines = [];
+  for (const paragraph of text.trim().split(/\r?\n/)) {
+    let line = '';
+    for (const word of paragraph.trim().split(/\s+/).filter(Boolean)) {
+      if (line && await measure(`${line} ${word}`) > maxWidth) {
+        lines.push(line);
+        line = '';
+      }
+      if (await measure(word) > maxWidth) {
+        for (const character of graphemes(word)) {
+          if (line && await measure(line + character) > maxWidth) {
+            lines.push(line);
+            line = '';
+          }
+          line += character;
+        }
+      } else {
+        line = line ? `${line} ${word}` : word;
+      }
+    }
+    lines.push(line);
+  }
+  if (lines.length <= maxLines) return lines;
+  const visible = lines.slice(0, maxLines);
+  const last = graphemes(visible[maxLines - 1].trimEnd());
+  while (last.length && await measure(last.join('') + '…') > maxWidth) last.pop();
+  visible[maxLines - 1] = last.join('') + '…';
+  return visible;
 }

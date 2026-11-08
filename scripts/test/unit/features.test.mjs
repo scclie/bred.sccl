@@ -28,7 +28,7 @@ function buildFixture(name, { inlineMode, search, customCSS = false, searchOnAbo
   if (searchOnAbout) config = config.replace('"/search/": {', '"/about/": {');
   writeFileSync(configPath, config);
 
-  const result = spawnSync('nix-shell', ['--run', 'npm run build'], {
+  const result = spawnSync(process.execPath, ['scripts/build.mjs'], {
     cwd: root,
     encoding: 'utf-8',
     timeout: 600000,

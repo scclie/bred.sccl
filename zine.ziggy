@@ -1,6 +1,6 @@
 .zine_version = "0.13.0",
 .site = .multilingual(.{
-    .host_url = "https://example.com",
+    .host_url = "https://bred.sccl.cc",
     .i18n_dir_path = "i18n",
     .layouts_dir_path = "layouts",
     .assets_dir_path = "assets",

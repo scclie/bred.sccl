@@ -9,6 +9,10 @@ import { discoverModules, resolveSlots, applyOverrides } from './lib/modules.mjs
 const root = process.cwd();
 const publicDir = join(root, 'public');
 const config = loadConfig(root);
+for (const home of ['index.html', 'ru/index.html']) {
+  const html = readFileSync(join(publicDir, home), 'utf8');
+  assert.match(html, /<video src="\/pictures\/blobby-blobby-dancer\.mp4" autoplay loop muted playsinline><\/video>/, `${home}: original inline autoplay video preserved`);
+}
 const model = buildModel(config, root);
 const modules = discoverModules(root);
 const { zones } = resolveSlots(config, modules);

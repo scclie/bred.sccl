@@ -1,6 +1,7 @@
-import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { join, basename } from 'node:path';
-import { execSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { execFileSync } from 'node:child_process';
 
 const MERMAID_CSS = `
 .mermaid-rendered {
@@ -75,12 +76,15 @@ export async function postprocess(publicDir, config) {
       if (!tagMatch) continue;
 
       const code = unescape(tagMatch[1]);
+      const tmp = mkdtempSync(join(tmpdir(), 'notizine-mermaid-'));
       try {
-        const tmpMmd = '/tmp/mermaid_' + Date.now() + '.mmd';
-        const tmpSvg = '/tmp/mermaid_' + Date.now() + '.svg';
+        const tmpMmd = join(tmp, 'diagram.mmd');
+        const tmpSvg = join(tmp, 'diagram.svg');
         writeFileSync(tmpMmd, code);
-        execSync(
-          `nix-shell -p mermaid-cli --run "mmdc -i ${tmpMmd} -o ${tmpSvg} -t dark -b transparent" 2>/dev/null`,
+        const args = ['-i', tmpMmd, '-o', tmpSvg, '-t', 'dark', '-b', 'transparent'];
+        if (process.env.MERMAID_PUPPETEER_CONFIG) args.push('-p', process.env.MERMAID_PUPPETEER_CONFIG);
+        execFileSync(
+          'mmdc', args,
           { encoding: 'utf-8', timeout: 60000 }
         );
         const svg = readFileSync(tmpSvg, 'utf-8').trim();
@@ -89,6 +93,8 @@ export async function postprocess(publicDir, config) {
         changed = true;
       } catch (e) {
         console.warn(`[mermaid] Failed to render block in ${basename(file)}: ${e.message.split('\n')[0]}`);
+      } finally {
+        rmSync(tmp, { recursive: true, force: true });
       }
     }
 

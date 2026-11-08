@@ -9,7 +9,7 @@ const post = (n, rate = n) => ({
 });
 const section = { locale: 'en', link: '/posts/', isSection: true };
 const site = pages => ({ pages: [section, ...pages] });
-const context = pages => ({ page: { locale: 'en' }, site: site(pages), params: { section: '/posts/', count: 5 }, i18n: k => k });
+const context = pages => ({ page: { locale: 'en', link: '/' }, site: site(pages), params: { section: '/posts/', count: 5 }, i18n: k => k });
 
 test('compact index excludes other locales, sections and bodies, newest first', () => {
   const result = buildEntries(site([
@@ -85,7 +85,7 @@ test('all filter labels come from the supplied i18n dictionary', async () => {
   assert.match(html, /<span>Meter &amp; title<\/span>/);
   assert.match(html, /&lt;No matches&gt;/);
   assert.match(html, /0 | serious &amp; thoughtful/);
-  assert.match(html, /9 | jokes/);
+  assert.match(html, /Just jokes \| 9/);
 });
 
 test('both footer actions use the original random-note link style without button resets', async () => {

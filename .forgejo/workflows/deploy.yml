@@ -1,0 +1,58 @@
+name: deploy
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: bred-sccl-deploy
+
+jobs:
+  deploy:
+    if: startsWith(github.server_url, 'http://10.69.0.10') || startsWith(github.server_url, 'https://git.sccl.cc')
+    runs-on: ubuntu-latest
+    env:
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+
+      - name: Install build dependencies
+        run: |
+          set -euo pipefail
+          apt-get update
+          apt-get install -y --no-install-recommends rsync chromium fonts-dejavu-core fonts-liberation fonts-cascadia-code
+          npm ci --ignore-scripts
+          npm install --global --ignore-scripts @mermaid-js/mermaid-cli@11.12.0
+          printf '%s\n' '{"args":["--no-sandbox"]}' > "$RUNNER_TEMP/puppeteer.json"
+          printf 'MERMAID_PUPPETEER_CONFIG=%s/puppeteer.json\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
+
+      - name: Setup Zine
+        run: |
+          set -euo pipefail
+          curl --fail --show-error --location --proto '=https' --proto-redir '=https' -o "$RUNNER_TEMP/zine.tar.xz" https://github.com/kristoff-it/zine/releases/download/v0.13.0/x86_64-linux-musl.tar.xz
+          printf '%s  %s\n' c250e029d978901b0c9a38eab0a860ef9db875bf686fe0f0abf61f180c280dba "$RUNNER_TEMP/zine.tar.xz" | sha256sum --check --strict
+          mkdir -p "$RUNNER_TEMP/zine"
+          tar -xJf "$RUNNER_TEMP/zine.tar.xz" -C "$RUNNER_TEMP/zine"
+          printf '%s\n' "$RUNNER_TEMP/zine" >> "$GITHUB_PATH"
+
+      - name: Validate, test and build
+        run: |
+          npm run validate
+          npm test
+          npm run audit:performance
+
+      - name: Publish to /tank/sites
+        run: |
+          set -euo pipefail
+          SITE="/tank/sites/bred.sccl"
+          RELEASE="$(date -u +%Y%m%dT%H%M%S)-${GITHUB_SHA::8}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT:-1}"
+          REL="${SITE}/releases/${RELEASE}"
+          mkdir "${REL}"
+          rsync -a --delete ./public/ "${REL}/"
+          ln -s "releases/${RELEASE}" "${SITE}/.public-${RELEASE}"
+          mv -Tf "${SITE}/.public-${RELEASE}" "${SITE}/public"
+          ls -1 "${SITE}/releases" | sort | head -n -5 | xargs -r -I{} rm -rf -- "${SITE}/releases/{}"

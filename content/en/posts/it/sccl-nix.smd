@@ -1,7 +1,7 @@
 ---
 .custom = .{ .shitpost_rate = 4, .auto_translated = true },
 .title = "nixdeclarative heaven",
-.description = "who's this nix of yours",
+.description = "who's nix",
 .date = .date("2026-02-13T00:00:00"),
 .layout = "page.shtml",
 .tags = ["os", "linux", "project", "shitpost"],

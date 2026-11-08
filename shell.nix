@@ -20,13 +20,19 @@ let
   };
 in
 pkgs.mkShell {
+  FONTCONFIG_FILE = pkgs.makeFontsConf {
+    fontDirectories = [ pkgs.cascadia-code pkgs.dejavu_fonts ];
+  };
   buildInputs = [
     pkgs.nodejs
     pkgs.python3Packages.pillow
+    pkgs.mermaid-cli
+    pkgs.fontconfig
+    pkgs.cascadia-code
     zine
   ];
 
   shellHook = ''
-    echo "notizine dev - Zine $(zine --version) ready"
+    echo "notizine dev - Zine $(zine version) ready"
   '';
 }

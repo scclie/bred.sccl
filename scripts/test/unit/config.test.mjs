@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { stripZiggy, loadConfig, assertZineConfigSync } from '../../lib/config.mjs';
+import { stripZiggy, loadConfig, assertZineConfigSync, renderZineConfig } from '../../lib/config.mjs';
 
 function siteConfig() {
   return {
@@ -45,6 +45,10 @@ function fixtureRoot({ zine }) {
   writeFileSync(join(root, 'zine.ziggy'), zine);
   return root;
 }
+
+test('rendered config targets the Zine version used for deployment', () => {
+  assert.match(renderZineConfig(siteConfig()), /^\.zine_version = "0\.13\.0",/);
+});
 
 test('stripZiggy removes comments and trailing commas', () => {
   const raw = '{\n  // c\n  "a": 1, // x\n  "b": [1, 2,],\n}';

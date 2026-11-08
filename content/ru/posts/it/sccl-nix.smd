@@ -139,63 +139,6 @@
 
 два профиля: **paper** (основной, со всем зоопарком) и **bootstrap** (минимальный, только vim, nmtui и ssh для установки с флешки).
 
-
-как пример реального юза.
-
-Схема:
-
-```
-x_mermaid_block_0
-flowchart TD
-    F["flake.nix<br/>auto-discovery: hosts + shells"]
-
-    NM["nixos/modules/core.nix<br/>sccl.* options: conditional config"]
-
-    H1["hosts/sacculos<br/>desktop + amd gpu"]
-    H2["hosts/aero15laptop<br/>laptop + nvidia gpu"]
-
-    P1["profiles/paper<br/>main: steam, blender..."]
-    PS["profiles/shared<br/>base: fish, niri, waybar..."]
-
-    PB["profiles/bootstrap<br/>minimal: nmtui, vim, ssh"]
-
-    S["secrets/ sops-nix encrypted"]
-    SH["shells/ auto-discovered devShells"]
-
-    F --> H1
-    F --> H2
-    F --> SH
-
-    H1 --> NM
-    H2 --> NM
-
-    H1 --> P1
-    H2 --> P1
-
-    H1 --> PB
-    H2 --> PB
-
-    P1 --> PS
-
-    classDef flakeStyle stroke:#517599,stroke-width:2px,color:currentColor
-    classDef hostStyle stroke:#5e81ac,stroke-width:2px,color:currentColor
-    classDef profileStyle stroke:#8fbcbb,stroke-width:2px,color:currentColor
-    classDef sharedStyle stroke:#d08770,stroke-width:2px,color:currentColor
-    classDef moduleStyle stroke:#bf616a,stroke-width:2px,color:currentColor
-    classDef secretStyle stroke:#bf616a,stroke-width:2px,color:currentColor
-    classDef shellStyle stroke:#d08770,stroke-width:2px,color:currentColor
-
-    class F flakeStyle
-    class H1,H2 hostStyle
-    class P1,PB profileStyle
-    class PS sharedStyle
-    class NM moduleStyle
-    class S secretStyle
-    class SH shellStyle
-
-x_mermaid_block_0
-```
-
 -
 
 ## ## sccl.*
@@ -213,7 +156,7 @@ x_mermaid_block_0
 }
 ```
 
-полный список опций *(на момент написания статьи, хз буду ли обновлять)*:
+полный список опций *(на момент написания статьи, хз буду ли обновлять (нет не буду, нахуя? их там много.))*:
 
 ```
 sccl.ui.enable           # Nord-тема + greetd
