@@ -24,11 +24,22 @@ jobs:
         run: |
           set -euo pipefail
           apt-get update
-          apt-get install -y --no-install-recommends rsync chromium fonts-dejavu-core fonts-liberation fonts-cascadia-code
+          apt-get install -y --no-install-recommends rsync chromium fontconfig unzip fonts-dejavu-core fonts-liberation
           npm ci --ignore-scripts
           npm install --global --ignore-scripts @mermaid-js/mermaid-cli@11.12.0
           printf '%s\n' '{"args":["--no-sandbox"]}' > "$RUNNER_TEMP/puppeteer.json"
           printf 'MERMAID_PUPPETEER_CONFIG=%s/puppeteer.json\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
+
+      - name: Setup Cascadia Code for OG images
+        run: |
+          set -euo pipefail
+          curl --fail --show-error --location --proto '=https' --proto-redir '=https' -o "$RUNNER_TEMP/cascadia.zip" https://github.com/microsoft/cascadia-code/releases/download/v2407.24/CascadiaCode-2407.24.zip
+          printf '%s  %s\n' e67a68ee3386db63f48b9054bd196ea752bc6a4ebb4df35adce6733da50c8474 "$RUNNER_TEMP/cascadia.zip" | sha256sum --check --strict
+          mkdir -p /usr/local/share/fonts/cascadia-code
+          unzip -j "$RUNNER_TEMP/cascadia.zip" 'otf/static/CascadiaCode-Regular.otf' 'otf/static/CascadiaCode-Bold.otf' -d /usr/local/share/fonts/cascadia-code
+          fc-cache -f /usr/local/share/fonts/cascadia-code
+          test "$(fc-match -f '%{family}' 'Cascadia Code')" = 'Cascadia Code'
+          test "$(fc-match -f '%{family} %{style}' 'Cascadia Code:weight=bold')" = 'Cascadia Code Bold'
 
       - name: Setup Zine
         run: |
