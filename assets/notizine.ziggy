@@ -75,7 +75,6 @@
     "bottom_right": [],
     "bottom_center": [
       [{ "module": "divider" }],
-      [{ "module": "badges", "align": "center" }],
       [{ "module": "site_footer", "align": "center" }],
       [{ "module": "_rss_link", "align": "center" }],
       [{ "module": "_back_to_top", "align": "center" }]
@@ -103,7 +102,7 @@
       "middle_center": [],
       "middle_right": [],
       "bottom_left": [],
-      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
       "bottom_right": []
     },
     "/posts/": {
@@ -114,7 +113,7 @@
       "middle_center": [[{ "module": "comments" }]],
       "middle_right": [],
       "bottom_left": [],
-      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
       "bottom_right": []
     },
     "/ru/posts/": {
@@ -125,7 +124,7 @@
       "middle_center": [[{ "module": "comments" }]],
       "middle_right": [],
       "bottom_left": [],
-      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
       "bottom_right": []
     },
     "/search/": {
@@ -136,7 +135,7 @@
       "middle_center": [[{ "module": "search", "id": "search" }]],
       "middle_right": [],
       "bottom_left": [],
-      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
       "bottom_right": []
     },
     "/ru/search/": {
@@ -147,7 +146,7 @@
       "middle_center": [[{ "module": "search", "id": "search" }]],
       "middle_right": [],
       "bottom_left": [],
-      "bottom_center": [[{ "module": "divider" }], [{ "module": "badges", "align": "center" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
+      "bottom_center": [[{ "module": "divider" }], [{ "module": "site_footer", "align": "center" }], [{ "module": "_rss_link", "align": "center" }], [{ "module": "_back_to_top", "align": "center" }]],
       "bottom_right": []
     }
   },
